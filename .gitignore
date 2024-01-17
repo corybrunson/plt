@@ -1,0 +1,18 @@
+# macOS
+**/.DS_Store
+
+# R project
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
+# source code compilation
+src/*.o
+src/*.so
+src/*.dll
+
+# ignore
+ignore
+
+

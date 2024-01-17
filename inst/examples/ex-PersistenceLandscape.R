@@ -1,0 +1,59 @@
+
+# double matrix
+pl <- new(
+  PersistenceLandscape,
+  cbind(c(0, 0, 1, 2), c(1.5, 2.5, 3.5, 4.5)),
+  TRUE,
+  0, 10, .01
+)
+pl$isExact()
+pl$xMin()
+pl$xMax()
+pl$xBy()
+pl$getInternal()
+print(pl)
+summary(pl)
+
+dim(pl$discretize())
+length(as.vector(pl))
+as.data.frame(pl)
+
+pl2 <- pl$scale(2)
+pl2$getInternal()
+pl3 <- pl$add(pl2)
+pl3$getInternal()
+
+# integer matrix
+pl <- new(
+  PersistenceLandscape,
+  cbind(c(0L, 0L, 1L, 2L), c(2L, 3L, 4L, 5L)),
+  TRUE,
+  0, 10, .01
+)
+pl$getInternal()
+print(pl)
+
+# discrete landscape
+pl <- new(
+  PersistenceLandscape,
+  cbind(c(0, 0, 1, 2), c(1.5, 2.5, 3.5, 4.5)),
+  FALSE,
+  0, 5, .5
+)
+pl$xBy()
+pl$getInternal()
+print(pl)
+
+dim(pl$discretize())
+length(as.vector(pl))
+as.data.frame(pl)
+
+pl2 <- pl$scale(2)
+pl2$isExact()
+pl2$xBy()
+pl2$getInternal()
+show(pl2)
+
+(pl3 <- pl$add(pl2))
+pl3$getInternal()
+pl3$xBy()

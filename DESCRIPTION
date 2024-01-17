@@ -1,0 +1,52 @@
+Package: plt
+Type: Package
+Title: Interface to the Persistence Landscapes Toolbox
+Version: 0.0.0.9999
+Authors@R: c(
+    person("Jason Cory", "Brunson",
+           email = "cornelioid@gmail.com",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-3126-9494")),
+    person("Jose", "Bouza",
+           email = "josejbouza@gmail.com",
+           role = c("aut", "prg", "cph")),
+    person("Paweł", "Dłotko",
+           role = c("aut", "prg", "cph")),
+    person("Peter", "Bubenik",
+           role = c("ctb", "ldr"))
+    )
+Description: Persistence data (often equated with persistence diagrams) are
+    difficult to couple with statistical tools and machine learning approaches.
+    Bubenik (2015) <arXiv:1207.6437> introduced persistence landscapes to
+    address this problem by encoding persistence data as functions with a
+    Hilbert space structure. As such, they admit linear operations, an inner
+    product, and desirable statistical properties like a central limit theorem.
+    Bubenik and Dłotko (2017) <doi:10.1016/j.jsc.2016.03.009> developed the
+    Persistence Landscapes Toolbox to facilitate computational work with
+    persistence landscapes. These included calculations of distance, a null
+    hypothesis testing procedure, and a support vector machine classifier. Core
+    functionality was exported to R in the 'tda-tools' package by Bouza, from
+    which this package is adapted.
+Language: en-US
+Encoding: UTF-8
+License: GPL (>= 2)
+Imports: methods, Rcpp (>= 1.0.12)
+LinkingTo: Rcpp
+Suggests: 
+    testthat (>= 3.0.0),
+    grDevices,
+    tdaunif,
+    TDA,
+    ripserr
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
+Config/testthat/edition: 3
+Collate: 
+    'PersistenceLandscape.R'
+    'RcppExports.R'
+    'plt-package.R'
+    'landscape.R'
+    'persistence.R'
+    'plot.R'
+    'show.R'
+    'utils.R'
