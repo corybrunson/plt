@@ -1,3 +1,4 @@
+Rcpp_PersistenceLandscape <- setClass("Rcpp_PersistenceLandscape")
 
 #' @rdname PersistenceLandscape
 #' @inheritParams base::summary

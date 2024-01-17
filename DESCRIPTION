@@ -43,6 +43,7 @@ Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 Collate: 
     'PersistenceLandscape.R'
+    'Ops.R'
     'RcppExports.R'
     'plt-package.R'
     'landscape.R'

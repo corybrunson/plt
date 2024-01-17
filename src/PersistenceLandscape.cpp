@@ -169,6 +169,8 @@ private:
   
 public:
   
+  // Subsection: Constructors
+  
   // REVIEW: I don't understand this. -JCB
   PersistenceLandscape(){}
   
@@ -197,7 +199,7 @@ public:
   //   double min_x = 0, double max_x = 1, double dx = 0.001
   // );
   
-  // internal structure
+  // Subsection: Internals
   
   // landscape data
   std::vector<std::vector<std::pair<double, double>>> land;
@@ -210,7 +212,6 @@ public:
   ) const;
   
   // getters
-  
   bool isExact() const { return exact; }
   double xMin() const { return min_x; }
   double xMax() const { return max_x; }
@@ -232,11 +233,7 @@ public:
     return wrap(getInternalDiscrete(disc.land));
   }
   
-  PersistenceLandscape scale(double x) const;
-  
-  PersistenceLandscape add(const PersistenceLandscape &other);
-  
-  // Friendzone:
+  // Subsection: Friendzone
   
   friend PersistenceLandscape discretizeExactLandscape(
     const PersistenceLandscape &pl,
@@ -248,6 +245,7 @@ public:
       double min_x, double max_x, double dx
   );
   
+  // TODO: Find more uses for this or replace with addition only. -JCB
   // This is a general algorithm to perform linear operations on persistence
   // landscapes. It perform it by doing operations on landscape points.
   friend PersistenceLandscape operateExactLandscapes(
@@ -255,14 +253,12 @@ public:
       const PersistenceLandscape &pl2,
       double (*oper)(double, double)
   );
-  
   friend PersistenceLandscape addExactLandscapes(
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2
   ) {
     return operateExactLandscapes(pl1, pl2, addOp);
   }
-  
   friend PersistenceLandscape addDiscreteLandscapes(
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2
@@ -273,18 +269,45 @@ public:
   //     double con) {
   //   return first.scale(con);
   // }
-  
   // friend PersistenceLandscape operator*(
   //     double con,
   //     const PersistenceLandscape &first) {
   //   return first.scale(con);
   // }
-  
   // friend PersistenceLandscape operator+(
   //     const PersistenceLandscape &pl1,
   //     const PersistenceLandscape &pl2) {
   //   return addExactLandscapes(pl1, pl2);
   // }
+  
+  friend double innerProductExactLandscapes(
+      const PersistenceLandscape &pl1,
+      const PersistenceLandscape &pl2
+  );
+  friend double innerProductDiscreteLandscapes(
+      const PersistenceLandscape &pl1,
+      const PersistenceLandscape &pl2
+  );
+  
+  // Subsection: Functions
+  
+  double minimum(unsigned level) const;
+  
+  double maximum(unsigned level) const;
+  
+  PersistenceLandscape scale(double x) const;
+  
+  PersistenceLandscape add(const PersistenceLandscape &other);
+  
+  PersistenceLandscape abs();
+  
+  double inner(const PersistenceLandscape &other);
+  
+  double computeMoment(
+      unsigned p,
+      double center,
+      unsigned level
+  ) const;
   
 };
 
@@ -548,7 +571,8 @@ PersistenceLandscape discretizeExactLandscape(
       
       // Skip to the critical point rightward of `currentPoint` for which the
       // next critical point is just leftward of `currentPoint + dx`.
-      if (level[j].first <= x_buff || level[j + 1].first < x_buff + dx) continue;
+      if (level[j].first <= x_buff || level[j + 1].first < x_buff + dx)
+        continue;
       
       // If the next critical point is at least `dx` rightward, then increment
       // linearly to it; else, compute and increment to the next level value.
@@ -874,6 +898,318 @@ PersistenceLandscape PersistenceLandscape::add(
   return sum;
 }
 
+double locateIntermediateRoot(
+    std::pair<double, double> p1,
+    std::pair<double, double> p2
+) {
+  
+  if (p1.first == p2.first)
+    return p1.first;
+  
+  // throw error if segment does not cross abscissa
+  if (p1.second * p2.second > 0) {
+    std::ostringstream errMessage;
+    errMessage << "Arguments to `locateIntermediateRoot()` were ("
+    << p1.first << "," << p1.second << ") and ("
+    << p2.first << "," << p2.second
+    << "). The segment between those points does not cross the abscissa.";
+    std::string errMessageStr = errMessage.str();
+    const char *err = errMessageStr.c_str();
+    throw(err);
+  }
+  
+  // assume that `p1.first <= x <= p2.first`
+  double a = (p2.second - p1.second) / (p2.first - p1.first);
+  double b = p1.second - a * p1.first;
+  // cerr << "Line crossing points : (" << p1.first << "," << p1.second << ")
+  // oraz (" << p2.first << "," << p2.second << ") : \n"; cerr << "a : " << a <<
+  // " , b : " << b << " , x : " << x << endl;
+  return -b / a;
+}
+
+PersistenceLandscape PersistenceLandscape::abs() {
+  
+  PersistenceLandscape result;
+  result.exact = this->exact;
+  result.min_x = this->min_x;
+  result.max_x = this->max_x;
+  result.dx = this->dx;
+  
+  for (size_t level = 0; level != this->land.size(); ++level) {
+    
+    std::vector<std::pair<double, double>> lambda_n;
+    
+    // REVIEW: Try to prevent operations from infinitizing endpoints. -JCB
+    // if (this->land[level][0].first == INT_MIN) {
+    //   lambda_n.push_back(std::make_pair(INT_MIN, 0.));
+    // } else {
+    //   lambda_n.push_back(std::make_pair(this->land[level][0].first,
+    //                                     fabs(this->land[level][0].second)));
+    // }
+    lambda_n.push_back(std::make_pair(
+        this->land[level][0].first,
+        fabs(this->land[level][0].second)
+    ));
+    
+    for (size_t i = 1; i != this->land[level].size(); ++i) {
+      // if a line segment between this->land[level][i-1] and
+      // this->land[level][i] crosses the x-axis, then we have to add one
+      // landscape point to result
+      if ((this->land[level][i - 1].second) *
+          (this->land[level][i].second) < 0) {
+        
+        double zero = locateIntermediateRoot(
+          this->land[level][i - 1], this->land[level][i]);
+        lambda_n.push_back(std::make_pair(zero, 0.));
+        
+        lambda_n.push_back(std::make_pair(
+            this->land[level][i].first,
+            fabs(this->land[level][i].second)
+        ));
+        
+      } else {
+        
+        lambda_n.push_back(std::make_pair(
+            this->land[level][i].first,
+            fabs(this->land[level][i].second)
+        ));
+        
+      }
+    }
+    result.land.push_back(lambda_n);
+  }
+  
+  return result;
+}
+
+double innerProductExactLandscapes(
+    const PersistenceLandscape &pl1,
+    const PersistenceLandscape &pl2
+) {
+  double result = 0;
+  
+  for (size_t level = 0; level != std::min(pl1.size(), pl2.size()); ++level) {
+    if (pl1.land[level].size() * pl2.land[level].size() == 0)
+      continue;
+    
+    // endpoints of the interval on which we will compute the inner product of
+    // two locally linear functions:
+    double x1 = INT_MIN;
+    double x2;
+    if (pl1.land[level][1].first < pl2.land[level][1].first) {
+      x2 = pl1.land[level][1].first;
+    } else {
+      x2 = pl2.land[level][1].first;
+    }
+    
+    // iterators for the landscapes pl1 and pl2
+    size_t l1It = 0;
+    size_t l2It = 0;
+    
+    while ((l1It < pl1.land[level].size() - 1) &&
+           (l2It < pl2.land[level].size() - 1)) {
+      // compute the value of a inner product on an interval [x1,x2]
+      
+      double a, b, c, d;
+      
+      a = (pl1.land[level][l1It + 1].second - pl1.land[level][l1It].second) /
+        (pl1.land[level][l1It + 1].first - pl1.land[level][l1It].first);
+      b = pl1.land[level][l1It].second - a * pl1.land[level][l1It].first;
+      c = (pl2.land[level][l2It + 1].second - pl2.land[level][l2It].second) /
+        (pl2.land[level][l2It + 1].first - pl2.land[level][l2It].first);
+      d = pl2.land[level][l2It].second - c * pl2.land[level][l2It].first;
+      
+      double contributionFromThisPart =
+        (a * c * x2 * x2 * x2 / 3 + (a * d + b * c) * x2 * x2 / 2 +
+        b * d * x2) -
+        (a * c * x1 * x1 * x1 / 3 + (a * d + b * c) * x1 * x1 / 2 +
+        b * d * x1);
+      
+      result += contributionFromThisPart;
+      
+      // we have two intervals in which functions are constant:
+      //[pl1.land[level][l1It].first , pl1.land[level][l1It+1].first]
+      // and
+      //[pl2.land[level][l2It].first , pl2.land[level][l2It+1].first]
+      // We also have an interval [x1,x2]. Since the intervals in the landscapes
+      // cover the whole R, then it is clear that x2 is either
+      // pl1.land[level][l1It+1].first of pl2.land[level][l2It+1].first or both.
+      // Lets test it.
+      if (x2 == pl1.land[level][l1It + 1].first) {
+        if (x2 == pl2.land[level][l2It + 1].first) {
+          // in this case, we increment both:
+          ++l2It;
+        }
+        ++l1It;
+      } else {
+        // in this case we increment l2It
+        ++l2It;
+      }
+      // Now, we shift x1 and x2:
+      x1 = x2;
+      if (pl1.land[level][l1It + 1].first < pl2.land[level][l2It + 1].first) {
+        x2 = pl1.land[level][l1It + 1].first;
+      } else {
+        x2 = pl2.land[level][l2It + 1].first;
+      }
+    }
+  }
+  
+  return result;
+}
+
+double innerProductDiscreteLandscapes(
+    const PersistenceLandscape &pl1,
+    const PersistenceLandscape &pl2
+) {
+  
+  int min_level = std::min(pl1.land.size(), pl2.land.size());
+  double integral_buffer = 0;
+  
+  for (int i = 0; i < min_level; i++) {
+    int min_index = std::min(pl1.land[i].size(), pl2.land[i].size());
+    for (int j = 0; j < min_index; j++)
+      integral_buffer += pl1.land[i][j].second * pl2.land[i][j].second;
+  }
+  
+  return integral_buffer * pl1.dx;
+}
+
+double PersistenceLandscape::inner(
+    const PersistenceLandscape &other
+) {
+  
+  double scalar;
+  
+  // both landscapes are exact
+  if (this->exact && other.exact)
+    scalar = innerProductExactLandscapes(*this, other);
+  
+  // both landscapes are discrete
+  else if (! this->exact && ! other.exact)
+    scalar = innerProductDiscreteLandscapes(*this, other);
+  
+  // one landscape is exact, the other discrete
+  else if (this->exact) {
+    // only this landscape is exact
+    PersistenceLandscape conversion1 = discretizeExactLandscape(
+      *this,
+      other.min_x, other.max_x, other.dx
+    );
+    scalar = innerProductDiscreteLandscapes(conversion1, other);
+  } else {
+    // only other landscape is exact
+    PersistenceLandscape conversion2 = discretizeExactLandscape(
+      other,
+      this->min_x, this->max_x, this->dx
+    );
+    scalar = innerProductDiscreteLandscapes(*this, conversion2);
+  }
+  
+  return scalar;
+}
+
+// This function finds the minimum value at a given level.
+double PersistenceLandscape::minimum(
+    unsigned level
+) const {
+  if (level < 0 || level >= this->land.size())
+    return NA_REAL;
+  if (this->land.size() < level)
+    return 0;
+  double level_min = INT_MAX;
+  for (size_t i = 0; i != this->land[level].size(); ++i) {
+    if (this->land[level][i].second < level_min)
+      level_min = this->land[level][i].second;
+  }
+  return level_min;
+}
+
+// This function finds the maximum value at a given level.
+double PersistenceLandscape::maximum(
+    unsigned level
+) const {
+  if (level < 0 || level >= this->land.size())
+    return NA_REAL;
+  if (this->land.size() < level)
+    return 0;
+  double level_max = INT_MIN;
+  for (size_t i = 0; i != this->land[level].size(); ++i) {
+    if (this->land[level][i].second > level_max)
+      level_max = this->land[level][i].second;
+  }
+  return level_max;
+}
+
+// This function computes the n^th moment of a given level.
+double PersistenceLandscape::computeMoment(
+    unsigned p,
+    double center,
+    unsigned level
+) const {
+  if (p < 1)
+    throw("Cannot compute p^th moment for p < 1.\n");
+  if (level < 0 || level > this->land.size())
+    return NA_REAL;
+  
+  double result = 0;
+  
+  if (this->land.size() > level) {
+    for (size_t i = 2; i != this->land[level].size() - 1; ++i) {
+      if (this->land[level][i].first - this->land[level][i - 1].first == 0)
+        continue;
+      // Between `this->land[level][i]` and `this->land[level][i-1]`, the
+      // `lambda_level` is of the form a x + b. First we need to find a and b.
+      double a =
+        (this->land[level][i].second - this->land[level][i - 1].second) /
+          (this->land[level][i].first - this->land[level][i - 1].first);
+      double b =
+        this->land[level][i - 1].second - a * this->land[level][i - 1].first;
+      
+      double x1 = this->land[level][i - 1].first;
+      double x2 = this->land[level][i].first;
+      
+      // double first =
+      // b*(pow((x2-center),(double)(p+1))/(p+1)-
+      // pow((x1-center),(double)(p+1))/(p+1));
+      // double second = a/(p+1)*((x2*pow((x2-center),(double)(p+1))) -
+      // (x1*pow((x1-center),(double)(p+1))) )
+      //              +
+      //              a/(p+1)*( pow((x2-center),(double)(p+2))/(p+2) -
+      //              pow((x1-center),(double)(p+2))/(p+2) );
+      // result += first;
+      // result += second;
+      
+      double first = a / (p + 2) *
+        (pow((x2 - center), (double)(p + 2)) -
+        pow((x1 - center), (double)(p + 2)));
+      double second = center / (p + 1) *
+        (pow((x2 - center), (double)(p + 1)) -
+        pow((x1 - center), (double)(p + 1)));
+      double third = b / (p + 1) *
+        (pow((x2 - center), (double)(p + 1)) -
+        pow((x1 - center), (double)(p + 1)));
+      
+      result += first + second + third;
+    }
+  }
+  
+  return result;
+}
+
+// Section: List operations
+
+PersistenceLandscape PLsum(List pl_list) {
+  
+  PersistenceLandscape sum = as<PersistenceLandscape>(pl_list[0]);
+  
+  for (int i = 1; i < pl_list.size(); i++) {
+    sum = sum.add(as<PersistenceLandscape>(pl_list[i]));
+  }
+  
+  return sum;
+}
+
 // Section: Module
 
 RCPP_EXPOSED_CLASS(PersistenceLandscape)
@@ -902,18 +1238,35 @@ RCPP_MODULE(persistence_landscape_module) {
   .method("xBy",
   &PersistenceLandscape::xBy,
   "Returns the resolution of the discrete representation")
+  
   .method("getInternal",
   &PersistenceLandscape::getInternal,
   "Returns the internal tensor representation of the PL")
   .method("discretize",
   &PersistenceLandscape::discretize,
   "Casts an exact PL to a discrete one")
+  
   .method("scale",
   &PersistenceLandscape::scale,
   "Multiplies this PL by a scalar")
   .method("add",
   &PersistenceLandscape::add,
   "Adds this PL to another")
-    
+  .method("abs",
+  &PersistenceLandscape::abs,
+  "Takes the absolute value of this PL")
+  .method("inner",
+  &PersistenceLandscape::inner,
+  "Takes the inner product of this PL with another")
+  
+  .method("minimum",
+  &PersistenceLandscape::minimum,
+  "Finds the minimum value of one level of this PL")
+  .method("maximum",
+  &PersistenceLandscape::maximum,
+  "Finds the maximum value of one level of this PL")
+  
   ;
+  
+  Rcpp::function("PLsum", &PLsum);
 }
