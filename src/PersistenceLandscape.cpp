@@ -259,6 +259,12 @@ public:
   ) {
     return operateExactLandscapes(pl1, pl2, addOp);
   }
+  friend PersistenceLandscape subtractExactLandscapes(
+      const PersistenceLandscape &pl1,
+      const PersistenceLandscape &pl2
+  ) {
+    return operateExactLandscapes(pl1, pl2, subOp);
+  }
   friend PersistenceLandscape addDiscreteLandscapes(
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2
@@ -289,11 +295,29 @@ public:
       const PersistenceLandscape &pl2
   );
   
+  friend double maximalAsymmetricDistance(
+      const PersistenceLandscape &pl1,
+      const PersistenceLandscape &pl2
+  );
+  friend double normDistanceLandscapes(
+      const PersistenceLandscape &pl1,
+      const PersistenceLandscape &pl2
+  );
+  friend double normDistanceLandscapes(
+      const PersistenceLandscape &pl1,
+      const PersistenceLandscape &pl2,
+      unsigned p
+  );
+  
   // Subsection: Functions
   
   double minimum(unsigned level) const;
   
   double maximum(unsigned level) const;
+  
+  // integral of (the p^th power of) a landscape
+  double integrateLandscape() const;
+  double integrateLandscape(double p) const;
   
   PersistenceLandscape scale(double x) const;
   
@@ -303,11 +327,95 @@ public:
   
   double inner(const PersistenceLandscape &other);
   
-  double computeMoment(
+  double moment(
       unsigned p,
       double center,
       unsigned level
   ) const;
+  
+  double integrate(
+      unsigned p
+  ) {
+    double integral;
+    if (p == 1)
+      integral = this->integrateLandscape();
+    else
+      integral = this->integrateLandscape(p);
+    return integral;
+  }
+  
+  double distance(
+      PersistenceLandscape &other,
+      unsigned p
+  ) {
+    if (p == 0)
+      // `p = 0` encodes `p = Inf` (`R_PosInf` is a double)
+      return normDistanceLandscapes(*this, other);
+    else
+      return normDistanceLandscapes(*this, other, p);
+  }
+  
+  double norm(
+      unsigned p
+  ) {
+    if (p == 0) {
+      return normDistanceLandscapes(*this, *this);
+    } else {
+      return normDistanceLandscapes(*this, *this, p);
+    }
+  }
+  
+  PersistenceLandscape multiplyIndicator(
+      std::vector<std::pair<double, double>> indicator,
+      unsigned r
+  ) const;
+  PersistenceLandscape indicator(
+      List indicator,
+      unsigned r
+  ) {
+    
+    // Encode the list of vectors as a vector of pairs.
+    std::vector<std::pair<double, double>> ind;
+    for (size_t i = 0; i != indicator.length(); ++i) {
+      std::vector<double> supp = indicator[i];
+      ind.push_back(std::make_pair(supp[0], supp[1]));
+    }
+    
+    PersistenceLandscape result = this->multiplyIndicator(ind, r);
+    
+    return result;
+  }
+  
+  // integral of (the p^th power of) the product of a landscape with an
+  // indicator function
+  double integrateIndicatorLandscape(
+      std::vector<std::pair<double, double>> indicator,
+      unsigned r
+  ) const;
+  double integrateIndicatorLandscape(
+      std::vector<std::pair<double, double>> indicator,
+      unsigned r,
+      double p
+  ) const;
+  double indicator_form(
+      List indicator,
+      unsigned r,
+      unsigned p) {
+    
+    // Encode the list of vectors as a vector of pairs.
+    std::vector<std::pair<double, double>> ind;
+    for (size_t i = 0; i != indicator.length(); ++i) {
+      std::vector<double> supp = indicator[i];
+      ind.push_back(std::make_pair(supp[0], supp[1]));
+    }
+    
+    double form;
+    if (p == 0)
+      form = this->integrateIndicatorLandscape(ind, r);
+    else
+      form = this->integrateIndicatorLandscape(ind, r, p);
+    return form;
+  }
   
 };
 
@@ -1142,7 +1250,7 @@ double PersistenceLandscape::maximum(
 }
 
 // This function computes the n^th moment of a given level.
-double PersistenceLandscape::computeMoment(
+double PersistenceLandscape::moment(
     unsigned p,
     double center,
     unsigned level
@@ -1197,17 +1305,353 @@ double PersistenceLandscape::computeMoment(
   return result;
 }
 
+double PersistenceLandscape::integrateLandscape() const {
+  double integral = 0;
+  
+  for (size_t i = 0; i != this->land.size(); ++i) {
+    // REVIEW: Handle exact and discrete cases differently. -JCB
+    int infs = this->land[i][0].first == INT_MIN;
+    // It suffices to compute every planar integral and then sum them up for
+    // each `lambda_n`.
+    // for (size_t nr = 2; nr != this->land[i].size() - 1; ++nr) {
+    for (size_t nr = 1 + infs; nr != this->land[i].size() - infs; ++nr) {
+      integral += 0.5 * (this->land[i][nr].first - this->land[i][nr - 1].first) *
+        (this->land[i][nr].second + this->land[i][nr - 1].second);
+    }
+  }
+  
+  return integral;
+}
+
+std::pair<double, double> parameterizeLine(
+    std::pair<double, double> p1,
+    std::pair<double, double> p2
+) {
+  double a = (p2.second - p1.second) / (p2.first - p1.first);
+  double b = p1.second - a * p1.first;
+  return std::make_pair(a, b);
+}
+
+double PersistenceLandscape::integrateLandscape(
+    double p
+) const {
+  double integral = 0;
+  
+  for (size_t i = 0; i != this->land.size(); ++i) {
+    // REVIEW: Handle exact and discrete cases differently. -JCB
+    int infs = this->land[i][0].first == INT_MIN;
+    // for (size_t nr = 2; nr != this->land[i].size() - 1; ++nr) {
+    for (size_t nr = 1 + infs; nr != this->land[i].size() - infs; ++nr) {
+      // In this interval, the landscape has a form f(x) = ax + b. We want to
+      // compute integral of (ax + b)^p = 1 / a * (ax + b)^{p + 1} / (p + 1)
+      std::pair<double, double> coef =
+        parameterizeLine(this->land[i][nr], this->land[i][nr - 1]);
+      double a = coef.first;
+      // double b = coef.second;
+      
+      if (this->land[i][nr].first == this->land[i][nr - 1].first)
+        continue;
+      
+      // REVIEW: Debug discrepancy with R implementation. -JCB
+      // if (a != 0) {
+      // if (fabs(a) > epsi) {
+      if (! almostEqual(a, 0.)) {
+        // REVIEW: Simplify this formula:
+        // integral += 1 / (a * (p + 1)) *
+        //   (pow((a * this->land[i][nr].first + b), p + 1) -
+        //   pow((a * this->land[i][nr - 1].first + b), p + 1));
+        integral += 1 / (a * (p + 1)) *
+          (pow(this->land[i][nr].second, p + 1) -
+          pow(this->land[i][nr - 1].second, p + 1));
+      } else {
+        integral += (this->land[i][nr].first - this->land[i][nr - 1].first) *
+          (pow(this->land[i][nr].second, p));
+      }
+    }
+  }
+  
+  return integral;
+}
+
+double maximalAsymmetricDistance(
+    const PersistenceLandscape &pl1,
+    const PersistenceLandscape &pl2
+) {
+  // this distance is not symmetric. It compute ONLY distance between inflection
+  // points of pl1 and pl2.
+  double maxDist = 0;
+  
+  int minimalNumberOfLevels = std::min(pl1.land.size(), pl2.land.size());
+  for (int level = 0; level != minimalNumberOfLevels; ++level) {
+    int p2Count = 0;
+    // not considering points at infinity
+    for (int i = 1; i != pl1.land[level].size() - 1; ++i) {
+      while (true) {
+        if ((pl1.land[level][i].first >= pl2.land[level][p2Count].first) &&
+            (pl1.land[level][i].first <= pl2.land[level][p2Count + 1].first))
+          break;
+        p2Count++;
+      }
+      double val = fabs(interpolatePoint(pl2.land[level][p2Count],
+                                         pl2.land[level][p2Count + 1],
+                                         pl1.land[level][i].first) -
+                                           pl1.land[level][i].second);
+      if (maxDist <= val)
+        maxDist = val;
+    }
+  }
+  
+  if (minimalNumberOfLevels < pl1.land.size()) {
+    for (int level = minimalNumberOfLevels; level != pl1.land.size(); ++level) {
+      for (int i = 0; i != pl1.land[level].size(); ++i) {
+        if (maxDist < pl1.land[level][i].second)
+          maxDist = pl1.land[level][i].second;
+      }
+    }
+  }
+  return maxDist;
+}
+
+double normDistanceLandscapes(
+    const PersistenceLandscape &pl1,
+    const PersistenceLandscape &pl2
+) {
+  return std::max(maximalAsymmetricDistance(pl1, pl2),
+                  maximalAsymmetricDistance(pl2, pl1));
+}
+
+double normDistanceLandscapes(
+    const PersistenceLandscape &pl1,
+    const PersistenceLandscape &pl2,
+    unsigned p
+) {
+  // This is what we want to compute:
+  // ( \int_{- \infty}^{+\infty} | pl1 - pl2 |^p )^(1/p)
+  // We will do it one step at a time:
+  
+  // pl1 - pl2
+  // PersistenceLandscape diff = pl1 - pl2;
+  PersistenceLandscape diff = subtractExactLandscapes(pl1, pl2);
+  // | pl1 - pl2 |
+  diff = diff.abs();
+  
+  // \int_{- \infty}^{+\infty} | pl1 - pl2 |^p
+  double result;
+  if (p == 1) {
+    result = diff.integrateLandscape();
+  } else {
+    result = diff.integrateLandscape(p);
+  }
+  
+  // ( \int_{- \infty}^{+\infty} | pl1 - second |^p )^(1/p)
+  return pow(result, 1 / (double)p);
+}
+
+// The `indicator` function is a vector of pairs. Its length is the number of
+// levels on which it may be nonzero. See Section 3.6 of Bubenik (2015).
+PersistenceLandscape PersistenceLandscape::multiplyIndicator(
+    std::vector<std::pair<double, double>> indicator,
+    unsigned r
+) const {
+  
+  PersistenceLandscape result;
+  
+  for (size_t lev = 0; lev != this->land.size(); ++lev) {
+    
+    double lev_c = pow(pow(lev + 1, -1), r);
+    std::vector<std::pair<double, double>> lambda_n;
+    
+    // left (lower) limit
+    if (exact)
+      lambda_n.push_back(std::make_pair(INT_MIN, 0.));
+    
+    // if the indicator has at least `lev` levels...
+    if (indicator.size() > lev) {
+      
+      if (exact) {
+        // original method, for exact landscapes
+        
+        // loop over the critical points...
+        for (size_t nr = 0; nr != this->land[lev].size(); ++nr) {
+          
+          // critical point lies before left endpoint; exclude
+          if (this->land[lev][nr].first < indicator[lev].first) {
+            continue;
+          }
+          
+          // critical point lies just after right endpoint; interpolate
+          if (this->land[lev][nr].first > indicator[lev].second) {
+            lambda_n.push_back(std::make_pair(
+                indicator[lev].second,
+                interpolatePoint(this->land[lev][nr - 1], this->land[lev][nr],
+                                 indicator[lev].second) * lev_c));
+            lambda_n.push_back(std::make_pair(indicator[lev].second, 0.));
+            break;
+          }
+          
+          // critical point lies just after left endpoint; interpolate
+          if ((this->land[lev][nr].first >= indicator[lev].first) &&
+              (this->land[lev][nr - 1].first <= indicator[lev].first)) {
+            lambda_n.push_back(std::make_pair(indicator[lev].first, 0.));
+            lambda_n.push_back(std::make_pair(
+                indicator[lev].first,
+                interpolatePoint(this->land[lev][nr - 1], this->land[lev][nr],
+                                 indicator[lev].first) * lev_c));
+          }
+          
+          // critical point lies between left and right endpoints; include
+          // lambda_n.push_back(this->land[lev][nr]);
+          lambda_n.push_back(std::make_pair(
+              this->land[lev][nr].first,
+              this->land[lev][nr].second * lev_c));
+        }
+        
+      } else {
+        // method for discrete landscapes
+        
+        // loop over grid...
+        for (size_t nr = 0; nr != this->land[lev].size(); ++nr) {
+          
+          if (this->land[lev][nr].first >= indicator[lev].first &&
+              this->land[lev][nr].first <= indicator[lev].second) {
+            // critical point lies inside endpoints; include
+            
+            // lambda_n.push_back(this->land[lev][nr]);
+            lambda_n.push_back(std::make_pair(
+                this->land[lev][nr].first,
+                this->land[lev][nr].second * lev_c));
+          } else {
+            // critical point lies outside endpoints; exclude
+            
+            lambda_n.push_back(std::make_pair(this->land[lev][nr].first, 0.));
+          }
+        }
+        
+      }
+      
+    }
+    
+    // right (upper) limit
+    if (exact)
+      lambda_n.push_back(std::make_pair(INT_MAX, 0.));
+    
+    // cases with no critical points
+    if (lambda_n.size() > 2)
+      result.land.push_back(lambda_n);
+  }
+  
+  return result;
+}
+
+double PersistenceLandscape::integrateIndicatorLandscape(
+    std::vector<std::pair<double, double>> indicator,
+    unsigned r
+  ) const {
+    PersistenceLandscape pl = this->multiplyIndicator(indicator, r);
+    return pl.integrateLandscape();
+  }
+
+double PersistenceLandscape::integrateIndicatorLandscape(
+    std::vector<std::pair<double, double>> indicator,
+    unsigned r,
+    // This function computes the integral of the p^th power of a landscape.
+    double p
+) const {
+    PersistenceLandscape pl = this->multiplyIndicator(indicator, r);
+    return pl.integrateLandscape(p);
+  }
+
 // Section: List operations
 
 PersistenceLandscape PLsum(List pl_list) {
   
-  PersistenceLandscape sum = as<PersistenceLandscape>(pl_list[0]);
+  PersistenceLandscape sum_out = as<PersistenceLandscape>(pl_list[0]);
   
   for (int i = 1; i < pl_list.size(); i++) {
-    sum = sum.add(as<PersistenceLandscape>(pl_list[i]));
+    sum_out = sum_out.add(as<PersistenceLandscape>(pl_list[i]));
   }
   
-  return sum;
+  return sum_out;
+}
+
+List PLdiff(List pl_list) {
+  
+  List diff_out;
+  
+  for (int i = 1; i < pl_list.size(); i++) {
+    PersistenceLandscape
+    diff_i = as<PersistenceLandscape>(pl_list[i]);
+    diff_i = diff_i.add(as<PersistenceLandscape>(
+      pl_list[i - 1]).scale(-1));
+    diff_out.push_back(diff_i);
+  }
+  
+  return diff_out;
+}
+
+PersistenceLandscape PLmean(List pl_list) {
+  
+  PersistenceLandscape mean_out = PLsum(pl_list);
+  
+  return mean_out.scale(1.0 / pl_list.size());
+}
+
+NumericMatrix PLdist(List pl_list, unsigned p) {
+  
+  // empty matrix
+  unsigned n = pl_list.size();
+  NumericMatrix dist_out(n, n);
+  
+  // not assuming symmetric distance calculation
+  for (int i = 0; i != n; i++) {
+    PersistenceLandscape
+    pl_i = as<PersistenceLandscape>(pl_list[i]);
+    for (int j = 0; j != n; j++) {
+      if (j == i) {
+        // same landscape
+        dist_out(i, j) = 0.;
+      } else {
+        // different landscape
+        PersistenceLandscape
+        pl_j = as<PersistenceLandscape>(pl_list[j]);
+        dist_out(i, j) = pl_i.distance(pl_j, p);
+      }
+    }
+  }
+  
+  return dist_out;
+}
+
+double PLvar(List pl_list, unsigned p) {
+  
+  // average landscape
+  PersistenceLandscape avg = PLmean(pl_list);
+  
+  // sum-squared distance
+  double ssd = 0;
+  
+  for (size_t i = 0; i != pl_list.size(); ++i) {
+    
+    PersistenceLandscape
+    pl_i = as<PersistenceLandscape>(pl_list[i]);
+    
+    double d = avg.distance(pl_i, p);
+    
+    ssd += d * d;
+  }
+  
+  // sample standard deviation
+  double var_out = ssd / pl_list.size();
+  // double var_out = ssd / (pl_list.size() - 1.0);
+  return var_out;
+}
+
+double PLsd(List pl_list, unsigned p) {
+  
+  double sd_out = PLvar(pl_list, p);
+  
+  sd_out = sqrt(sd_out);
+  return sd_out;
 }
 
 // Section: Module
@@ -1266,7 +1710,27 @@ RCPP_MODULE(persistence_landscape_module) {
   &PersistenceLandscape::maximum,
   "Finds the maximum value of one level of this PL")
   
+  .method("moment",
+  &PersistenceLandscape::moment,
+  "Computes the n^th moment of one level of this PL")
+  .method("integrate",
+  &PersistenceLandscape::integrate,
+  "Computes the integral of this PL")
+  .method("distance",
+  &PersistenceLandscape::distance,
+  "Takes the p-distance between this PL and another")
+  .method("indicator",
+  &PersistenceLandscape::indicator,
+  "Multiplies this PL by a level-indexed set of indicator functions")
+  .method("indicator_form",
+  &PersistenceLandscape::indicator_form,
+  "Computes the integral of the productof this PL with an indicator")
   ;
   
   Rcpp::function("PLsum", &PLsum);
+  Rcpp::function("PLdiff", &PLdiff);
+  Rcpp::function("PLmean", &PLmean);
+  Rcpp::function("PLdist", &PLdist);
+  Rcpp::function("PLvar", &PLvar);
+  Rcpp::function("PLsd", &PLsd);
 }

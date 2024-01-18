@@ -44,6 +44,7 @@ A persistence landscape (an object of S4 class
 Perform arithmetic on persistence landscapes.
 }
 \examples{
+
 # infix arithmetic with two landscapes
 pt1 <- tdaunif::sample_torus_tube(100, 2.5)
 pt2 <- tdaunif::sample_torus_tube(100, 2.5)

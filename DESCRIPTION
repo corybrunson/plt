@@ -45,6 +45,8 @@ Collate:
     'PersistenceLandscape.R'
     'Ops.R'
     'RcppExports.R'
+    'arithmetic.R'
+    'calculus.R'
     'plt-package.R'
     'landscape.R'
     'persistence.R'

@@ -12,7 +12,7 @@ summary.Rcpp_PersistenceLandscape <- function(object, ...) {
     support = pl_support(object)
     # range = c(pl_min(object), pl_max(object)),
     # magnitude = object %*% object,
-    # integral = pl_integral(object)
+    # integral = pl_integrate(object)
   )
   class(res) <- "summary.Rcpp_PersistenceLandscape"
   res

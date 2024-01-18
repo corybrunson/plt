@@ -67,6 +67,7 @@ the endpoints of its internal representation (excluding infinities)
 which its value is nonzero (\code{pl_support()}).
 }
 \examples{
+
 # sample points
 points <- tdaunif::sample_torus_tube(100, 5)
 
@@ -86,6 +87,7 @@ plot(pl)
 # # coerce to discrete
 # pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .005)
 # plot(pl_)
+
 # sample points
 points <- tdaunif::sample_torus_tube(60L, 2.5)
 

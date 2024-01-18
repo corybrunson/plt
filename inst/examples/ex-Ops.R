@@ -1,3 +1,4 @@
+
 # infix arithmetic with two landscapes
 pt1 <- tdaunif::sample_torus_tube(100, 2.5)
 pt2 <- tdaunif::sample_torus_tube(100, 2.5)

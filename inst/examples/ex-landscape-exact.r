@@ -1,3 +1,4 @@
+
 # sample points
 points <- tdaunif::sample_torus_tube(100, 5)
 
