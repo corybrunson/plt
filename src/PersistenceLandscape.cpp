@@ -309,6 +309,23 @@ public:
       unsigned p
   );
   
+  friend PersistenceLandscape multiplyIndicator(
+      const PersistenceLandscape &pl,
+      std::vector<std::pair<double, double>> indicator,
+      unsigned r
+  );
+  friend double integrateIndicatorLandscape(
+      const PersistenceLandscape &pl,
+      std::vector<std::pair<double, double>> indicator,
+      unsigned r
+  );
+  friend double integrateIndicatorLandscape(
+      const PersistenceLandscape &pl,
+      std::vector<std::pair<double, double>> indicator,
+      unsigned r,
+      double p
+  );
+  
   // Subsection: Functions
   
   double minimum(unsigned level) const;
@@ -365,10 +382,6 @@ public:
     }
   }
   
-  PersistenceLandscape multiplyIndicator(
-      std::vector<std::pair<double, double>> indicator,
-      unsigned r
-  ) const;
   PersistenceLandscape indicator(
       List indicator,
       unsigned r
@@ -381,26 +394,18 @@ public:
       ind.push_back(std::make_pair(supp[0], supp[1]));
     }
     
-    PersistenceLandscape result = this->multiplyIndicator(ind, r);
+    PersistenceLandscape pl_ind = multiplyIndicator(*this, ind, r);
     
-    return result;
+    return pl_ind;
   }
   
   // integral of (the p^th power of) the product of a landscape with an
   // indicator function
-  double integrateIndicatorLandscape(
-      std::vector<std::pair<double, double>> indicator,
-      unsigned r
-  ) const;
-  double integrateIndicatorLandscape(
-      std::vector<std::pair<double, double>> indicator,
-      unsigned r,
-      double p
-  ) const;
   double indicator_form(
       List indicator,
       unsigned r,
-      unsigned p) {
+      unsigned p
+  ) {
     
     // Encode the list of vectors as a vector of pairs.
     std::vector<std::pair<double, double>> ind;
@@ -411,9 +416,9 @@ public:
     
     double form;
     if (p == 0)
-      form = this->integrateIndicatorLandscape(ind, r);
+      form = integrateIndicatorLandscape(*this, ind, r);
     else
-      form = this->integrateIndicatorLandscape(ind, r, p);
+      form = integrateIndicatorLandscape(*this, ind, r, p);
     return form;
   }
   
@@ -532,7 +537,8 @@ PersistenceLandscape::PersistenceLandscape(
     
   } else {
     
-    size_t numberOfBins = 2 * ((max_x - min_x) / dx) + 1;
+    // size_t numberOfBins = 2 * ((max_x - min_x) / dx) + 1;
+    size_t numberOfBins = (max_x - min_x) / dx + 1;
     
     // The first element of a pair `std::pair< double, std::vector<double> >`
     // is an x-value. The second element is a vector of values of landscapes.
@@ -552,7 +558,8 @@ PersistenceLandscape::PersistenceLandscape(
       std::pair<double, std::vector<double>> p = std::make_pair(x, v);
       criticalValuesOnPointsOfGrid[i] = p;
       aa.push_back(std::make_pair(x, 0.));
-      x += 0.5 * dx;
+      // x += 0.5 * dx;
+      x += dx;
     }
     
     // For every persistent interval, sample on the grid.
@@ -650,15 +657,16 @@ PersistenceLandscape discretizeExactLandscape(
     double min_x, double max_x, double dx
 ) {
   
-  PersistenceLandscape result;
-  result.exact = false;
-  result.min_x = min_x;
-  result.max_x = max_x;
-  result.dx = dx;
+  PersistenceLandscape pl_disc;
+  pl_disc.exact = false;
+  pl_disc.min_x = min_x;
+  pl_disc.max_x = max_x;
+  pl_disc.dx = dx;
   
   std::vector<std::vector<std::pair<double, double>>> land_disc;
   std::pair<double, double> currentPoint;
   
+  // assuming `pl` is exact, warn if not `min_x < pl.land[0] < max_x`
   if (pl.land[0][1].first < min_x ||
       pl.land[0][pl.land[0].size() - 2].first > max_x)
     warning("This landscape extends beyond [ `min_x`, `max_x` ].");
@@ -726,8 +734,8 @@ PersistenceLandscape discretizeExactLandscape(
     land_disc.push_back(level_disc);
   }
   
-  result.land = land_disc;
-  return result;
+  pl_disc.land = land_disc;
+  return pl_disc;
 }
 
 PersistenceLandscape discretizeLandscape(
@@ -753,7 +761,7 @@ PersistenceLandscape PersistenceLandscape::scale(
     double x
 ) const {
   
-  std::vector<std::vector<std::pair<double, double>>> result(this->land.size());
+  std::vector<std::vector<std::pair<double, double>>> land_x(this->land.size());
   
   for (size_t lev = 0; lev != this->land.size(); ++lev) {
     
@@ -763,7 +771,7 @@ PersistenceLandscape PersistenceLandscape::scale(
       lambda_lev[i] = std::make_pair(this->land[lev][i].first,
                                      x * this->land[lev][i].second);
     }
-    result[lev] = lambda_lev;
+    land_x[lev] = lambda_lev;
   }
   
   // uses empty constructor `PersistenceLandscape(){}`
@@ -773,8 +781,8 @@ PersistenceLandscape PersistenceLandscape::scale(
   product.max_x = this->max_x;
   product.dx = this->dx;
   // CHANGE
-  // product.land = result;
-  product.land.swap(result);
+  // product.land = land_x;
+  product.land.swap(land_x);
   
   return product;
 }
@@ -787,13 +795,14 @@ PersistenceLandscape operateExactLandscapes(
   if (! pl1.exact || ! pl2.exact)
     stop("`operateExactLandscapes()` requires both landscapes to be exact.");
   
-  PersistenceLandscape result;
-  result.exact = true;
-  result.min_x = min(pl1.min_x, pl2.min_x);
-  result.max_x = max(pl1.max_x, pl2.max_x);
+  PersistenceLandscape pl_op;
+  pl_op.exact = true;
+  pl_op.min_x = min(pl1.min_x, pl2.min_x);
+  pl_op.max_x = max(pl1.max_x, pl2.max_x);
+  pl_op.dx = pl1.dx;
   std::vector<std::vector<std::pair<double, double>>> land(
       std::max(pl1.land.size(), pl2.land.size()));
-  result.land = land;
+  pl_op.land = land;
   
   for (size_t i = 0; i != std::min(pl1.land.size(), pl2.land.size()); ++i) {
     
@@ -855,8 +864,8 @@ PersistenceLandscape operateExactLandscapes(
       lambda_n.push_back(std::make_pair(INT_MAX, 0.));
     }
     // CHANGE
-    // result.land[i] = lambda_n;
-    result.land[i].swap(lambda_n);
+    // pl_op.land[i] = lambda_n;
+    pl_op.land[i].swap(lambda_n);
   }
   
   if (pl1.land.size() > std::min(pl1.land.size(), pl2.land.size())) {
@@ -868,8 +877,8 @@ PersistenceLandscape operateExactLandscapes(
                                       oper(pl1.land[i][nr].second, 0));
       }
       // CHANGE
-      // result.land[i] = lambda_n;
-      result.land[i].swap(lambda_n);
+      // pl_op.land[i] = lambda_n;
+      pl_op.land[i].swap(lambda_n);
     }
   }
   
@@ -882,16 +891,18 @@ PersistenceLandscape operateExactLandscapes(
                                       oper(0, pl2.land[i][nr].second));
       }
       // CHANGE
-      // result.land[i] = lambda_n;
-      result.land[i].swap(lambda_n);
+      // pl_op.land[i] = lambda_n;
+      pl_op.land[i].swap(lambda_n);
     }
   }
   
-  return result;
+  return pl_op;
 }
 
 // REVIEW: Assume only that the `dx` are equal and that they divide the
 // difference between the `min_x`. -JCB
+// NOTE: Follows the convention of using the first PL's `dx` in the result.
+// TODO: Add paragraph about safety conventions to documentation.
 PersistenceLandscape addDiscreteLandscapes(
     const PersistenceLandscape &pl1,
     const PersistenceLandscape &pl2
@@ -901,11 +912,11 @@ PersistenceLandscape addDiscreteLandscapes(
   if (! almostEqual(pl1.dx, pl2.dx))
     stop("`addDiscreteLandscapes()` requires PLs with same `dx`.");
   
-  PersistenceLandscape sum;
-  sum.exact = false;
-  sum.min_x = min(pl1.min_x, pl2.min_x);
-  sum.max_x = max(pl1.max_x, pl2.max_x);
-  sum.dx = pl1.dx;
+  PersistenceLandscape pl_sum;
+  pl_sum.exact = false;
+  pl_sum.min_x = min(pl1.min_x, pl2.min_x);
+  pl_sum.max_x = max(pl1.max_x, pl2.max_x);
+  pl_sum.dx = pl1.dx;
   std::vector<std::vector<std::pair<double, double>>> land_sum;
   
   // insert sums of shared levels
@@ -914,48 +925,56 @@ PersistenceLandscape addDiscreteLandscapes(
     
     std::vector<std::pair<double, double>> level_sum;
     
-    double lead_x = pl1.land[i][1].first - pl2.land[i][1].first;
-    double lag_x = pl1.land[i][pl1.land[i].size()].first -
-      pl2.land[i][pl2.land[i].size()].first;
+    double lead_x = pl1.land[i][0].first - pl2.land[i][0].first;
+    double lag_x = pl1.land[i][pl1.land[i].size() - 1].first -
+      pl2.land[i][pl2.land[i].size() - 1].first;
     int lead_index = std::round(lead_x / pl1.dx);
     int lag_index = std::round(lag_x / pl1.dx);
     
     // insert preceding indices from whichever landscape has them
     if (lead_index < 0) {
       // `pl1` begins first
-      for (int j = 0; j < -lead_index; j++)
+      for (int j = 0; j < -lead_index; j++) {
         level_sum.push_back(pl1.land[i][j]);
+      }
     } else if (lead_index > 0) {
       // `pl2` begins first
-      for (int j = 0; j < lead_index; j++)
+      for (int j = 0; j < lead_index; j++) {
         level_sum.push_back(std::make_pair(
-          pl1.land[i][0].first - (lead_index - j) * pl1.dx,
-          pl2.land[i][j].second
+            pl1.land[i][0].first - (lead_index - j) * pl1.dx,
+            // pl2.land[i][j].first,
+            pl2.land[i][j].second
         ));
+      }
     }
     
     // insert sums of shared indices
     int min_index = std::max(0, lead_index);
     int max_index = std::min(pl1.land[i].size() + lead_index,
                              pl2.land[i].size());
-    for (int j = min_index; j < max_index; j++)
+    for (int j = min_index; j < max_index; j++) {
       level_sum.push_back(std::make_pair(
         pl1.land[i][j - lead_index].first,
-        pl1.land[i][j].second + pl2.land[i][j].second
+        // pl2.land[i][j].first,
+        pl1.land[i][j - lead_index].second + pl2.land[i][j].second
       ));
+    }
     
     // insert succeeding indices from whichever landscape has them
     if (lag_index < 0) {
       // `pl1` ends first
-      for (int j = max_index; j < pl2.land[i].size(); j++)
+      for (int j = 0; j < pl2.land[i].size() - max_index; j++) {
         level_sum.push_back(std::make_pair(
-          pl1.land[i][pl1.land[i].size()].first + (j - max_index + 1) * pl1.dx,
-          pl2.land[i][j].second
+          pl1.land[i][pl1.land[i].size() - 1].first + (1 + j) * pl1.dx,
+          // pl2.land[i][max_index + j].first,
+          pl2.land[i][max_index + j].second
         ));
+      }
     } else if (lag_index > 0) {
       // `pl2` ends first
-      for (int j = max_index - lead_index; j < pl1.land[i].size(); j++)
+      for (int j = max_index - lead_index; j < pl1.land[i].size(); j++) {
         level_sum.push_back(pl1.land[i][j]);
+      }
     }
     
     land_sum.push_back(level_sum);
@@ -967,8 +986,8 @@ PersistenceLandscape addDiscreteLandscapes(
   for (; min_level < pl2.land.size(); min_level++)
     land_sum.push_back(pl2.land[min_level]);
   
-  sum.land = land_sum;
-  return sum;
+  pl_sum.land = land_sum;
+  return pl_sum;
 }
 
 PersistenceLandscape PersistenceLandscape::add(
@@ -976,34 +995,34 @@ PersistenceLandscape PersistenceLandscape::add(
 ) {
   
   // uses empty constructor `PersistenceLandscape(){}`
-  PersistenceLandscape sum;
+  PersistenceLandscape pl_sum;
   
   // both landscapes are exact
   if (this->exact && other.exact)
-    sum = addExactLandscapes(*this, other);
+    pl_sum = addExactLandscapes(*this, other);
   
   // both landscapes are discrete
   else if (! this->exact && ! other.exact)
-    sum = addDiscreteLandscapes(*this, other);
+    pl_sum = addDiscreteLandscapes(*this, other);
   
   // one landscape is exact, the other discrete
   else if (this->exact) {
     // only this landscape is exact
     PersistenceLandscape conversion1 = discretizeExactLandscape(
       *this,
-      other.min_x, other.max_x, other.dx
+      this->min_x, this->max_x, other.dx
     );
-    sum = addDiscreteLandscapes(conversion1, other);
+    pl_sum = addDiscreteLandscapes(conversion1, other);
   } else {
     // only other landscape is exact
     PersistenceLandscape conversion2 = discretizeExactLandscape(
       other,
-      this->min_x, this->max_x, this->dx
+      other.min_x, other.max_x, this->dx
     );
-    sum = addDiscreteLandscapes(*this, conversion2);
+    pl_sum = addDiscreteLandscapes(*this, conversion2);
   }
   
-  return sum;
+  return pl_sum;
 }
 
 double locateIntermediateRoot(
@@ -1037,11 +1056,11 @@ double locateIntermediateRoot(
 
 PersistenceLandscape PersistenceLandscape::abs() {
   
-  PersistenceLandscape result;
-  result.exact = this->exact;
-  result.min_x = this->min_x;
-  result.max_x = this->max_x;
-  result.dx = this->dx;
+  PersistenceLandscape pl_abs;
+  pl_abs.exact = this->exact;
+  pl_abs.min_x = this->min_x;
+  pl_abs.max_x = this->max_x;
+  pl_abs.dx = this->dx;
   
   for (size_t level = 0; level != this->land.size(); ++level) {
     
@@ -1062,7 +1081,7 @@ PersistenceLandscape PersistenceLandscape::abs() {
     for (size_t i = 1; i != this->land[level].size(); ++i) {
       // if a line segment between this->land[level][i-1] and
       // this->land[level][i] crosses the x-axis, then we have to add one
-      // landscape point to result
+      // landscape point to pl_abs
       if ((this->land[level][i - 1].second) *
           (this->land[level][i].second) < 0) {
         
@@ -1084,10 +1103,10 @@ PersistenceLandscape PersistenceLandscape::abs() {
         
       }
     }
-    result.land.push_back(lambda_n);
+    pl_abs.land.push_back(lambda_n);
   }
   
-  return result;
+  return pl_abs;
 }
 
 double innerProductExactLandscapes(
@@ -1202,14 +1221,14 @@ double PersistenceLandscape::inner(
     // only this landscape is exact
     PersistenceLandscape conversion1 = discretizeExactLandscape(
       *this,
-      other.min_x, other.max_x, other.dx
+      this->min_x, this->max_x, other.dx
     );
     scalar = innerProductDiscreteLandscapes(conversion1, other);
   } else {
     // only other landscape is exact
     PersistenceLandscape conversion2 = discretizeExactLandscape(
       other,
-      this->min_x, this->max_x, this->dx
+      other.min_x, other.max_x, this->dx
     );
     scalar = innerProductDiscreteLandscapes(*this, conversion2);
   }
@@ -1449,81 +1468,82 @@ double normDistanceLandscapes(
 
 // The `indicator` function is a vector of pairs. Its length is the number of
 // levels on which it may be nonzero. See Section 3.6 of Bubenik (2015).
-PersistenceLandscape PersistenceLandscape::multiplyIndicator(
+PersistenceLandscape multiplyIndicator(
+    const PersistenceLandscape &pl,
     std::vector<std::pair<double, double>> indicator,
     unsigned r
-) const {
+) {
   
   PersistenceLandscape result;
   
-  for (size_t lev = 0; lev != this->land.size(); ++lev) {
+  for (size_t lev = 0; lev != pl.land.size(); ++lev) {
     
     double lev_c = pow(pow(lev + 1, -1), r);
     std::vector<std::pair<double, double>> lambda_n;
     
     // left (lower) limit
-    if (exact)
+    if (pl.exact)
       lambda_n.push_back(std::make_pair(INT_MIN, 0.));
     
     // if the indicator has at least `lev` levels...
     if (indicator.size() > lev) {
       
-      if (exact) {
+      if (pl.exact) {
         // original method, for exact landscapes
         
         // loop over the critical points...
-        for (size_t nr = 0; nr != this->land[lev].size(); ++nr) {
+        for (size_t nr = 0; nr != pl.land[lev].size(); ++nr) {
           
           // critical point lies before left endpoint; exclude
-          if (this->land[lev][nr].first < indicator[lev].first) {
+          if (pl.land[lev][nr].first < indicator[lev].first) {
             continue;
           }
           
           // critical point lies just after right endpoint; interpolate
-          if (this->land[lev][nr].first > indicator[lev].second) {
+          if (pl.land[lev][nr].first > indicator[lev].second) {
             lambda_n.push_back(std::make_pair(
                 indicator[lev].second,
-                interpolatePoint(this->land[lev][nr - 1], this->land[lev][nr],
+                interpolatePoint(pl.land[lev][nr - 1], pl.land[lev][nr],
                                  indicator[lev].second) * lev_c));
             lambda_n.push_back(std::make_pair(indicator[lev].second, 0.));
             break;
           }
           
           // critical point lies just after left endpoint; interpolate
-          if ((this->land[lev][nr].first >= indicator[lev].first) &&
-              (this->land[lev][nr - 1].first <= indicator[lev].first)) {
+          if ((pl.land[lev][nr].first >= indicator[lev].first) &&
+              (pl.land[lev][nr - 1].first <= indicator[lev].first)) {
             lambda_n.push_back(std::make_pair(indicator[lev].first, 0.));
             lambda_n.push_back(std::make_pair(
                 indicator[lev].first,
-                interpolatePoint(this->land[lev][nr - 1], this->land[lev][nr],
+                interpolatePoint(pl.land[lev][nr - 1], pl.land[lev][nr],
                                  indicator[lev].first) * lev_c));
           }
           
           // critical point lies between left and right endpoints; include
-          // lambda_n.push_back(this->land[lev][nr]);
+          // lambda_n.push_back(pl.land[lev][nr]);
           lambda_n.push_back(std::make_pair(
-              this->land[lev][nr].first,
-              this->land[lev][nr].second * lev_c));
+              pl.land[lev][nr].first,
+              pl.land[lev][nr].second * lev_c));
         }
         
       } else {
         // method for discrete landscapes
         
         // loop over grid...
-        for (size_t nr = 0; nr != this->land[lev].size(); ++nr) {
+        for (size_t nr = 0; nr != pl.land[lev].size(); ++nr) {
           
-          if (this->land[lev][nr].first >= indicator[lev].first &&
-              this->land[lev][nr].first <= indicator[lev].second) {
+          if (pl.land[lev][nr].first >= indicator[lev].first &&
+              pl.land[lev][nr].first <= indicator[lev].second) {
             // critical point lies inside endpoints; include
             
-            // lambda_n.push_back(this->land[lev][nr]);
+            // lambda_n.push_back(pl.land[lev][nr]);
             lambda_n.push_back(std::make_pair(
-                this->land[lev][nr].first,
-                this->land[lev][nr].second * lev_c));
+                pl.land[lev][nr].first,
+                pl.land[lev][nr].second * lev_c));
           } else {
             // critical point lies outside endpoints; exclude
             
-            lambda_n.push_back(std::make_pair(this->land[lev][nr].first, 0.));
+            lambda_n.push_back(std::make_pair(pl.land[lev][nr].first, 0.));
           }
         }
         
@@ -1532,7 +1552,7 @@ PersistenceLandscape PersistenceLandscape::multiplyIndicator(
     }
     
     // right (upper) limit
-    if (exact)
+    if (pl.exact)
       lambda_n.push_back(std::make_pair(INT_MAX, 0.));
     
     // cases with no critical points
@@ -1543,22 +1563,24 @@ PersistenceLandscape PersistenceLandscape::multiplyIndicator(
   return result;
 }
 
-double PersistenceLandscape::integrateIndicatorLandscape(
+double integrateIndicatorLandscape(
+    const PersistenceLandscape &pl,
     std::vector<std::pair<double, double>> indicator,
     unsigned r
-  ) const {
-    PersistenceLandscape pl = this->multiplyIndicator(indicator, r);
-    return pl.integrateLandscape();
+  ) {
+    PersistenceLandscape pl_ind = multiplyIndicator(pl, indicator, r);
+    return pl_ind.integrateLandscape();
   }
 
-double PersistenceLandscape::integrateIndicatorLandscape(
+double integrateIndicatorLandscape(
+    const PersistenceLandscape &pl,
     std::vector<std::pair<double, double>> indicator,
     unsigned r,
     // This function computes the integral of the p^th power of a landscape.
     double p
-) const {
-    PersistenceLandscape pl = this->multiplyIndicator(indicator, r);
-    return pl.integrateLandscape(p);
+) {
+    PersistenceLandscape pl_ind = multiplyIndicator(pl, indicator, r);
+    return pl_ind.integrateLandscape(p);
   }
 
 // Section: List operations

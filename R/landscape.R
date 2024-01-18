@@ -58,7 +58,7 @@ landscape <- function(
   xmax <- xmax %||% max(diagram)
   if (! xmin < xmax) stop("Must have `xmin < xmax`.")
   # grid of between 100 and 1000 intervals of length a power of 10
-  by <- by %||% 10 ^ (floor(log(xmax - xmin, 10)) - 2L)
+  by <- by %||% (10 ^ (floor(log(xmax - xmin, 10)) - 2L))
   
   # construct persistence landscape
   new(PersistenceLandscape, diagram, exact, xmin, xmax, by)
@@ -117,7 +117,7 @@ pl_support <- function(pl) {
       return(range(xvec[! is.infinite(xvec)]))
     },
     discrete = {
-      nz <- which(apply(pl$getInternal()[, , 2L], 2L, max) > 0)
+      nz <- which(apply(pl$getInternal()[, , 2L, drop = FALSE], 2L, max) > 0)
       supp <- intersect(
         Reduce(union, list(nz - 1L, nz, nz + 1L)),
         seq(dim(pl$getInternal())[[2L]])

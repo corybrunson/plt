@@ -1,3 +1,4 @@
+
 test_that("PL is correct for one persistence pair.", {
   # double input
   pd <- matrix(c(0, 2), nrow = 1, ncol = 2)
