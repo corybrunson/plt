@@ -3,19 +3,10 @@
 
 # plt
 
-Persistence landscapes, [originated by Peter
-Bubenik](https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html), are a
-vectorization of persistence data/diagrams that have useful statistical
-properties including linearity and an inner product. This is an R
-package interface to [Paweł Dłotko’s Persistence Landscape
-Toolbox](https://www2.math.upenn.edu/~dlotko/persistenceLandscape.html),
-[developed with
-Bubenik](https://www.sciencedirect.com/science/article/pii/S0747717116300104)
-to efficienctly compute and calculate with persistence landscapes. It
-was adapted from [Jose Bouza’s **tda-tools**
-package](https://github.com/jjbouza/tda-tools), a TDA pipeline used by
-[Bubenik’s
-lab](https://people.clas.ufl.edu/peterbubenik/researchgroup/).
+Persistence landscapes are a vectorization of persistence data/diagrams
+that have useful statistical properties including linearity and an inner
+product.[^1] This is an R package interface to a C++ library to
+efficienctly compute and calculate with persistence landscapes.[^2]
 
 ## Installation
 
@@ -316,6 +307,13 @@ par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 
 ## Acknowledgments
 
+### Precursors
+
+The C++ library is adapted from [Paweł Dłotko’s Persistence Landscape
+Toolbox](https://www2.math.upenn.edu/~dlotko/persistenceLandscape.html).
+It was originally adapted and ported to R in [Jose Bouza’s **tda-tools**
+package](https://github.com/jjbouza/tda-tools).
+
 ### Resources
 
 Development of this package benefitted from the use of equipment and the
@@ -335,3 +333,12 @@ Conduct](https://github.com/corybrunson/pltr/blob/main/CODE_OF_CONDUCT.md).
 
 If you use **plt** in published work, please include a citation
 following `citation("plt")`.
+
+[^1]: Bubenik P (2015) “Statistical Topological Data Analysis using
+    Persistence Landscapes”. *JMLR* **16**(3):77–102.
+    <https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html>
+
+[^2]: Bubenik P & Dłotko P (2017) “A persistence landscapes toolbox for
+    topological statistics”. *Journal of Symbolic Computation*
+    **78**(1):91–114.
+    <https://www.sciencedirect.com/science/article/pii/S0747717116300104>

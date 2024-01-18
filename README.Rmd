@@ -15,9 +15,11 @@ library(plt)
 
 # plt
 
-Persistence landscapes, [originated by Peter Bubenik](https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html), are a vectorization of persistence data/diagrams that have useful statistical properties including linearity and an inner product.
-This is an R package interface to [Paweł Dłotko's Persistence Landscape Toolbox](https://www2.math.upenn.edu/~dlotko/persistenceLandscape.html), [developed with Bubenik](https://www.sciencedirect.com/science/article/pii/S0747717116300104) to efficienctly compute and calculate with persistence landscapes.
-It was adapted from [Jose Bouza's **tda-tools** package](https://github.com/jjbouza/tda-tools), a TDA pipeline used by [Bubenik's lab](https://people.clas.ufl.edu/peterbubenik/researchgroup/).
+Persistence landscapes are a vectorization of persistence data/diagrams that have useful statistical properties including linearity and an inner product.[^pl]
+This is an R package interface to a C++ library to efficienctly compute and calculate with persistence landscapes.[^plt]
+
+[^pl]: Bubenik P (2015) "Statistical Topological Data Analysis using Persistence Landscapes". _JMLR_ **16**(3):77--102. <https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html>
+[^plt]: Bubenik P & Dłotko P (2017) "A persistence landscapes toolbox for topological statistics". _Journal of Symbolic Computation_ **78**(1):91--114. <https://www.sciencedirect.com/science/article/pii/S0747717116300104>
 
 ## Installation
 
@@ -149,6 +151,11 @@ par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 
 
 ## Acknowledgments
+
+### Precursors
+
+The C++ library is adapted from [Paweł Dłotko's Persistence Landscape Toolbox](https://www2.math.upenn.edu/~dlotko/persistenceLandscape.html).
+It was originally adapted and ported to R in [Jose Bouza's **tda-tools** package](https://github.com/jjbouza/tda-tools).
 
 ### Resources
 
