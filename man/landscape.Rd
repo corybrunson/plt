@@ -7,6 +7,7 @@
 \alias{pl_num_levels}
 \alias{pl_limits}
 \alias{pl_support}
+\alias{pl_discretize}
 \title{Persistence Landscapes}
 \usage{
 landscape(
@@ -27,6 +28,8 @@ pl_num_levels(pl)
 pl_limits(pl)
 
 pl_support(pl)
+
+pl_discretize(pl, xmin = NULL, xmax = NULL, by = NULL)
 }
 \arguments{
 \item{pd}{Persistence data (or diagram), stored as a 2-column matrix or as a
@@ -84,9 +87,12 @@ print(pl$getInternal()[[1L]])
 # plot all landscape layers
 plot(pl)
 
-# # coerce to discrete
-# pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .005)
-# plot(pl_)
+# coerce to discrete
+plot(pl, xlim = c(0, .5))
+pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .01)
+plot(pl_)
+pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .001)
+plot(pl_)
 
 # sample points
 points <- tdaunif::sample_torus_tube(60L, 2.5)

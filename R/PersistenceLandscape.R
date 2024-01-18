@@ -48,7 +48,7 @@ print.summary.Rcpp_PersistenceLandscape <- function(
 #' @export
 as.vector.Rcpp_PersistenceLandscape <- function(x, mode = "any") {
   # get discrete representation for consistent abscissa values
-  internal <- x$discretize()
+  internal <- pl_discretize(x)$getInternal()
   
   # export concatenation of levels
   as.vector(t(internal[, , 2L]), mode = mode)

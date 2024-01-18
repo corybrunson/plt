@@ -14,7 +14,7 @@ pl$getInternal()
 print(pl)
 summary(pl)
 
-dim(pl$discretize())
+dim(pl$toDiscrete()$getInternal())
 length(as.vector(pl))
 as.data.frame(pl)
 
@@ -44,7 +44,7 @@ pl$xBy()
 pl$getInternal()
 print(pl)
 
-dim(pl$discretize())
+dim(pl$toDiscrete()$getInternal())
 length(as.vector(pl))
 as.data.frame(pl)
 

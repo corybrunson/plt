@@ -47,6 +47,7 @@ Collate:
     'RcppExports.R'
     'arithmetic.R'
     'calculus.R'
+    'inference.R'
     'plt-package.R'
     'landscape.R'
     'persistence.R'

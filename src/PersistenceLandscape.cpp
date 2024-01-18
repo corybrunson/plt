@@ -224,30 +224,40 @@ public:
       return wrap(getInternalDiscrete(land));
   }
   
-  NumericVector discretize() {
-    PersistenceLandscape disc;
+  PersistenceLandscape toDiscrete() {
+    PersistenceLandscape pl_disc;
     if (exact)
-      disc = discretizeExactLandscape(*this, min_x, max_x, dx);
+      pl_disc =
+        discretizeExactLandscape(*this, this->min_x, this->max_x, this->dx);
     else
-      disc = *this;
-    return wrap(getInternalDiscrete(disc.land));
+      pl_disc = *this;
+    return pl_disc;
+  }
+  PersistenceLandscape discretize(double min_x, double max_x, double dx) {
+    PersistenceLandscape pl_disc;
+    if (exact)
+      pl_disc = discretizeExactLandscape(*this, min_x, max_x, dx);
+    else {
+      warning("Discrete landscapes cannot yet be re-discretized.");
+      pl_disc = *this;
+    }
+    return pl_disc;
   }
   
   // Subsection: Friendzone
   
   friend PersistenceLandscape discretizeExactLandscape(
-    const PersistenceLandscape &pl,
-    double min_x, double max_x, double dx
+      const PersistenceLandscape &pl,
+      double min_x, double max_x, double dx
   );
-  
   friend PersistenceLandscape discretizeLandscape(
       const PersistenceLandscape &pl,
       double min_x, double max_x, double dx
   );
   
-  // TODO: Find more uses for this or replace with addition only. -JCB
   // This is a general algorithm to perform linear operations on persistence
   // landscapes. It perform it by doing operations on landscape points.
+  // TODO: Find more uses for this or replace with addition only. -JCB
   friend PersistenceLandscape operateExactLandscapes(
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2,
@@ -537,6 +547,7 @@ PersistenceLandscape::PersistenceLandscape(
     
   } else {
     
+    // WARNING: Fundamental change from original PLT. -JCB
     // size_t numberOfBins = 2 * ((max_x - min_x) / dx) + 1;
     size_t numberOfBins = (max_x - min_x) / dx + 1;
     
@@ -558,6 +569,7 @@ PersistenceLandscape::PersistenceLandscape(
       std::pair<double, std::vector<double>> p = std::make_pair(x, v);
       criticalValuesOnPointsOfGrid[i] = p;
       aa.push_back(std::make_pair(x, 0.));
+      // WARNING: Fundamental change from original PLT. -JCB
       // x += 0.5 * dx;
       x += dx;
     }
@@ -610,7 +622,7 @@ PersistenceLandscape::PersistenceLandscape(
     }
     
   }
-
+  
 }
 
 // Section: Converters
@@ -954,9 +966,9 @@ PersistenceLandscape addDiscreteLandscapes(
                              pl2.land[i].size());
     for (int j = min_index; j < max_index; j++) {
       level_sum.push_back(std::make_pair(
-        pl1.land[i][j - lead_index].first,
-        // pl2.land[i][j].first,
-        pl1.land[i][j - lead_index].second + pl2.land[i][j].second
+          pl1.land[i][j - lead_index].first,
+          // pl2.land[i][j].first,
+          pl1.land[i][j - lead_index].second + pl2.land[i][j].second
       ));
     }
     
@@ -965,9 +977,9 @@ PersistenceLandscape addDiscreteLandscapes(
       // `pl1` ends first
       for (int j = 0; j < pl2.land[i].size() - max_index; j++) {
         level_sum.push_back(std::make_pair(
-          pl1.land[i][pl1.land[i].size() - 1].first + (1 + j) * pl1.dx,
-          // pl2.land[i][max_index + j].first,
-          pl2.land[i][max_index + j].second
+            pl1.land[i][pl1.land[i].size() - 1].first + (1 + j) * pl1.dx,
+            // pl2.land[i][max_index + j].first,
+            pl2.land[i][max_index + j].second
         ));
       }
     } else if (lag_index > 0) {
@@ -1035,13 +1047,13 @@ double locateIntermediateRoot(
   
   // throw error if segment does not cross abscissa
   if (p1.second * p2.second > 0) {
-    std::ostringstream errMessage;
-    errMessage << "Arguments to `locateIntermediateRoot()` were ("
-    << p1.first << "," << p1.second << ") and ("
-    << p2.first << "," << p2.second
-    << "). The segment between those points does not cross the abscissa.";
-    std::string errMessageStr = errMessage.str();
-    const char *err = errMessageStr.c_str();
+    std::ostringstream errMsg;
+    errMsg << "Arguments to `locateIntermediateRoot()` were ("
+           << p1.first << "," << p1.second << ") and ("
+           << p2.first << "," << p2.second
+           << "). The segment between those points does not have a root.";
+    std::string errMsgStr = errMsg.str();
+    const char *err = errMsgStr.c_str();
     throw(err);
   }
   
@@ -1334,7 +1346,8 @@ double PersistenceLandscape::integrateLandscape() const {
     // each `lambda_n`.
     // for (size_t nr = 2; nr != this->land[i].size() - 1; ++nr) {
     for (size_t nr = 1 + infs; nr != this->land[i].size() - infs; ++nr) {
-      integral += 0.5 * (this->land[i][nr].first - this->land[i][nr - 1].first) *
+      integral += 0.5 *
+        (this->land[i][nr].first - this->land[i][nr - 1].first) *
         (this->land[i][nr].second + this->land[i][nr - 1].second);
     }
   }
@@ -1567,10 +1580,10 @@ double integrateIndicatorLandscape(
     const PersistenceLandscape &pl,
     std::vector<std::pair<double, double>> indicator,
     unsigned r
-  ) {
-    PersistenceLandscape pl_ind = multiplyIndicator(pl, indicator, r);
-    return pl_ind.integrateLandscape();
-  }
+) {
+  PersistenceLandscape pl_ind = multiplyIndicator(pl, indicator, r);
+  return pl_ind.integrateLandscape();
+}
 
 double integrateIndicatorLandscape(
     const PersistenceLandscape &pl,
@@ -1579,9 +1592,9 @@ double integrateIndicatorLandscape(
     // This function computes the integral of the p^th power of a landscape.
     double p
 ) {
-    PersistenceLandscape pl_ind = multiplyIndicator(pl, indicator, r);
-    return pl_ind.integrateLandscape(p);
-  }
+  PersistenceLandscape pl_ind = multiplyIndicator(pl, indicator, r);
+  return pl_ind.integrateLandscape(p);
+}
 
 // Section: List operations
 
@@ -1679,80 +1692,83 @@ double PLsd(List pl_list, unsigned p) {
 // Section: Module
 
 RCPP_EXPOSED_CLASS(PersistenceLandscape)
-
-RCPP_MODULE(persistence_landscape_module) {
-  using namespace Rcpp;
   
-  class_<PersistenceLandscape>("PersistenceLandscape")
-  
-  // .constructor<NumericMatrix>(""
-  // "Creates an exact PL from a PD as a 2-column numeric matrix")
-  // .constructor<NumericMatrix, double, double, double>(""
-  // "Creates a discrete PL from a PD as a 2-column numeric matrix")
-  .constructor<NumericMatrix, bool, double, double, double>(""
-  "Creates a PL from a PD as a 2-column numeric matrix")
-  
-  .method("isExact",
-  &PersistenceLandscape::isExact,
-  "Queries whether the underlying PL representation is exact")
-  .method("xMin",
-  &PersistenceLandscape::xMin,
-  "Returns the infimum (left endpoint) of the PL support")
-  .method("xMax",
-  &PersistenceLandscape::xMax,
-  "Returns the supremum (right endpoint) of the PL support")
-  .method("xBy",
-  &PersistenceLandscape::xBy,
-  "Returns the resolution of the discrete representation")
-  
-  .method("getInternal",
-  &PersistenceLandscape::getInternal,
-  "Returns the internal tensor representation of the PL")
-  .method("discretize",
-  &PersistenceLandscape::discretize,
-  "Casts an exact PL to a discrete one")
-  
-  .method("scale",
-  &PersistenceLandscape::scale,
-  "Multiplies this PL by a scalar")
-  .method("add",
-  &PersistenceLandscape::add,
-  "Adds this PL to another")
-  .method("abs",
-  &PersistenceLandscape::abs,
-  "Takes the absolute value of this PL")
-  .method("inner",
-  &PersistenceLandscape::inner,
-  "Takes the inner product of this PL with another")
-  
-  .method("minimum",
-  &PersistenceLandscape::minimum,
-  "Finds the minimum value of one level of this PL")
-  .method("maximum",
-  &PersistenceLandscape::maximum,
-  "Finds the maximum value of one level of this PL")
-  
-  .method("moment",
-  &PersistenceLandscape::moment,
-  "Computes the n^th moment of one level of this PL")
-  .method("integrate",
-  &PersistenceLandscape::integrate,
-  "Computes the integral of this PL")
-  .method("distance",
-  &PersistenceLandscape::distance,
-  "Takes the p-distance between this PL and another")
-  .method("indicator",
-  &PersistenceLandscape::indicator,
-  "Multiplies this PL by a level-indexed set of indicator functions")
-  .method("indicator_form",
-  &PersistenceLandscape::indicator_form,
-  "Computes the integral of the productof this PL with an indicator")
-  ;
-  
-  Rcpp::function("PLsum", &PLsum);
-  Rcpp::function("PLdiff", &PLdiff);
-  Rcpp::function("PLmean", &PLmean);
-  Rcpp::function("PLdist", &PLdist);
-  Rcpp::function("PLvar", &PLvar);
-  Rcpp::function("PLsd", &PLsd);
-}
+  RCPP_MODULE(persistence_landscape_module) {
+    using namespace Rcpp;
+    
+    class_<PersistenceLandscape>("PersistenceLandscape")
+      
+      // .constructor<NumericMatrix>(""
+      // "Creates an exact PL from a PD as a 2-column numeric matrix")
+      // .constructor<NumericMatrix, double, double, double>(""
+      // "Creates a discrete PL from a PD as a 2-column numeric matrix")
+      .constructor<NumericMatrix, bool, double, double, double>(""
+      "Creates a PL from a PD as a 2-column numeric matrix")
+      
+      .method("isExact",
+      &PersistenceLandscape::isExact,
+      "Queries whether the underlying PL representation is exact")
+      .method("xMin",
+      &PersistenceLandscape::xMin,
+      "Returns the infimum (left endpoint) of the PL support")
+      .method("xMax",
+      &PersistenceLandscape::xMax,
+      "Returns the supremum (right endpoint) of the PL support")
+      .method("xBy",
+      &PersistenceLandscape::xBy,
+      "Returns the resolution of the discrete representation")
+      
+      .method("getInternal",
+      &PersistenceLandscape::getInternal,
+      "Returns the internal tensor representation of the PL")
+      .method("toDiscrete",
+      &PersistenceLandscape::toDiscrete,
+      "Casts an exact PL to a discrete one")
+      .method("discretize",
+      &PersistenceLandscape::discretize,
+      "Casts an exact PL to a discrete one")
+      
+      .method("scale",
+      &PersistenceLandscape::scale,
+      "Multiplies this PL by a scalar")
+      .method("add",
+      &PersistenceLandscape::add,
+      "Adds this PL to another")
+      .method("abs",
+      &PersistenceLandscape::abs,
+      "Takes the absolute value of this PL")
+      .method("inner",
+      &PersistenceLandscape::inner,
+      "Takes the inner product of this PL with another")
+      
+      .method("minimum",
+      &PersistenceLandscape::minimum,
+      "Finds the minimum value of one level of this PL")
+      .method("maximum",
+      &PersistenceLandscape::maximum,
+      "Finds the maximum value of one level of this PL")
+      
+      .method("moment",
+      &PersistenceLandscape::moment,
+      "Computes the n^th moment of one level of this PL")
+      .method("integrate",
+      &PersistenceLandscape::integrate,
+      "Computes the integral of this PL")
+      .method("distance",
+      &PersistenceLandscape::distance,
+      "Takes the p-distance between this PL and another")
+      .method("indicator",
+      &PersistenceLandscape::indicator,
+      "Multiplies this PL by a level-indexed set of indicator functions")
+      .method("indicator_form",
+      &PersistenceLandscape::indicator_form,
+      "Computes the integral of the productof this PL with an indicator")
+      ;
+    
+    Rcpp::function("PLsum", &PLsum);
+    Rcpp::function("PLdiff", &PLdiff);
+    Rcpp::function("PLmean", &PLmean);
+    Rcpp::function("PLdist", &PLdist);
+    Rcpp::function("PLvar", &PLvar);
+    Rcpp::function("PLsd", &PLsd);
+  }

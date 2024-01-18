@@ -100,9 +100,12 @@ print(pl$getInternal()[[1L]])
 # plot all landscape layers
 plot(pl)
 
-# # coerce to discrete
-# pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .005)
-# plot(pl_)
+# coerce to discrete
+plot(pl, xlim = c(0, .5))
+pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .01)
+plot(pl_)
+pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .001)
+plot(pl_)
 
 # sample points
 points <- tdaunif::sample_torus_tube(60L, 2.5)

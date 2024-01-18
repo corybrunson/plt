@@ -127,31 +127,11 @@ pl_support <- function(pl) {
   )
 }
 
-#' #' @rdname landscape
-#' #' @export
-#' pl_discretize <- function(pl, xmin = NULL, xmax = NULL, by = NULL) {
-#'   if (is.null(xmin) && is.null(xmax)) return(pl)
-#'   # TODO: Replace the `NULL` defaults with the `pl$*()` values?
-#'   if (is.null(xmin)) xmin <- pl$xMin()
-#'   if (is.null(xmax)) xmax <- pl$xMax()
-#'   if (is.null(by)) by <- pl$xBy()
-#'   pl$discretize(xmin, xmax, by)
-#' }
-#' 
-#' #' @rdname landscape
-#' #' @export
-#' pl_expand <- function(pl, xmin = NULL, xmax = NULL) {
-#'   if (is.null(xmin) && is.null(xmax)) return(pl)
-#'   if (is.null(xmin)) xmin <- pl$xMin()
-#'   if (is.null(xmax)) xmax <- pl$xMax()
-#'   pl$expand(xmin, xmax)
-#' }
-#' 
-#' #' @rdname landscape
-#' #' @export
-#' pl_contract <- function(pl, xmin = NULL, xmax = NULL) {
-#'   if (is.null(xmin) && is.null(xmax)) return(pl)
-#'   if (is.null(xmin)) xmin <- pl$xMin()
-#'   if (is.null(xmax)) xmax <- pl$xMax()
-#'   pl$contract(xmin, xmax)
-#' }
+#' @rdname landscape
+#' @export
+pl_discretize <- function(pl, xmin = NULL, xmax = NULL, by = NULL) {
+  if (is.null(xmin)) xmin <- pl$xMin()
+  if (is.null(xmax)) xmax <- pl$xMax()
+  if (is.null(by)) by <- pl$xBy()
+  pl$discretize(xmin, xmax, by)
+}
