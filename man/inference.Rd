@@ -72,9 +72,7 @@ from the two lists of landscapes.}
 which to estimate the null distance between mean landscapes.}
 }
 \value{
-A list with class \code{"htest"} containing the following components
-(TODO: organize these as in e.g. \code{\link[stats:chisq.test]{stats::chisq.test()}}):
-\describe{
+A list with class \code{"htest"} containing the following components:
 \item{\code{statistic}}{(z-test only) the value of the test statistic.}
 \item{\code{parameter}}{(z-test only) the degrees of freedom of the test, \eqn{\lvert x \rvert + \lvert y \rvert - 2}.}
 \item{\code{p.value}}{the p-value for the test.}
@@ -83,7 +81,6 @@ A list with class \code{"htest"} containing the following components
 \item{\code{alternative}}{a character string describing the alternative hypothesis.}
 \item{\code{method}}{a character string indicating the test performed.}
 \item{\code{conf.int}}{(z-test only) a confidence interval for the estimated difference in means. Depends on the choice of \code{conf.level}.}
-}
 }
 \description{
 Compute test statistics and conduct null hypothesis tests for
