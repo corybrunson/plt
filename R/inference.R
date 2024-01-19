@@ -13,8 +13,18 @@
 #' @param max_iter Positive integer; the maximum number of combinations using
 #'   which to estimate the null distance between mean landscapes.
 #' @inheritParams stats::t.test
-#' @return A persistence landscape (an object of S4 class
-#'   'Rcpp_PersistenceLandscape').
+#' @return A list with class `"htest"` containing the following components
+#'   (TODO: format these as in e.g. [stats::chisq.test()]):
+#' \describe{
+#'   \item{`statistic`}{(z-test only) the value of the test statistic.}
+#'   \item{`parameter`}{(z-test only) the degrees of freedom of the test, \eqn{\lvert x \rvert + \lvert y \rvert - 2}.}
+#'   \item{`p.value`}{the p-value for the test.}
+#'   \item{`estimate`}{the estimated difference difference in means.}
+#'   \item{`null.value`}{the difference in means under the null hypothesis, always \eqn{0}.}
+#'   \item{`alternative`}{a character string describing the alternative hypothesis.}
+#'   \item{`method`}{a character string indicating the test performed.}
+#'   \item{`conf.int`}{(z-test only) a confidence interval for the estimated difference in means. Depends on the choice of `conf.level`.}
+#' }
 #' @seealso PersistenceLandscape-methods
 #' @example inst/examples/ex-inference.R
 NULL
@@ -56,12 +66,12 @@ pl_z_test <- function(
     statistic = c(z = z),
     parameter = c(df = length(x) + length(y) - 2L),
     p.value = pval,
-    conf.int = conf,
     estimate = c(`mean of x` = xbar, `mean of y` = ybar),
     null.value = c(`difference in means` = 0),
     # stderr = c(),
     alternative = alternative,
-    method = "z-test"
+    method = "z-test",
+    conf.int = conf
   )
   class(res) <- "htest"
   return(res)
