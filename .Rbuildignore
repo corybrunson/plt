@@ -1,5 +1,18 @@
+# R project
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
+# package
+LICENSE
+^CODE_OF_CONDUCT.md$
+^CONTRIBUTING.md$
+^README.Rmd$
+
+# hosting
+^cran-comments.md$
+^CRAN-SUBMISSION$
+^CRAN-RELEASE$
+
+# idiosyncrasies
 sandbox
 
