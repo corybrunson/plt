@@ -1,9 +1,18 @@
 #' @title Prefix and Infix Operators for Persistence Landscapes
 #' @description Perform arithmetic on persistence landscapes.
-#' 
+#'
+#' @details Most of these operators extend selected members of the [S4 Arith
+#'   group generic][base::Arithmetic] to the 'Rcpp_PersistenceLandscape' class:
+#'   unary and binary `+` and `-` for persistence landscapes, `*`, and `/` for
+#'   one persistence landscape (either factor or the numerator) and one numeric
+#'   (either factor or the denominator). The exception is the binary `%*%`,
+#'   which extends [matrix multiplication][base::matmult] to the inner product
+#'   on persistence landscapes.
+#'
 #' @docType methods
-#' @name persistence_landscape
-#' @rdname Rcpp_PersistenceLandscape-methods
+#' @name Rcpp_PersistenceLandscape-methods
+#' @aliases Arithmetic
+#' @aliases matmult
 #' @include PersistenceLandscape.R
 #' @param e1,e2,x,y Arguments of unary and binary operators.
 #' @return A persistence landscape (an object of S4 class
