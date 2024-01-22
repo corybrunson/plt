@@ -15,7 +15,7 @@ from the GitHub repository as follows:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("corybrunson/pltr")
+remotes::install_github("corybrunson/plt")
 ```
 
 Alternatively—and especially if you want to contribute—you can clone or
@@ -325,9 +325,9 @@ group](https://people.clas.ufl.edu/peterbubenik/researchgroup/).
 
 Bug reports, unit tests, documentation, use cases, feature suggestions,
 and other contributions are welcome. See the
-[CONTRIBUTING](https://github.com/corybrunson/pltr/blob/main/CONTRIBUTING.md)
+[CONTRIBUTING](https://github.com/corybrunson/plt/blob/main/CONTRIBUTING.md)
 file for guidance, and please respect the [Code of
-Conduct](https://github.com/corybrunson/pltr/blob/main/CODE_OF_CONDUCT.md).
+Conduct](https://github.com/corybrunson/plt/blob/main/CODE_OF_CONDUCT.md).
 
 ### Cite
 
