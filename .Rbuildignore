@@ -16,3 +16,6 @@ LICENSE
 # idiosyncrasies
 sandbox
 
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
