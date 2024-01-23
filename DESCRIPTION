@@ -1,6 +1,6 @@
 Package: plt
 Type: Package
-Title: Interface to the Persistence Landscapes Toolbox
+Title: R Interface to the Persistence Landscapes Toolbox
 Version: 0.0.0.9999
 Authors@R: c(
     person("Jason Cory", "Brunson",
