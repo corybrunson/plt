@@ -135,17 +135,20 @@ bench::mark(
   check = \(x, y) all(abs(y - x) < epsi)
 )
 
-# toy example from Bubenik & Dłotko (2017)
+# toy example from Bubenik & Dłotko (2017) Section 5
 
 n <- 5L
+# scale factor apparent from results in Section 5.5
+f <- 54
 
 pls_n <- list()
 for (i in seq(11L)) {
-  A <- do.call(rbind, lapply(seq(0L, n), function(m) {
+  A <- do.call(rbind, lapply(seq(0L, n - 1L), function(m) {
     tdaunif::sample_circle(n = 50L, sd = .15/2) +
       matrix(rep(c(2 * m, 0), each = 50L), ncol = 2L)
   }))
-  pd <- as_persistence(ripserr::vietoris_rips(A, dim = 1, threshold = n * 2))
+  A[, ] <- A[, ] * f
+  pd <- as_persistence(ripserr::vietoris_rips(A, dim = 1, threshold = n * 2 * f))
   pl <- landscape(pd, degree = 1L, exact = TRUE)
   pls_n <- c(pls_n, list(pl))
 }
