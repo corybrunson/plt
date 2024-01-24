@@ -42,6 +42,7 @@ pl_dist <- function(pl_list, p = 2) {
 #' @export
 pl_norm <- function(pl, p = 2) {
   p <- ensure_p(p)
+  if (p == Inf) p <- 0
   pl$norm(p)
 }
 

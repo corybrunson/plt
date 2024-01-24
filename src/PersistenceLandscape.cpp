@@ -162,6 +162,9 @@ RCPP_MODULE(persistence_landscape_module) {
     .method("distance",
     &PersistenceLandscape::distance,
     "Takes the p-distance between this PL and another")
+    .method("norm",
+    &PersistenceLandscape::norm,
+    "Computes the p-norm of this PL")
     .method("indicator",
     &PersistenceLandscape::indicator,
     "Multiplies this PL by a level-indexed set of indicator functions")

@@ -382,6 +382,7 @@ public:
       return normDistanceLandscapes(*this, other, p);
   }
   
+  // FIXME: Calling `pl$norm()` from R seems to always return 0.
   double norm(
       unsigned p
   ) {

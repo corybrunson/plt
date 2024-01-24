@@ -1,0 +1,113 @@
+---
+title: "Analysis of a Toy Example"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Analysis of a Toy Example}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7L
+)
+```
+
+This vignette reproduces the analysis of a toy example in Sections 5.2--5.7 of Bubenik and Dłotko (2017).[^plt]
+
+[^plt]: Bubenik P & Dłotko P (2017) "A persistence landscapes toolbox for topological statistics". _Journal of Symbolic Computation_ **78**(1):91--114. <https://www.sciencedirect.com/science/article/pii/S0747717116300104>
+
+```{r setup}
+library(plt)
+```
+
+The purpose of this example is to illustrate the Persistence Landscapes Toolbox for summarizing and discriminating among point cloud data based on their persistent homology.
+The toy data comprise several point clouds sampled from unions of pairwise tangent unit circles; see the example after the sampler below (c.f. Section 5.2):
+
+```{r, fig.height=3}
+# sample `50 * n` points from `n` concatenated circles with uniform noise
+sample_tangent_circles <- function(n) {
+  # bind rows from several samples
+  do.call(rbind, lapply(seq(0L, n - 1L), function(m) {
+    # sample from the unit circle
+    tdaunif::sample_circle(n = 50L) +
+      # shift this circle `m` units rightward
+      matrix(rep(c(2 * m, 0), each = 50L), ncol = 2L) +
+      # add uniform noise
+      matrix(runif(n = 50L * 2L, min = -0.15, max = 0.15), ncol = 2L)
+  }))
+}
+# illustrate with a 5-circle sequence
+plot(sample_tangent_circles(n = 5L), pch = "+", col = "red", asp = 1)
+```
+
+Here we generate all $5 * 11 = 55$ samples and store their degree-1 persistence landscapes.
+We include a scale factor that recovers landscapes at the same scale as those reported in the paper:
+
+```{r}
+# define scale factor
+sf <- 55
+# initialize list
+toy_pl <- vector("list", 5L)
+# populate each position in the list
+for (n in seq_along(toy_pl)) {
+  # initialize sub-list
+  toy_n <- vector("list", 11L)
+  # draw 11 samples
+  for (i in seq(11L)) {
+    toy_data <- sample_tangent_circles(n)
+    # scale data by scale factor
+    toy_data[, ] <- toy_data[, ] * sf
+    # calculate persistent homology, up to the diameter of the subspace
+    ph <- ripserr::vietoris_rips(toy_data, dim = 1, threshold = n * 2 * sf)
+    # format as persistence data
+    pd <- as_persistence(ph)
+    # construct degree-1 persistence landscape
+    pl <- landscape(pd, degree = 1L, exact = TRUE)
+    # store the landscape
+    toy_n[[i]] <- pl
+  }
+  toy_pl[[n]] <- toy_n
+}
+```
+
+Each landscape contains as many significant levels as circles made up the sample space. In the plots below, tick marks are omitted to make more space for the landscapes themselves:
+
+```{r, fig.height=10}
+par(mfcol = c(11L, 5L), mar = c(0, 0, 0, 0))
+for (n in seq_along(toy_pl)) for (i in seq_along(toy_pl[[n]])) {
+  plot(toy_pl[[n]][[i]], xaxt = "n", yaxt = "n")
+}
+```
+
+The commonalities of the samples from each space can be revealed by taking their mean landscapes (c.f. Section 5.4):
+
+```{r, fig.height=1}
+# calculate means
+toy_pl_mean <- lapply(toy_pl, pl_mean)
+# plot  means
+par(mfcol = c(1L, 5L), mar = c(0, 0, 0, 0))
+for (n in seq_along(toy_pl_mean)) {
+  plot(toy_pl_mean[[n]], xaxt = "n", yaxt = "n")
+}
+```
+
+Below we compute the $1$-, $2$-, and $\infty$-norms of these mean landscapes (c.f. Section 5.5):
+
+```{r}
+# norms to calculate
+ps <- c(1, 2, Inf)
+# initialize matrix
+toy_pl_norms <- matrix(NA_real_, nrow = 5L, ncol = 3L)
+rownames(toy_pl_norms) <- paste0(seq(5L), "-circle")
+colnames(toy_pl_norms) <- paste0("p = ", ps)
+# populate matrix
+for (n in seq_along(toy_pl_mean)) for (p in seq_along(ps)) {
+  # calculate norm
+  toy_pl_norms[n, p] <- pl_norm(toy_pl_mean[[n]], ps[[p]])
+}
+# print matrix
+print(toy_pl_norms)
+```

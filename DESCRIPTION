@@ -37,7 +37,9 @@ Suggests:
     grDevices,
     tdaunif,
     TDA,
-    ripserr
+    ripserr,
+    knitr,
+    rmarkdown
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
@@ -54,3 +56,4 @@ Collate:
     'plot.R'
     'show.R'
     'utils.R'
+VignetteBuilder: knitr

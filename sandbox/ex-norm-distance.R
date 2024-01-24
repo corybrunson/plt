@@ -1,3 +1,5 @@
+# This script uses user-facing R implementations to validate and benchmark the
+# norm and related functions in C++.
 
 # TODO: When `epsi` in 'PersistenceLandscape.h' is made into a user-settable
 # option, set this equal to that option.
