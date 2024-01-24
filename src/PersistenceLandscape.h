@@ -1463,7 +1463,12 @@ double normDistanceLandscapes(
   
   // pl1 - pl2
   // PersistenceLandscape diff = pl1 - pl2;
-  PersistenceLandscape diff = subtractExactLandscapes(pl1, pl2);
+  PersistenceLandscape diff;
+  if (pl1.exact && pl2.exact) {
+    diff = subtractExactLandscapes(pl1, pl2);
+  } else {
+    diff = addDiscreteLandscapes(pl1, pl2.scale(-1));
+  }
   // | pl1 - pl2 |
   diff = diff.abs();
   

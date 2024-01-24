@@ -66,7 +66,7 @@ pl_norm_discrete <- function(pl, p = 2) {
 pl_norm <- function(pl, p = 2) {
   stopifnot(is.numeric(p), p >= 1)
   switch(
-    pl_str(pl),
+    pl_type(pl),
     exact = pl_norm_exact(pl = pl, p = p),
     discrete = pl_norm_discrete(pl = pl, p = p)
   )
@@ -124,15 +124,15 @@ pl_dist(pl1, pl2, p = 1)
 ps <- c(Inf, 1 + 2 ^ seq(8L, 0L, -2L), 1)
 # exact
 bench::mark(
-  cpp = vapply(ps, function(p) pl_distance(ple1, ple2, p), 0),
+  Cpp = vapply(ps, function(p) pl_distance(ple1, ple2, p), 0),
   R = vapply(ps, function(p) pl_dist(ple1, ple2, p), 0),
-  check = TRUE
+  check = \(x, y) all(abs(y - x) < epsi)
 )
 # discrete
 bench::mark(
-  cpp = vapply(ps, function(p) pl_distance(pl1, pl2, p), 0),
+  Cpp = vapply(ps, function(p) pl_distance(pl1, pl2, p), 0),
   R = vapply(ps, function(p) pl_dist(pl1, pl2, p), 0),
-  check = TRUE
+  check = \(x, y) all(abs(y - x) < epsi)
 )
 
 # toy example from Bubenik & Dłotko (2017)
