@@ -8,6 +8,12 @@ LICENSE
 ^CONTRIBUTING.md$
 ^README.Rmd$
 
+# website
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^vignettes/articles$
+
 # hosting
 ^cran-comments.md$
 ^CRAN-SUBMISSION$
@@ -17,6 +23,3 @@ LICENSE
 ignore
 sandbox
 
-^_pkgdown\.yml$
-^docs$
-^pkgdown$
