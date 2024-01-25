@@ -15,8 +15,11 @@ src/*.dll
 # ignore
 ignore
 
+# website
 docs/*
 !docs/articles/
+
+# ???
 inst/doc
 /doc/
 /Meta/
