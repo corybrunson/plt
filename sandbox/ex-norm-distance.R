@@ -1,6 +1,8 @@
 # This script uses user-facing R implementations to validate and benchmark the
 # norm and related functions in C++.
 
+devtools::load_all()
+
 # TODO: When `epsi` in 'PersistenceLandscape.h' is made into a user-settable
 # option, set this equal to that option.
 epsi <- 0.000005
@@ -65,7 +67,7 @@ pl_norm_discrete <- function(pl, p = 2) {
 }
 
 # norm for landscapes
-pl_norm <- function(pl, p = 2) {
+pl_norm_ <- function(pl, p = 2) {
   stopifnot(is.numeric(p), p >= 1)
   switch(
     pl_type(pl),
@@ -75,9 +77,9 @@ pl_norm <- function(pl, p = 2) {
 }
 
 # L^p distance between two comparable landscapes
-pl_dist <- function(pl1, pl2, p = 2) {
+pl_distance_ <- function(pl1, pl2, p = 2) {
   pl <- pl2 - pl1
-  pl_norm(pl = pl, p = p)
+  pl_norm_(pl = pl, p = p)
 }
 
 # persistence data for two point clouds
@@ -97,6 +99,14 @@ pl_norm_exact(ple1, p = 2)
 # 1 norm
 pl_norm_exact(ple1, p = 1)
 
+# {plt}
+# inf norm
+pl_norm(ple1, p = Inf)
+# 2 norm
+pl_norm(ple1, p = 2)
+# 1 norm
+pl_norm(ple1, p = 1)
+
 # two discrete persistence landscapes
 pl1 <- landscape(pd1, degree = 1, xmin = 0, xmax = 1.5, by = 0.01)
 pl2 <- landscape(pd2, degree = 1, xmin = 0, xmax = 1.5, by = 0.01)
@@ -108,6 +118,14 @@ pl_norm_discrete(pl1, p = 2)
 # 1 norm
 pl_norm_discrete(pl1, p = 1)
 
+# {plt}
+# inf norm
+pl_norm(pl1, p = Inf)
+# 2 norm
+pl_norm(pl1, p = 2)
+# 1 norm
+pl_norm(pl1, p = 1)
+
 # arithmetic differences
 ple12 <- ple2 - ple1
 plot(ple12)
@@ -116,48 +134,31 @@ plot(pl12)
 dim(pl12$getInternal())
 
 # L^inf distance
-pl_dist(pl1, pl2, p = Inf)
+pl_distance_(pl1, pl2, p = Inf)
 # L^2 distance
-pl_dist(pl1, pl2, p = 2)
+pl_distance_(pl1, pl2, p = 2)
 # L^1 distance
-pl_dist(pl1, pl2, p = 1)
+pl_distance_(pl1, pl2, p = 1)
+
+# {plt}
+# L^inf distance
+pl_distance(pl1, pl2, p = Inf)
+# L^2 distance
+pl_distance(pl1, pl2, p = 2)
+# L^1 distance
+pl_distance(pl1, pl2, p = 1)
 
 # benchmark comparison of distance functions
 ps <- c(Inf, 1 + 2 ^ seq(8L, 0L, -2L), 1)
 # exact
 bench::mark(
   Cpp = vapply(ps, function(p) pl_distance(ple1, ple2, p), 0),
-  R = vapply(ps, function(p) pl_dist(ple1, ple2, p), 0),
+  R = vapply(ps, function(p) pl_distance_(ple1, ple2, p), 0),
   check = \(x, y) all(abs(y - x) < epsi)
 )
 # discrete
 bench::mark(
   Cpp = vapply(ps, function(p) pl_distance(pl1, pl2, p), 0),
-  R = vapply(ps, function(p) pl_dist(pl1, pl2, p), 0),
+  R = vapply(ps, function(p) pl_distance_(pl1, pl2, p), 0),
   check = \(x, y) all(abs(y - x) < epsi)
 )
-
-# toy example from Bubenik & Dłotko (2017) Section 5
-
-n <- 5L
-# scale factor apparent from results in Section 5.5
-f <- 54
-
-pls_n <- list()
-for (i in seq(11L)) {
-  A <- do.call(rbind, lapply(seq(0L, n - 1L), function(m) {
-    tdaunif::sample_circle(n = 50L, sd = .15/2) +
-      matrix(rep(c(2 * m, 0), each = 50L), ncol = 2L)
-  }))
-  A[, ] <- A[, ] * f
-  pd <- as_persistence(ripserr::vietoris_rips(A, dim = 1, threshold = n * 2 * f))
-  pl <- landscape(pd, degree = 1L, exact = TRUE)
-  pls_n <- c(pls_n, list(pl))
-}
-
-pls_n_avg <- pl_mean(pls_n)
-plot(pls_n_avg)
-
-pl_norm(pls_n_avg, 1)
-pl_norm(pls_n_avg, 2)
-pl_norm(pls_n_avg, Inf)

@@ -309,11 +309,11 @@ public:
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2
   );
-  friend double normDistanceLandscapes(
+  friend double distanceLandscapes(
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2
   );
-  friend double normDistanceLandscapes(
+  friend double distanceLandscapes(
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2,
       unsigned p
@@ -348,11 +348,11 @@ public:
   
   PersistenceLandscape scale(double x) const;
   
-  PersistenceLandscape add(const PersistenceLandscape &other);
+  PersistenceLandscape add(const PersistenceLandscape &other) const;
   
-  PersistenceLandscape abs();
+  PersistenceLandscape abs() const;
   
-  double inner(const PersistenceLandscape &other);
+  double inner(const PersistenceLandscape &other) const;
   
   double moment(
       unsigned p,
@@ -362,7 +362,7 @@ public:
   
   double integrate(
       unsigned p
-  ) {
+  ) const {
     double integral;
     if (p == 1)
       integral = this->integrateLandscape();
@@ -374,29 +374,37 @@ public:
   double distance(
       PersistenceLandscape &other,
       unsigned p
-  ) {
+  ) const {
     if (p == 0)
       // `p = 0` encodes `p = Inf` (`R_PosInf` is a double)
-      return normDistanceLandscapes(*this, other);
+      return distanceLandscapes(*this, other);
     else
-      return normDistanceLandscapes(*this, other, p);
+      return distanceLandscapes(*this, other, p);
   }
   
-  // FIXME: Calling `pl$norm()` from R seems to always return 0.
   double norm(
       unsigned p
-  ) {
+  ) const {
+    
+    // uses null constructor `PersistenceLandscape(){}`
+    PersistenceLandscape zero;
+    // impose same properties as `this`
+    zero.exact = this->exact;
+    zero.min_x = this->min_x;
+    zero.max_x = this->max_x;
+    zero.dx = this->dx;
+    
     if (p == 0) {
-      return normDistanceLandscapes(*this, *this);
+      return distanceLandscapes(*this, zero);
     } else {
-      return normDistanceLandscapes(*this, *this, p);
+      return distanceLandscapes(*this, zero, p);
     }
   }
   
   PersistenceLandscape indicator(
       List indicator,
       unsigned r
-  ) {
+  ) const {
     
     // Encode the list of vectors as a vector of pairs.
     std::vector<std::pair<double, double>> ind;
@@ -416,7 +424,7 @@ public:
       List indicator,
       unsigned r,
       unsigned p
-  ) {
+  ) const {
     
     // Encode the list of vectors as a vector of pairs.
     std::vector<std::pair<double, double>> ind;
@@ -787,7 +795,7 @@ PersistenceLandscape PersistenceLandscape::scale(
     land_x[lev] = lambda_lev;
   }
   
-  // uses empty constructor `PersistenceLandscape(){}`
+  // uses null constructor `PersistenceLandscape(){}`
   PersistenceLandscape product;
   product.exact = this->exact;
   product.min_x = this->min_x;
@@ -1005,9 +1013,9 @@ PersistenceLandscape addDiscreteLandscapes(
 
 PersistenceLandscape PersistenceLandscape::add(
     const PersistenceLandscape &other
-) {
+) const {
   
-  // uses empty constructor `PersistenceLandscape(){}`
+  // uses null constructor `PersistenceLandscape(){}`
   PersistenceLandscape pl_sum;
   
   // both landscapes are exact
@@ -1067,7 +1075,7 @@ double locateIntermediateRoot(
   return -b / a;
 }
 
-PersistenceLandscape PersistenceLandscape::abs() {
+PersistenceLandscape PersistenceLandscape::abs() const {
   
   PersistenceLandscape pl_abs;
   pl_abs.exact = this->exact;
@@ -1217,7 +1225,7 @@ double innerProductDiscreteLandscapes(
 
 double PersistenceLandscape::inner(
     const PersistenceLandscape &other
-) {
+) const {
   
   double scalar;
   
@@ -1445,7 +1453,7 @@ double maximalAsymmetricDistance(
   return maxDist;
 }
 
-double normDistanceLandscapes(
+double distanceLandscapes(
     const PersistenceLandscape &pl1,
     const PersistenceLandscape &pl2
 ) {
@@ -1453,7 +1461,7 @@ double normDistanceLandscapes(
                   maximalAsymmetricDistance(pl2, pl1));
 }
 
-double normDistanceLandscapes(
+double distanceLandscapes(
     const PersistenceLandscape &pl1,
     const PersistenceLandscape &pl2,
     unsigned p
@@ -1468,7 +1476,8 @@ double normDistanceLandscapes(
   if (pl1.exact && pl2.exact) {
     diff = subtractExactLandscapes(pl1, pl2);
   } else {
-    diff = addDiscreteLandscapes(pl1, pl2.scale(-1));
+    // diff = addDiscreteLandscapes(pl1, pl2.scale(-1));
+    diff = pl1.add(pl2.scale(-1));
   }
   // | pl1 - pl2 |
   diff = diff.abs();

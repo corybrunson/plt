@@ -111,3 +111,50 @@ for (n in seq_along(toy_pl_mean)) for (p in seq_along(ps)) {
 # print matrix
 print(toy_pl_norms)
 ```
+
+Below we compute the pairwise $2$-distances between the mean landscapes (c.f. Section 5.6):
+
+```{r}
+# compute distance matrix
+pl_dist(toy_pl_mean)
+```
+
+Section 5.7 reports that permutation tests between the sample landscapes from different numbers $n$ of circles all obtained p-values near zero, successfully detecting the differences between the samples.
+Below we report two permutation tests, between the samples $n=1$ and $n=2$ and between the samples $n=4$ and $n=5$:
+
+```{r}
+# compare 1-circle and 2-circle samples
+pl_perm_test(toy_pl[[1L]], toy_pl[[2L]])
+# compare 4-circle and 5-circle samples
+pl_perm_test(toy_pl[[4L]], toy_pl[[5L]])
+```
+
+To test the specificity, rather than the sensitivity, of the permutation test, below we generate additional, smaller samples from the 1- and 5-circle spaces and perform permutation tests between them and their original counterparts from the same spaces:
+
+```{r}
+# draw a new 1-circle sample
+new_pl_1 <- vector("list", 6L)
+for (i in seq(6L)) {
+  toy_data <- sample_tangent_circles(1)
+  toy_data[, ] <- toy_data[, ] * sf
+  ph <- ripserr::vietoris_rips(toy_data, dim = 1, threshold = 1 * 2 * sf)
+  pd <- as_persistence(ph)
+  pl <- landscape(pd, degree = 1L, exact = TRUE)
+  new_pl_1[[i]] <- pl
+}
+# compare old & new 1-circle samples
+pl_perm_test(toy_pl[[1L]], new_pl_1)
+
+# draw a new 5-circle sample
+new_pl_5 <- vector("list", 6L)
+for (i in seq(6L)) {
+  toy_data <- sample_tangent_circles(5)
+  toy_data[, ] <- toy_data[, ] * sf
+  ph <- ripserr::vietoris_rips(toy_data, dim = 1, threshold = 5 * 2 * sf)
+  pd <- as_persistence(ph)
+  pl <- landscape(pd, degree = 1L, exact = TRUE)
+  new_pl_5[[i]] <- pl
+}
+# compare old & new 1-circle samples
+pl_perm_test(toy_pl[[5L]], new_pl_5)
+```
