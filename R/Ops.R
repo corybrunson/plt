@@ -13,6 +13,7 @@
 #' @name Rcpp_PersistenceLandscape-methods
 #' @aliases Arithmetic
 #' @aliases matmult
+#' @aliases + - * / %*%
 #' @include PersistenceLandscape.R
 #' @usage
 #' ## S4 methods for signature

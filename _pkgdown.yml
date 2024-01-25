@@ -3,17 +3,17 @@ reference:
   desc: An R interface to the Persistence Landscapes Toolbox
   contents:
   - '`plt-package`'
+- title: "'persistence' class"
+  desc: An S3 class for persistence data
+  contents:
+  - '`as_persistence`'
 - title: "'PersistenceLandscape' class"
-  desc: An S4 class exported via Rcpp
+  desc: An S4 class for persistence landscapes exposed from C++
   contents:
   - '`PersistenceLandscape`'
   - '`landscape`'
   - '`show`'
   - '`plot`'
-- title: "'persistence' class"
-  desc: An S3 class for persistence data
-  contents:
-  - '`as_persistence`'
 - title: Operations on landscapes
   desc: Computational tools for working with persistence landscapes
   contents:

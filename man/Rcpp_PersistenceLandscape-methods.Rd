@@ -5,6 +5,11 @@
 \alias{Rcpp_PersistenceLandscape-methods}
 \alias{Arithmetic}
 \alias{matmult}
+\alias{+}
+\alias{-}
+\alias{*}
+\alias{/}
+\alias{\%*\%}
 \alias{+,Rcpp_PersistenceLandscape,missing-method}
 \alias{Rcpp_PersistenceLandscape,missing-method}
 \alias{+,Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape-method}
@@ -73,7 +78,7 @@ plot(pl2)
 # negation
 plot(-pl1)
 # scalar multiplication
-plot(3 * pl2)
+plot(pl2 * 3)
 # addition
 plot(pl1 + 2 * pl2)
 # subtraction
@@ -82,16 +87,21 @@ par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))
 
 # add an exact landscape to a discrete one
 pl2d <- landscape(pd2, degree = 1, exact = FALSE,
-                  xmin = 0, xmax = 1.2, by = 0.00001)
+                  xmin = 0, xmax = 1.2, by = 0.001)
 # plot the summand landscapes and their sum with consistent parameters;
 # the exact landscape is automatically converted to a discrete one
 n_lev <- pl_num_levels(pl1)
 par(mfrow = c(3, 1), mar = c(0, 2, 0, 2))
 plot(pl1, xlim = c(0, 1.2), n_levels = n_lev)
 plot(pl2d, xlim = c(0, 1.2), n_levels = n_lev)
-# FIXME: This plot contains a mysterious second peak.
 plot(pl1 + pl2d, xlim = c(0, 1.2), n_levels = n_lev)
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))
+
+# inner products of similar landscapes
+pl2 \%*\% pl2
+pl2d \%*\% pl2d
+# FIXME: This should not be much smaller than the above two.
+pl2 \%*\% pl2d
 
 \dontrun{
 set.seed(031537L)
