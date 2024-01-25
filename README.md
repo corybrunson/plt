@@ -15,7 +15,7 @@ from the GitHub repository as follows:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("corybrunson/plt")
+remotes::install_github("corybrunson/plt", build_vignettes = TRUE)
 ```
 
 Alternatively—and especially if you want to contribute—you can clone or

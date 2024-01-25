@@ -19,7 +19,7 @@ This vignette reproduces the analysis of a toy example in Sections 5.2--5.7 of B
 
 [^plt]: Bubenik P & Dłotko P (2017) "A persistence landscapes toolbox for topological statistics". _Journal of Symbolic Computation_ **78**(1):91--114. <https://www.sciencedirect.com/science/article/pii/S0747717116300104>
 
-```{r setup}
+```{r}
 library(plt)
 ```
 
@@ -61,7 +61,9 @@ for (n in seq_along(toy_pl)) {
     # scale data by scale factor
     toy_data[, ] <- toy_data[, ] * sf
     # calculate persistent homology, up to the diameter of the subspace
-    ph <- ripserr::vietoris_rips(toy_data, dim = 1, threshold = n * 2 * sf)
+    ph <- suppressWarnings(
+      ripserr::vietoris_rips(toy_data, dim = 1, threshold = n * 2 * sf)
+    )
     # format as persistence data
     pd <- as_persistence(ph)
     # construct degree-1 persistence landscape
@@ -137,7 +139,9 @@ new_pl_1 <- vector("list", 6L)
 for (i in seq(6L)) {
   toy_data <- sample_tangent_circles(1)
   toy_data[, ] <- toy_data[, ] * sf
-  ph <- ripserr::vietoris_rips(toy_data, dim = 1, threshold = 1 * 2 * sf)
+  ph <- suppressWarnings(
+    ripserr::vietoris_rips(toy_data, dim = 1, threshold = 1 * 2 * sf)
+  )
   pd <- as_persistence(ph)
   pl <- landscape(pd, degree = 1L, exact = TRUE)
   new_pl_1[[i]] <- pl
@@ -150,7 +154,9 @@ new_pl_5 <- vector("list", 6L)
 for (i in seq(6L)) {
   toy_data <- sample_tangent_circles(5)
   toy_data[, ] <- toy_data[, ] * sf
-  ph <- ripserr::vietoris_rips(toy_data, dim = 1, threshold = 5 * 2 * sf)
+  ph <- suppressWarnings(
+    ripserr::vietoris_rips(toy_data, dim = 1, threshold = 5 * 2 * sf)
+  )
   pd <- as_persistence(ph)
   pl <- landscape(pd, degree = 1L, exact = TRUE)
   new_pl_5[[i]] <- pl

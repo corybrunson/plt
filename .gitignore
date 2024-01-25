@@ -18,3 +18,5 @@ ignore
 
 docs
 inst/doc
+/doc/
+/Meta/
