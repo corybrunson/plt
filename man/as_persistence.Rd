@@ -63,15 +63,19 @@ a matrix of persistence pairs.}
 }
 \value{
 Persistence data in the form of a list with named entries:
-\itemize{
-\item{pairs}{A list of 2-column matrices containing birth-death pairs
-in each dimension/degree, starting with zero.}
-\item{modulus}{The (integer) modulus of the prime field
-in which homology coefficientts were calculated.}
-\item{max_dim}{The (integer) maximum dimension
-of calculated features.}
-\item{threshold}{The (real) maximum length of an edge
-in the simplicial filtration.}
+\item{\code{pairs}}{
+A list of 2-column matrices containing birth-death pairs
+in each dimension/degree, starting with zero.
+}
+\item{\code{modulus}}{
+The (integer) modulus of the prime field in which
+homology coefficientts were calculated.
+}
+\item{\code{max_dim}}{
+The (integer) maximum dimension of calculated features.
+}
+\item{\code{threshold}}{
+The (real) maximum length of an edge in the simplicial filtration.
 }
 }
 \description{
@@ -121,7 +125,7 @@ print(pl)
 # landscape dimensions
 print(dim(pl$getInternal()))
 # landscape values
-print(pl$getInternal())
+print(head(pl$getInternal()))
 # plot landscape
 plot(pl)
 

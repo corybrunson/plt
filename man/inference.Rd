@@ -73,14 +73,32 @@ which to estimate the null distance between mean landscapes.}
 }
 \value{
 A list with class \code{"htest"} containing the following components:
-\item{\code{statistic}}{(z-test only) the value of the test statistic.}
-\item{\code{parameter}}{(z-test only) the degrees of freedom of the test, \eqn{\lvert x \rvert + \lvert y \rvert - 2}.}
-\item{\code{p.value}}{the p-value for the test.}
-\item{\code{estimate}}{the estimated difference difference in means.}
-\item{\code{null.value}}{the difference in means under the null hypothesis, always \eqn{0}.}
-\item{\code{alternative}}{a character string describing the alternative hypothesis.}
-\item{\code{method}}{a character string indicating the test performed.}
-\item{\code{conf.int}}{(z-test only) a confidence interval for the estimated difference in means. Depends on the choice of \code{conf.level}.}
+\item{\code{statistic}}{
+(z-test only) the value of the test statistic.
+}
+\item{\code{parameter}}{
+(z-test only) the degrees of freedom of the test,
+\eqn{\lvert x \rvert + \lvert y \rvert - 2}.
+}
+\item{\code{p.value}}{
+the p-value for the test.
+}
+\item{\code{estimate}}{
+the estimated difference difference in means.
+}
+\item{\code{null.value}}{
+the difference in means under the null hypothesis, always \eqn{0}.
+}
+\item{\code{alternative}}{
+a character string describing the alternative hypothesis.
+}
+\item{\code{method}}{
+a character string indicating the test performed.
+}
+\item{\code{conf.int}}{
+(z-test only) a confidence interval for the estimated difference in means.
+Depends on the choice of \code{conf.level}.
+}
 }
 \description{
 Compute test statistics and conduct null hypothesis tests for

@@ -24,16 +24,20 @@
 #' @inheritParams base::as.data.frame
 
 #' @return Persistence data in the form of a list with named entries:
-#' \itemize{
-#'   \item{pairs}{A list of 2-column matrices containing birth-death pairs
-#'                in each dimension/degree, starting with zero.}
-#'   \item{modulus}{The (integer) modulus of the prime field
-#'                  in which homology coefficientts were calculated.}
-#'   \item{max_dim}{The (integer) maximum dimension
-#'                  of calculated features.}
-#'   \item{threshold}{The (real) maximum length of an edge
-#'                    in the simplicial filtration.}
-#' }
+#'   \item{`pairs`}{
+#'   A list of 2-column matrices containing birth-death pairs
+#'   in each dimension/degree, starting with zero.
+#'   }
+#'   \item{`modulus`}{
+#'   The (integer) modulus of the prime field in which
+#'   homology coefficientts were calculated.
+#'   }
+#'   \item{`max_dim`}{
+#'   The (integer) maximum dimension of calculated features.
+#'   }
+#'   \item{`threshold`}{
+#'   The (real) maximum length of an edge in the simplicial filtration.
+#'   }
 
 #' @example inst/examples/ex-landscape-exact.r
 #' @example inst/examples/ex-landscape-discrete.r

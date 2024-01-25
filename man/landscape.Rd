@@ -108,7 +108,7 @@ print(pl)
 # landscape dimensions
 print(dim(pl$getInternal()))
 # landscape values
-print(pl$getInternal())
+print(head(pl$getInternal()))
 # plot landscape
 plot(pl)
 
