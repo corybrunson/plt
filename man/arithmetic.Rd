@@ -56,25 +56,26 @@ pl_moment(pl, p = 1L, center = 0, level = 1L)
 pl_vmoment(pl, p = 1L, center = 0, level = pl_num_levels(pl))
 }
 \arguments{
-\item{pl1, pl2}{Persistent landscapes.}
+\item{pl1, pl2}{Persistence landscapes.}
 
-\item{pl_list}{A list of persistent landscapes.}
+\item{pl_list}{A list of persistence landscapes.}
 
-\item{pl}{Persistent landscapes.}
+\item{pl}{Persistence landscapes.}
 
 \item{mult}{Double; a real-valued scale factor.}
 
 \item{p}{Positive integer or infinity; the power used to compute a norm or
 moment.}
 
-\item{level}{Positive integer; the level of the persistence landscape (up
-to) whose moment to calculate.}
+\item{level}{Positive integer; the level of the persistence landscape (up to)
+whose moment to calculate.}
 
 \item{center}{Double; where to center the moment.}
 }
 \value{
 A persistence landscape (an object of S4 class
-'Rcpp_PersistenceLandscape'), a real number, or a vector of real numbers.
+'Rcpp_PersistenceLandscape'), a list of persistence landscapes, a real
+number, or a vector of real numbers.
 }
 \description{
 Calculate sums, scalar multiples, absolute values, means, inner
@@ -86,11 +87,11 @@ arise from the Hilbert space structure on persistence landscapes (Bubenik,
 These functions are prefixed \verb{pl_*()} to help users access them via
 tab-completion. Some take their names from the underlying S4 class methods
 and are only provided to enable composition via pipes: \code{add}, \code{scale},
-\code{abs}, \code{inner}, \code{min} (\code{minimum}), \code{max} (\code{maximum}), and \code{moment};
-\code{range} combines \code{min} and \code{max}. Others mimic classic R functions to
-handle lists of persistence landscapes: \code{sum}, \code{diff}, \code{mean}, \code{var}, and
-\code{sd}. Finally, some are vectorizations of the preceding: \code{vmin}, \code{vmax},
-\code{vrange}, and \code{vmoment}.
+\code{abs}, \code{inner}, \code{min} (\code{minimum}), \code{max} (\code{maximum}), and \code{moment}; \code{range}
+combines \code{min} and \code{max}. Others mimic classic R functions to handle lists
+of persistence landscapes: \code{sum}, \code{diff}, \code{mean}, \code{var}, and \code{sd}. Finally,
+some are vectorizations of the preceding: \code{vmin}, \code{vmax}, \code{vrange}, and
+\code{vmoment}.
 }
 \examples{
 

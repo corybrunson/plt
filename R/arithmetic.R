@@ -7,25 +7,26 @@
 #' @details These functions are prefixed `pl_*()` to help users access them via
 #'   tab-completion. Some take their names from the underlying S4 class methods
 #'   and are only provided to enable composition via pipes: `add`, `scale`,
-#'   `abs`, `inner`, `min` (`minimum`), `max` (`maximum`), and `moment`;
-#'   `range` combines `min` and `max`. Others mimic classic R functions to
-#'   handle lists of persistence landscapes: `sum`, `diff`, `mean`, `var`, and
-#'   `sd`. Finally, some are vectorizations of the preceding: `vmin`, `vmax`,
-#'   `vrange`, and `vmoment`.
+#'   `abs`, `inner`, `min` (`minimum`), `max` (`maximum`), and `moment`; `range`
+#'   combines `min` and `max`. Others mimic classic R functions to handle lists
+#'   of persistence landscapes: `sum`, `diff`, `mean`, `var`, and `sd`. Finally,
+#'   some are vectorizations of the preceding: `vmin`, `vmax`, `vrange`, and
+#'   `vmoment`.
 #'
 #' @name arithmetic
 #' @include PersistenceLandscape.R
-#' @param pl Persistent landscapes.
-#' @param pl1,pl2 Persistent landscapes.
-#' @param pl_list A list of persistent landscapes.
+#' @param pl Persistence landscapes.
+#' @param pl1,pl2 Persistence landscapes.
+#' @param pl_list A list of persistence landscapes.
 #' @param mult Double; a real-valued scale factor.
-#' @param level Positive integer; the level of the persistence landscape (up
-#'   to) whose moment to calculate.
+#' @param level Positive integer; the level of the persistence landscape (up to)
+#'   whose moment to calculate.
 #' @param p Positive integer or infinity; the power used to compute a norm or
 #'   moment.
 #' @param center Double; where to center the moment.
 #' @return A persistence landscape (an object of S4 class
-#'   'Rcpp_PersistenceLandscape'), a real number, or a vector of real numbers.
+#'   'Rcpp_PersistenceLandscape'), a list of persistence landscapes, a real
+#'   number, or a vector of real numbers.
 #' @seealso PersistenceLandscape-methods
 #' @example inst/examples/ex-arithmetic.R
 NULL

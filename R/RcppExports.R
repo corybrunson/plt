@@ -21,3 +21,11 @@
 #' @export
 NULL
 
+almostEqual <- function(a, b) {
+    .Call(`_plt_almostEqual`, a, b)
+}
+
+almostUnique <- function(a) {
+    .Call(`_plt_almostUnique`, a)
+}
+

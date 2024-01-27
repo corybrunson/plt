@@ -13,6 +13,33 @@ inline bool almostEqual(double a, double b) {
   return false;
 }
 
+// [[Rcpp::export]]
+bool almostEqual(NumericVector a, NumericVector b) {
+  if (a.size() != b.size())
+    stop("Vectors must have equal length.");
+    
+  bool res = true;
+  for (int i = 0; i < a.size(); i++) {
+    if (! almostEqual(a[i], b[i])) {
+      res = false;
+      break;
+    }
+  }
+  return res;
+}
+
+// [[Rcpp::export]]
+bool almostUnique(NumericVector a) {
+  bool res = true;
+  for (int i = 0; i < a.size() - 1; i++) {
+    if (! almostEqual(a[i], a[i + 1])) {
+      res = false;
+      break;
+    }
+  }
+  return res;
+}
+
 // compare birth-death pairs
 bool compareFeatures(
     std::pair<double, double> x,
@@ -198,6 +225,30 @@ public:
   //   const PersistenceLandscape &pl,
   //   double min_x = 0, double max_x = 1, double dx = 0.001
   // );
+  
+  // construct a discrete persistence landscape from a vectorization,
+  // encoded row-wise (atypical for R) in a `NumericMatrix`
+  PersistenceLandscape(
+    // vector of time points
+    const NumericVector &t,
+    // matrix of levels
+    const NumericMatrix &x
+  ) {
+    // impose properties
+    this->exact = false;
+    this->min_x = t[0];
+    this->max_x = t[t.size() - 1];
+    this->dx = (this->max_x - this->min_x) / (t.size() - 1);
+    
+    // populate `land`
+    for (size_t i = 0; i != x.nrow(); ++i) {
+      std::vector<std::pair<double, double>> lev;
+      for (int j = 0; j < x.ncol(); j++) {
+        lev.push_back(std::make_pair(t[j], x(i,j)));
+      }
+      this->land.push_back(lev);
+    }
+  }
   
   // Subsection: Internals
   

@@ -48,6 +48,7 @@ Collate:
     'Ops.R'
     'RcppExports.R'
     'arithmetic.R'
+    'algebra.R'
     'calculus.R'
     'inference.R'
     'plt-package.R'

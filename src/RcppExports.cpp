@@ -10,10 +10,35 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// almostEqual
+bool almostEqual(NumericVector a, NumericVector b);
+RcppExport SEXP _plt_almostEqual(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(almostEqual(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// almostUnique
+bool almostUnique(NumericVector a);
+RcppExport SEXP _plt_almostUnique(SEXP aSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type a(aSEXP);
+    rcpp_result_gen = Rcpp::wrap(almostUnique(a));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_persistence_landscape_module();
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_plt_almostEqual", (DL_FUNC) &_plt_almostEqual, 2},
+    {"_plt_almostUnique", (DL_FUNC) &_plt_almostUnique, 1},
     {"_rcpp_module_boot_persistence_landscape_module", (DL_FUNC) &_rcpp_module_boot_persistence_landscape_module, 0},
     {NULL, NULL, 0}
 };

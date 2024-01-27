@@ -109,6 +109,8 @@ RCPP_MODULE(persistence_landscape_module) {
     // "Creates a discrete PL from a PD as a 2-column numeric matrix")
     .constructor<NumericMatrix, bool, double, double, double>(""
     "Creates a PL from a PD as a 2-column numeric matrix")
+    .constructor<NumericVector, NumericMatrix>(""
+    "Creates a discrete PL from a time vector and level matrix")
     
     .method("isExact",
     &PersistenceLandscape::isExact,

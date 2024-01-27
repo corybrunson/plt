@@ -27,9 +27,9 @@ pl_indicator_form(pl, supports, r = 0, p = 1)
 
 \item{p}{Positive integer or infinity; the power used to compute an integral.}
 
-\item{pl1, pl2}{Persistent landscapes.}
+\item{pl1, pl2}{Persistence landscapes.}
 
-\item{pl_list}{A list of persistent landscapes.}
+\item{pl_list}{A list of persistence landscapes.}
 
 \item{supports}{List of support intervals for landscape levels.}
 
@@ -38,7 +38,7 @@ indicator linear form.}
 }
 \value{
 A persistence landscape (an object of S4 class
-'Rcpp_PersistenceLandscape').
+'Rcpp_PersistenceLandscape'), a real number, or a vector of real numbers.
 }
 \description{
 Calculate distances and perform infinitesimal calculus on
