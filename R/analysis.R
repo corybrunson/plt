@@ -2,7 +2,7 @@
 #' @description Calculate distances and perform infinitesimal calculus on
 #'   persistence landscapes. See Section 3 of Bubenik (2015).
 #'
-#' @name calculus
+#' @name analysis
 #' @include arithmetic.R
 #' @inheritParams landscape
 #' @inheritParams arithmetic
@@ -13,17 +13,17 @@
 #' @return A persistence landscape (an object of S4 class
 #'   'Rcpp_PersistenceLandscape'), a real number, or a vector of real numbers.
 #' @seealso PersistenceLandscape-methods
-#' @example inst/examples/ex-calculus.R
+#' @example inst/examples/ex-analysis.R
 NULL
 
-#' @rdname calculus
+#' @rdname analysis
 #' @export
 pl_integrate <- function(pl, p = 1) {
   p <- ensure_p(p)
   pl$integrate(p)
 }
 
-#' @rdname calculus
+#' @rdname analysis
 #' @export
 pl_distance <- function(pl1, pl2, p = 2) {
   p <- ensure_p(p)
@@ -31,14 +31,14 @@ pl_distance <- function(pl1, pl2, p = 2) {
   pl1$distance(pl2, p)
 }
 
-#' @rdname calculus
+#' @rdname analysis
 #' @export
 pl_dist <- function(pl_list, p = 2) {
   p <- ensure_p(p)
   PLdist(pl_list, p)
 }
 
-#' @rdname calculus
+#' @rdname analysis
 #' @export
 pl_norm <- function(pl, p = 2) {
   p <- ensure_p(p)
@@ -46,13 +46,13 @@ pl_norm <- function(pl, p = 2) {
   pl$norm(p)
 }
 
-#' @rdname calculus
+#' @rdname analysis
 #' @export
 pl_indicator <- function(pl, supports, r = 0) {
   pl$indicator(supports, r = r)
 }
 
-#' @rdname calculus
+#' @rdname analysis
 #' @export
 pl_indicator_form <- function(pl, supports, r = 0, p = 1) {
   p <- ensure_p(p)
