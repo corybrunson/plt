@@ -165,10 +165,13 @@ format.persistence <- function(x, ...) {
   fmt2 <- paste(lines2, collapse = "\n")
   
   # other parameters, if any
-  fmt3 <- paste(
-    if (! is.na(x$modulus)) sprintf("modulus = %i", x$modulus),
-    if (! is.na(x$threshold)) sprintf("threshold = %d", x$threshold),
-    sep = "; "
+  fmt3 <- do.call(
+    paste,
+    c(
+      if (! is.na(x$modulus)) list(sprintf("modulus = %i", x$modulus)),
+      if (! is.na(x$threshold)) list(sprintf("threshold = %f", x$threshold)),
+      list(sep = "; ")
+    )
   )
   
   if (length(fmt3) == 0L) {
