@@ -64,10 +64,10 @@ Compute persistence landscapes from persistence data.
 \code{landscape()} is a wrapper around the S4 class constructor
 \verb{[methods:new()]}. The \verb{pl_*()} helper functions take a persistence
 landscape as returned by \code{landscape()} and return its representation
-(\code{pl_is_exact()} and \code{pl_type()}), the number of levels (\code{pl_num_levels()}),
-the endpoints of its internal representation (excluding infinities)
-(\code{pl_limits()}), and the endpoints of its support, i.e. of the points at
-which its value is nonzero (\code{pl_support()}).
+(\code{pl_is_exact()} and \code{pl_type()}), the number of levels
+(\code{pl_num_levels()}), the endpoints of its internal representation
+(excluding infinities) (\code{pl_limits()}), and the endpoints of its support,
+i.e. of the points at which its value is nonzero (\code{pl_support()}).
 }
 \examples{
 

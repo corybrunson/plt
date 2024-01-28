@@ -4,10 +4,10 @@
 #' @details `landscape()` is a wrapper around the S4 class constructor
 #'   `[methods:new()]`. The `pl_*()` helper functions take a persistence
 #'   landscape as returned by `landscape()` and return its representation
-#'   (`pl_is_exact()` and `pl_type()`), the number of levels (`pl_num_levels()`),
-#'   the endpoints of its internal representation (excluding infinities)
-#'   (`pl_limits()`), and the endpoints of its support, i.e. of the points at
-#'   which its value is nonzero (`pl_support()`).
+#'   (`pl_is_exact()` and `pl_type()`), the number of levels
+#'   (`pl_num_levels()`), the endpoints of its internal representation
+#'   (excluding infinities) (`pl_limits()`), and the endpoints of its support,
+#'   i.e. of the points at which its value is nonzero (`pl_support()`).
 #'
 #' @name landscape
 #' @include plt-package.R
@@ -54,7 +54,7 @@ landscape <- function(
   }
   
   # infer any missing parameters from the diagram
-  xmin <- xmin %||% min(diagram)
+  xmin <- xmin %||% 0
   xmax <- xmax %||% max(diagram)
   if (! xmin < xmax) stop("Must have `xmin < xmax`.")
   # grid of between 100 and 1000 intervals of length a power of 10
