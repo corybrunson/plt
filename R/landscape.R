@@ -12,9 +12,8 @@
 #' @name landscape
 #' @include plt-package.R
 #' @include PersistenceLandscape.R
-#' @param pd Persistence data (or diagram), stored as a 2-column matrix or as a
-#'   persistence diagram object with element `pairs` being a list of 2-column
-#'   matrices (birth-death pairs).
+#' @param pd Persistence data (or diagram), stored as a 2-column matrix, as a
+#'   '[persistence]' object, or in a format coercible to 'persistence'.
 #' @param degree Non-negative integer; if input is a persistence diagram object,
 #'   then the dimension for which to compute a landscape. (For degree \eqn{d},
 #'   the \eqn{(d+1)}th matrix in the list will be selected.)
@@ -39,13 +38,16 @@ landscape <- function(
 ) {
   
   # birth-death pairs matrix `diagram`
-  if (inherits(pd, "persistence")) {
+  if (is.atomic(pd)) {
+    diagram <- pd
+    stopifnot(ncol(diagram) >= 2L, is.numeric(diagram))
+  } else {
+    pd <- try(as_persistence(pd))
+    if (inherits(pd, "try-error"))
+      stop("There is no `as_persistence()` method for object `pd`.")
     if (is.null(degree))
       stop("`landscape()` requires a homological degree (`degree = <int>`).")
     diagram <- pd$pairs[[degree + 1L]]
-  } else if (is.atomic(pd)) {
-    diagram <- pd
-    stopifnot(ncol(diagram) >= 2L, is.numeric(diagram))
   }
   
   # content check

@@ -2,9 +2,9 @@
 # sample points
 points <- tdaunif::sample_torus_tube(60L, 2.5)
 
-# compute persistence data, retaining parameters
-pd <- as_persistence(TDA::ripsDiag(points, maxdimension = 2L, maxscale = 3))
-print(dim(pd$pairs[[2L]]))
+# compute persistent homology
+pd <- TDA::ripsDiag(points, maxdimension = 2L, maxscale = 3)
+head(pd$diagram)
 
 # compute persistence landscape for 1-dimensional cycles
 pl <- landscape(pd, degree = 1L)

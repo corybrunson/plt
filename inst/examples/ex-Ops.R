@@ -2,8 +2,8 @@
 # infix arithmetic with two landscapes
 pt1 <- tdaunif::sample_torus_tube(100, 2.5)
 pt2 <- tdaunif::sample_torus_tube(100, 2.5)
-pd1 <- as_persistence(ripserr::vietoris_rips(pt1, dim = 2L, threshold = 3))
-pd2 <- as_persistence(ripserr::vietoris_rips(pt2, dim = 2L, threshold = 3))
+pd1 <- ripserr::vietoris_rips(pt1, dim = 2L, threshold = 3)
+pd2 <- ripserr::vietoris_rips(pt2, dim = 2L, threshold = 3)
 pl1 <- landscape(pd1, degree = 1L, exact = TRUE)
 pl2 <- landscape(pd2, degree = 1L, exact = TRUE)
 # plot
@@ -43,14 +43,14 @@ set.seed(031537L)
 
 # compute exact landscape for a large sample
 pt <- tdaunif::sample_torus_tube(600, 2.5)
-pd <- as_persistence(ripserr::vietoris_rips(pt, dim = 2, threshold = 3))
+pd <- ripserr::vietoris_rips(pt, dim = 2, threshold = 3)
 pl <- landscape(pd, degree = 1, exact = TRUE)
 
 # compute exact landscapes for a large sample of small samples
 pl_list <- c()
 for (i in seq(100)) {
   pti <- tdaunif::sample_torus_tube(100, 2.5)
-  pdi <- as_persistence(ripserr::vietoris_rips(pti, dim = 2, threshold = 3))
+  pdi <- ripserr::vietoris_rips(pti, dim = 2, threshold = 3)
   pli <- landscape(pdi, degree = 1L, exact = TRUE)
   pl_list <- c(pl_list, pli)
 }

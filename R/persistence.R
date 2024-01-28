@@ -39,8 +39,7 @@
 #'   The (real) maximum length of an edge in the simplicial filtration.
 #'   }
 
-#' @example inst/examples/ex-landscape-exact.r
-#' @example inst/examples/ex-landscape-discrete.r
+#' @example inst/examples/ex-persistence.r
 #' @export
 as_persistence <- function(x, ...) UseMethod("as_persistence")
 

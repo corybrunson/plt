@@ -88,49 +88,14 @@ can be imported by others as needed. Refer to
 }
 \examples{
 
-# sample points
-points <- tdaunif::sample_torus_tube(100, 5)
-
-# compute persistence
-pd <- as_persistence(ripserr::vietoris_rips(points, dim = 2L, threshold = 1))
-print(pd)
-
-# compute persistence landscapes for 0-cycles
-pl <- landscape(pd, degree = 1, exact = TRUE)
-print(pl)
-
-# first landscape layer
-print(pl$getInternal()[[1L]])
-# plot all landscape layers
-plot(pl)
-
-# coerce to discrete
-plot(pl, xlim = c(0, .5))
-pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .01)
-plot(pl_)
-pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .001)
-plot(pl_)
-
-# sample points
-points <- tdaunif::sample_torus_tube(60L, 2.5)
-
-# compute persistence data, retaining parameters
-pd <- as_persistence(TDA::ripsDiag(points, maxdimension = 2L, maxscale = 3))
-print(dim(pd$pairs[[2L]]))
-
-# compute persistence landscape for 1-dimensional cycles
-pl <- landscape(pd, degree = 1L)
-print(pl)
-
-# landscape dimensions
-print(dim(pl$getInternal()))
-# landscape values
-print(head(pl$getInternal()))
-# plot landscape
-plot(pl)
-
-# custom parameters
-pl <- landscape(pd, degree = 1L, by = 0.1, xmax = 2)
-print(pl)
-plot(pl)
+# sample from a cylinder
+x <- tdaunif::sample_cylinder_elliptical(n = 60)
+# calculate PH using {ripserr}
+ph <- ripserr::vietoris_rips(x, dim = 1)
+as_persistence(ph)
+# calculate PH using {TDA}
+ph <- TDA::alphaComplexDiag(x, maxdimension = 1)
+as_persistence(ph)
+# create a 'persistence' object directly from a matrix
+as_persistence(unclass(ph$diagram))
 }

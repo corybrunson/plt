@@ -32,9 +32,8 @@ pl_support(pl)
 pl_discretize(pl, xmin = NULL, xmax = NULL, by = NULL)
 }
 \arguments{
-\item{pd}{Persistence data (or diagram), stored as a 2-column matrix or as a
-persistence diagram object with element \code{pairs} being a list of 2-column
-matrices (birth-death pairs).}
+\item{pd}{Persistence data (or diagram), stored as a 2-column matrix, as a
+'\link{persistence}' object, or in a format coercible to 'persistence'.}
 
 \item{degree}{Non-negative integer; if input is a persistence diagram object,
 then the dimension for which to compute a landscape. (For degree \eqn{d},
@@ -74,9 +73,9 @@ i.e. of the points at which its value is nonzero (\code{pl_support()}).
 # sample points
 points <- tdaunif::sample_torus_tube(100, 5)
 
-# compute persistence
-pd <- as_persistence(ripserr::vietoris_rips(points, dim = 2L, threshold = 1))
-print(pd)
+# compute persistent homology
+pd <- ripserr::vietoris_rips(points, dim = 2L, threshold = 1)
+head(pd)
 
 # compute persistence landscapes for 0-cycles
 pl <- landscape(pd, degree = 1, exact = TRUE)
@@ -97,9 +96,9 @@ plot(pl_)
 # sample points
 points <- tdaunif::sample_torus_tube(60L, 2.5)
 
-# compute persistence data, retaining parameters
-pd <- as_persistence(TDA::ripsDiag(points, maxdimension = 2L, maxscale = 3))
-print(dim(pd$pairs[[2L]]))
+# compute persistent homology
+pd <- TDA::ripsDiag(points, maxdimension = 2L, maxscale = 3)
+head(pd$diagram)
 
 # compute persistence landscape for 1-dimensional cycles
 pl <- landscape(pd, degree = 1L)
