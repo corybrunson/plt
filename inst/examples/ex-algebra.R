@@ -24,3 +24,10 @@ pl_d_ <- pl_devectorize(vec_d)
 plot(pl_d_, xaxt = "n", yaxt = "n")
 
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
+
+# vectorize a list
+pl_lst <- list(pl_discretize(pl_e, xmax = 2, by = 0.05), pl_d)
+m <- pl_vectorize(pl_lst)
+# de-vectorize the matrix
+pl_devectorize(m)
+pl_devectorize(m, drop_levels = TRUE)

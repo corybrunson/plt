@@ -3,18 +3,23 @@
 \name{algebra}
 \alias{algebra}
 \alias{pl_t}
+\alias{pl_to_vector}
 \alias{pl_vectorize}
 \alias{pl_devectorize}
 \title{Linear Algebra with Persistence Landscapes}
 \usage{
 pl_t(pl)
 
-pl_vectorize(pl)
+pl_to_vector(pl, num_levels = pl_num_levels(pl))
 
-pl_devectorize(x, t_vals = NULL)
+pl_vectorize(...)
+
+pl_devectorize(x, t_vals = NULL, drop_levels = FALSE)
 }
 \arguments{
 \item{pl}{A persistence landscape as returned by \code{landscape()}.}
+
+\item{...}{Persistence landscapes or lists of persistence landscapes.}
 
 \item{x}{A numeric vector, optionally with an attribute \code{"t_vals"} whose
 length divides that of \code{x}, but with no other attributes.}
@@ -53,4 +58,11 @@ pl_d_ <- pl_devectorize(vec_d)
 plot(pl_d_, xaxt = "n", yaxt = "n")
 
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
+
+# vectorize a list
+pl_lst <- list(pl_discretize(pl_e, xmax = 2, by = 0.05), pl_d)
+m <- pl_vectorize(pl_lst)
+# de-vectorize the matrix
+pl_devectorize(m)
+pl_devectorize(m, drop_levels = TRUE)
 }
