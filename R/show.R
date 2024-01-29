@@ -18,12 +18,14 @@ setMethod(
     # number of levels
     envn <- pl_num_levels(object)
     # abscissal support
-    xran <- fmt_ran(pl_support(object))
+    # xran <- fmt_ran(pl_support(object))
     
     # send summary line to console
     cat(sprintf(
       "Persistence landscape (%s format) of %i levels over (%s,%s)",
-      fmt, envn, xran[[1L]], xran[[2L]]
+      # fmt, envn, xran[[1L]], xran[[2L]]
+      fmt, envn,
+      round(object$xMin(), digits = 3L), round(object$xMax(), digits = 3L)
     ))
     
   }
