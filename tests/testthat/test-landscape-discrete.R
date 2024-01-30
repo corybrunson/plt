@@ -138,10 +138,10 @@ test_that("toExact from discrete is correct", {
   expect_error(pl$toExact())
 })
 
-test_that("toDiscrete from discrete is correct", {
+test_that("`discretize` from discrete is correct", {
   pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, by=0.1)
   
-  expect_error(pl$toDiscrete(), NA)
+  expect_error(pl$discretize(), NA)
 })
 
 test_that("getInternal from discrete is correct from diagram", {

@@ -21,3 +21,9 @@ pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .01)
 plot(pl_)
 pl_ <- pl_discretize(pl, xmin = 0, xmax = .5, by = .001)
 plot(pl_)
+
+# ensure grid when discretizing
+pl_cut <- pl_discretize(pl, by = 0.1)
+pl_cut$getInternal()[1, , 1]
+pl_cut <- pl_discretize(pl, xmin = 0, xmax = pi, by = 0.1)
+pl_cut$getInternal()[1, , 1]

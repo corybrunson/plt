@@ -18,7 +18,7 @@ NULL
 #' @export
 pl_t <- function(pl) {
   pl_internal <- if (pl$isExact()) {
-    pl$toDiscrete()$getInternal()
+    pl$discretize()$getInternal()
   } else {
     pl$getInternal()
   }
@@ -28,8 +28,9 @@ pl_t <- function(pl) {
 #' @rdname algebra
 #' @export
 pl_to_vector <- function(pl, num_levels = pl_num_levels(pl)) {
+  if (pl$isExact()) pl <- pl_discretize(pl)
   # get matrix of levels from discrete representation
-  x <- pl_discretize(pl)$getInternal()[, , 2L, drop = 3L]
+  x <- pl$getInternal()[, , 2L, drop = 3L]
   # remove any superfluous levels
   if (num_levels < nrow(x)) x <- x[seq(num_levels), , drop = FALSE]
   # augment any additional empty levels
@@ -49,26 +50,28 @@ pl_vectorize <- function(...) {
   if (! all(vapply(args, inherits, FALSE, what = "Rcpp_PersistenceLandscape")))
     stop("`pl_vectorize()` accepts only PLs and lists of PLs.", call. = FALSE)
   
-  # ensure that all PLs have the same `t_vals`
-  xmins <- vapply(args, \(x) x$xMin(), 0)
-  xmaxs <- vapply(args, \(x) x$xMax(), 0)
+  # unique resolution of discrete PLs or else first resolution of exact PLs
   xbys <- vapply(args, \(x) x$xBy(), 0)
-  if (! almostUnique(xmins) || ! almostUnique(xmaxs) || ! almostUnique(xbys))
-    stop("PL fields `xmin`, `xmax`, `dx` must be equal.")
+  exacts <- vapply(args, \(x) x$isExact(), FALSE)
+  if (! almostUnique(xbys[! exacts]))
+    stop("All discrete PLs must have (almost) equal resolution `dx`.")
+  xby <- if (any(! exacts)) args[! exacts][[1L]]$xBy() else args[[1L]]$xBy()
+  args[exacts] <- lapply(args[exacts], pl_delimit, by = xby)
   
-  # ensure that all PLs are discretized
-  args_exact <- vapply(args, \(pl) pl$isExact(), FALSE)
-  if (any(args_exact))
-    args[args_exact] <- lapply(args[args_exact], \(pl) pl$toDiscrete())
+  # union of limits of all PLs
+  xmin <- min(vapply(args, \(x) x$xMin(), 0))
+  xmax <- max(vapply(args, \(x) x$xMax(), 0))
+  args <- lapply(args, pl_delimit, xmin = xmin, xmax = xmax)
   
   # use greatest number of levels
   max_levels <- max(vapply(args, pl_num_levels, 0L))
+  # concatenate vectorizations (`pl_to_vector()` discretizes any exacts)
   pl_mat <- sapply(args, pl_to_vector, num_levels = max_levels, simplify = TRUE)
   # encode vectorized landscapes as rows
   pl_mat <- t(pl_mat)
-  
-  # construct a matrix of vectorized PLs
+  # assign grid from first PL as attribute
   attr(pl_mat, "t_vals") <- pl_t(args[[1L]])
+  
   return(pl_mat)
 }
 

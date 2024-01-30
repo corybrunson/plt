@@ -173,7 +173,7 @@ be cost-prohibitive for larger persistence data:
 ``` r
 pl1 <- landscape(pd, degree = 1, exact = TRUE)
 print(pl1)
-#> Persistence landscape (exact format) of 2 levels over (0.2,0.6)
+#> Persistence landscape (exact format) of 2 levels over (0,0.636)
 ```
 
 ### Class
@@ -266,7 +266,7 @@ resolution given to `pl1`:
 
 ``` r
 # default conversion to discrete uses `by = 0.001`
-pl1_ <- pl1$toDiscrete()
+pl1_ <- pl1$discretize()
 print(dim(pl1_$getInternal()))
 #> [1]   2 636   2
 # print first 12 x-coordinates
@@ -317,7 +317,8 @@ pl1_$getInternal()[, seq(230L, 270L), , drop = FALSE]
 We can also specify the bounds and the resolution of the discretization:
 
 ``` r
-pl1_ <- pl_discretize(pl1, xmin = 0, xmax = 1, by = 0.1)
+pl1 <- pl_delimit(pl1, xmin = 0, xmax = 1, by = 0.1)
+pl1_ <- pl_discretize(pl1)
 pl1_$getInternal()
 #> , , 1
 #> 

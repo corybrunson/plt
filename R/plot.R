@@ -89,7 +89,9 @@ setMethod(
     )
     def_dots <- list(
       type = "l",
-      xlim = c(x$xMin(), x$xMax()), ylim = xyran[, 2L],
+      xlim = xyran[, 1L],
+      # xlim = c(x$xMin(), x$xMax()),
+      ylim = xyran[, 2L],
       xlab = "x", ylab = NA, lwd = 2
     )
     level_n <- accessLevel(internal, n_levels)

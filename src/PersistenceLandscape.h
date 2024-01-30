@@ -198,6 +198,7 @@ public:
   
   // Subsection: Constructors
   
+  // null constructor
   // REVIEW: I don't understand this. -JCB
   PersistenceLandscape(){}
   
@@ -275,33 +276,40 @@ public:
       return wrap(getInternalDiscrete(land));
   }
   
-  PersistenceLandscape toDiscrete() {
-    PersistenceLandscape pl_disc;
-    if (exact)
-      pl_disc =
-        discretizeExactLandscape(*this, this->min_x, this->max_x, this->dx);
-    else
-      pl_disc = *this;
-    return pl_disc;
-  }
-  PersistenceLandscape discretize(double min_x, double max_x, double dx) {
-    PersistenceLandscape pl_disc;
-    if (exact)
-      pl_disc = discretizeExactLandscape(*this, min_x, max_x, dx);
-    else {
-      warning("Discrete landscapes cannot yet be re-discretized.");
-      pl_disc = *this;
-    }
-    return pl_disc;
+  std::pair<double, double> support() const;
+  
+  PersistenceLandscape delimit(
+      double min_x, double max_x, double dx
+  ) {
+    if (exact) {
+      std::pair<double, double> supp = this->support();
+      if (min_x > supp.first || max_x < supp.second)
+        stop("New limits do not contain the support of this PL.");
+      this->min_x = min_x;
+      this->max_x = min_x + dx * std::ceil((max_x - min_x) / dx);
+      this->dx = dx;
+      return *this;
+    } else
+      return delimitDiscreteLandscape(*this, min_x, max_x, dx);
   }
   
+  PersistenceLandscape discretize() {
+    if (exact)
+      return discretizeExactLandscape(*this,
+                                      this->min_x, this->max_x, this->dx);
+    else {
+      warning("PL is already discrete.");
+      return *this;
+    }
+  }
+
   // Subsection: Friendzone
   
-  friend PersistenceLandscape discretizeExactLandscape(
+  friend PersistenceLandscape delimitDiscreteLandscape(
       const PersistenceLandscape &pl,
       double min_x, double max_x, double dx
   );
-  friend PersistenceLandscape discretizeLandscape(
+  friend PersistenceLandscape discretizeExactLandscape(
       const PersistenceLandscape &pl,
       double min_x, double max_x, double dx
   );
@@ -658,6 +666,7 @@ PersistenceLandscape::PersistenceLandscape(
     // Now, the basic structure is created. We need to translate it to a
     // persistence landscape data structure. To do so, first we need to sort all
     // the vectors in `criticalValuesOnPointsOfGrid[i].second`.
+    // REVIEW: Why not `.push_back()` from scratch to avoid empty levels? -JCB
     size_t maxNonzeroLambda = 0;
     for (size_t i = 0; i != criticalValuesOnPointsOfGrid.size(); ++i) {
       std::sort(criticalValuesOnPointsOfGrid[i].second.begin(),
@@ -680,6 +689,19 @@ PersistenceLandscape::PersistenceLandscape(
                          criticalValuesOnPointsOfGrid[i].second[lambda]);
       }
     }
+    
+    // // Drop empty levels
+    // unsigned int l = this->land.size();
+    // while (l > 0) {
+    //   bool zero = true;
+    //   for (int i = 0; i < this->land[l].size() - 1; i++) {
+    //     if (this->land[l][i].second != 0)
+    //       zero = false;
+    //   }
+    //   if (! zero) break;
+    //   this->land.erase(std::next(this->land.begin() + l - 1));
+    //   l--;
+    // }
     
   }
   
@@ -724,6 +746,51 @@ double PersistenceLandscape::landscapeValue(
                           this->land[level][coordEnd], x);
 }
 
+// assumes that first level has widest support
+std::pair<double, double> PersistenceLandscape::support() const {
+  double lo_x = R_PosInf;
+  double hi_x = R_NegInf;
+  
+  if (exact) {
+    // WARNING: assumes exact representation has infinities at ends, then
+    // corners on abscissa
+    
+    // low end of support
+    if (this->land[0][1].first != R_PosInf &&
+        this->land[0][1].second == 0)
+      lo_x = this->land[0][1].first;
+    // high end of support
+    if (this->land[0][this->land.size() - 1].first != R_NegInf &&
+        this->land[0][this->land.size() - 1].second == 0)
+      hi_x = this->land[0][this->land.size() - 1].first;
+    
+  } else {
+    
+    // low end of support
+    int i = 0;
+    while (i < this->land[0].size() && this->land[0][i].second == 0) i++;
+    if (i > 0 && i < this->land[0].size() - 1)
+      lo_x = this->land[0][i - 1].first;
+    else if (i < this->land[0].size()) {
+      warning("This PL is missing its left corner.");
+      lo_x = this->land[0][i].first;
+    }
+    // high end of support
+    int j = this->land[0].size() - 1;
+    while (j > i && this->land[0][j].second == 0) j--;
+    if (j < this->land[0].size() - 1 && j >= i)
+      hi_x = this->land[0][j + 1].first;
+    else if (j < i) {
+      warning("This PL is missing its right corner.");
+      hi_x = this->land[0][j].first;
+    }
+    
+  }
+  
+  // return pair
+  return std::make_pair(lo_x, hi_x);
+}
+
 PersistenceLandscape discretizeExactLandscape(
     const PersistenceLandscape &pl,
     double min_x, double max_x, double dx
@@ -739,8 +806,8 @@ PersistenceLandscape discretizeExactLandscape(
   std::pair<double, double> currentPoint;
   
   // assuming `pl` is exact, warn if not `min_x < pl.land[0] < max_x`
-  if (pl.land[0][1].first < min_x ||
-      pl.land[0][pl.land[0].size() - 2].first > max_x)
+  if (pl.land[0][1].first < min_x - epsi ||
+      pl.land[0][pl.land[0].size() - 2].first > max_x + epsi)
     warning("This landscape extends beyond [ `min_x`, `max_x` ].");
   
   for (unsigned int i = 0; i < pl.land.size(); i++) {
@@ -810,20 +877,77 @@ PersistenceLandscape discretizeExactLandscape(
   return pl_disc;
 }
 
-PersistenceLandscape discretizeLandscape(
+// This function throws errors, not warnings, when new limits are incompatible.
+PersistenceLandscape delimitDiscreteLandscape(
     const PersistenceLandscape &pl,
     double min_x, double max_x, double dx
 ) {
   
-  PersistenceLandscape out;
-  
-  if (pl.exact) {
-    out = discretizeExactLandscape(pl, min_x, max_x, dx);
-  } else {
-    warning("Can not yet re-discretize a discrete PL.");
-    out = pl;
+  // warn if resolution is incompatible
+  // QUESTION: Allow coarsening when `dx / pl.dx` is almost equal to an integer?
+  if (! almostEqual(dx, pl.dx))
+    warning("Cannot delimit a discrete PL with a different resolution.");
+  // ensure that new limits contain support
+  std::pair<double, double> supp = pl.support();
+  if (min_x > supp.first || max_x < supp.second)
+    stop("Cannot delimit to a domain that contains not the support.");
+  // ensure that new minimum is almost on the grid
+  if (
+      // TODO: Make a standalone function to check this.
+      ! almostEqual(fmod(min_x - pl.min_x, pl.dx), 0) &&
+        ! almostEqual(fmod(min_x - pl.min_x, pl.dx), pl.dx)
+  ) {
+    stop("New `min_x` is not on the grid of this PL.");
   }
   
+  // initialize result
+  PersistenceLandscape out;
+  out.exact = false;
+  // anchor new range to old grid
+  int min_diff = std::round((min_x - pl.min_x) / pl.dx);
+  int max_diff = std::ceil((max_x - pl.min_x) / pl.dx) - 
+    std::ceil((pl.max_x - pl.min_x) / pl.dx);
+  out.min_x = pl.min_x + min_diff * pl.dx;
+  out.max_x = pl.max_x + max_diff * pl.dx;
+  out.dx = pl.dx;
+  
+  // standard approach to combining discrete landscapes:
+  // use grid elements of first where possible
+  std::vector<std::vector<std::pair<double, double>>> land_out;
+  
+  // populate new landscape
+  int max_level = pl.land.size();
+  for (int i = 0; i < max_level; i++) {
+    
+    std::vector<std::pair<double, double>> level_out;
+    
+    // lead zeros, if any (min_diff < 0)
+    for (int j = 0; j < -std::min(min_diff, 0); j++) {
+      level_out.push_back(std::make_pair(
+          pl.min_x + (min_diff + j) * pl.dx,
+          0
+      ));
+    }
+    
+    // original landscape (within new range)
+    for (int j = std::max(min_diff, 0);
+         j < pl.land[i].size() + std::min(max_diff, 0);
+         j++) {
+      level_out.push_back(pl.land[i][j]);
+    }
+    
+    // lag zeros, if any (max_diff > 0)
+    for (int j = 0; j < std::max(max_diff, 0); j++) {
+      level_out.push_back(std::make_pair(
+          pl.max_x + (j + 1) * pl.dx,
+          0
+      ));
+    }
+    
+    land_out.push_back(level_out);
+  }
+  
+  out.land = land_out;
   return out;
 }
 

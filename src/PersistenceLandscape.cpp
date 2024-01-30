@@ -128,9 +128,9 @@ RCPP_MODULE(persistence_landscape_module) {
     .method("getInternal",
     &PersistenceLandscape::getInternal,
     "Returns the internal tensor representation of the PL")
-    .method("toDiscrete",
-    &PersistenceLandscape::toDiscrete,
-    "Casts an exact PL to a discrete one")
+    .method("delimit",
+    &PersistenceLandscape::delimit,
+    "Updates the discretization grid of a PL")
     .method("discretize",
     &PersistenceLandscape::discretize,
     "Casts an exact PL to a discrete one")

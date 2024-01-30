@@ -52,10 +52,10 @@ test_that("add PL is correct for simple case.", {
 x <- tdaunif::sample_circle(100)
 pd <- as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2))
 
-test_that("toDiscrete from exact is correct", {
+test_that("`discretize` from exact is correct", {
   pl <- landscape(pd$pairs[[1]], exact=TRUE)
   
-  expect_error(pl$toDiscrete(), NA)
+  expect_error(pl$discretize(), NA)
 })
 
 test_that("getInternal from discrete is correct from diagram", {

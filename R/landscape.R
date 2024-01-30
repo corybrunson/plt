@@ -131,9 +131,13 @@ pl_support <- function(pl) {
 
 #' @rdname landscape
 #' @export
-pl_discretize <- function(pl, xmin = NULL, xmax = NULL, by = NULL) {
+pl_delimit <- function(pl, xmin = NULL, xmax = NULL, by = NULL) {
   if (is.null(xmin)) xmin <- pl$xMin()
   if (is.null(xmax)) xmax <- pl$xMax()
   if (is.null(by)) by <- pl$xBy()
-  pl$discretize(xmin, xmax, by)
+  pl$delimit(xmin, xmax, by)
 }
+
+#' @rdname landscape
+#' @export
+pl_discretize <- function(pl) pl$discretize()

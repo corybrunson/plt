@@ -116,7 +116,7 @@ Below, we view a portion of the discretized exact landscape, using the default b
 
 ```{r}
 # default conversion to discrete uses `by = 0.001`
-pl1_ <- pl1$toDiscrete()
+pl1_ <- pl1$discretize()
 print(dim(pl1_$getInternal()))
 # print first 12 x-coordinates
 pl1_$getInternal()[, seq(230L, 270L), , drop = FALSE]
@@ -125,7 +125,8 @@ pl1_$getInternal()[, seq(230L, 270L), , drop = FALSE]
 We can also specify the bounds and the resolution of the discretization:
 
 ```{r}
-pl1_ <- pl_discretize(pl1, xmin = 0, xmax = 1, by = 0.1)
+pl1 <- pl_delimit(pl1, xmin = 0, xmax = 1, by = 0.1)
+pl1_ <- pl_discretize(pl1)
 pl1_$getInternal()
 ```
 
