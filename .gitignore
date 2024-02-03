@@ -19,7 +19,7 @@ ignore
 docs/*
 !docs/articles/
 
-# ???
+# hosting
 inst/doc
 /doc/
 /Meta/
