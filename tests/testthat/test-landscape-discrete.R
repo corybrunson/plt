@@ -1,3 +1,13 @@
+
+test_that("limits that don't contain support generate a warning/error", {
+  sq <- rbind(c(0, 0), c(0, 1), c(1, 1), c(1, 0))
+  ph <- TDA::ripsDiag(sq, maxdimension = 2L, maxscale = 1.5)
+  expect_warning(landscape(ph, degree = 1, xmax = .4))
+  expect_warning(landscape(ph, degree = 1, xmin = .3, xmax = 1))
+  expect_error(landscape(ph, degree = 1, xmax = .4))
+  expect_error(landscape(ph, degree = 1, xmin = .3, xmax = 1))
+})
+
 test_that("PL is correct for one persistence pair.", {
   p1 <- matrix(c(0, 2), nrow = 1L, ncol = 2L)
   pd <- p1

@@ -214,6 +214,7 @@ public:
   
   // construct a persistence landscape, either exact or discrete
   PersistenceLandscape(
+    // 2-column matrix of birth and death values
     const NumericMatrix &x,
     // type of landscape encoding
     bool exact = true,
@@ -525,6 +526,12 @@ PersistenceLandscape::PersistenceLandscape(
   bool exact,
   double min_x, double max_x, double dx
 ) : exact(exact), min_x(min_x), max_x(max_x), dx(dx) {
+  
+  // check limits
+  if (! (min_x < max_x)) stop("PL limits must satisfy `min_x < max_x`.");
+  if (*std::min_element(x(_,0).begin(), x(_,0).end()) < min_x ||
+      *std::max_element(x(_,1).begin(), x(_,1).end()) > max_x)
+    stop("PL limits `xmin, xmax` must contain PL support.");
   
   std::vector<std::pair<double, double>> pd = persistencePairs(x);
   
@@ -904,9 +911,10 @@ PersistenceLandscape delimitDiscreteLandscape(
   PersistenceLandscape out;
   out.exact = false;
   // anchor new range to old grid
+  // int orig_ran = std::ceil((pl.max_x - pl.min_x) / pl.dx);
+  int orig_ran = pl.land[0].size();
   int min_diff = std::round((min_x - pl.min_x) / pl.dx);
-  int max_diff = std::ceil((max_x - pl.min_x) / pl.dx) - 
-    std::ceil((pl.max_x - pl.min_x) / pl.dx);
+  int max_diff = std::ceil((max_x - pl.min_x) / pl.dx) - orig_ran;
   out.min_x = pl.min_x + min_diff * pl.dx;
   out.max_x = pl.max_x + max_diff * pl.dx;
   out.dx = pl.dx;
@@ -939,7 +947,7 @@ PersistenceLandscape delimitDiscreteLandscape(
     // lag zeros, if any (max_diff > 0)
     for (int j = 0; j < std::max(max_diff, 0); j++) {
       level_out.push_back(std::make_pair(
-          pl.max_x + (j + 1) * pl.dx,
+          pl.min_x + (orig_ran + j) * pl.dx,
           0
       ));
     }

@@ -39,31 +39,33 @@ landscape <- function(
   
   # birth-death pairs matrix `diagram`
   if (is.atomic(pd)) {
-    diagram <- pd
-    stopifnot(ncol(diagram) >= 2L, is.numeric(diagram))
+    stopifnot(ncol(pd) >= 2L, is.numeric(pd))
   } else {
     pd <- try(as_persistence(pd))
     if (inherits(pd, "try-error"))
       stop("There is no `as_persistence()` method for object `pd`.")
     if (is.null(degree))
       stop("`landscape()` requires a homological degree (`degree = <int>`).")
-    diagram <- pd$pairs[[degree + 1L]]
+    pd <- pd$pairs[[degree + 1L]]
   }
+  
+  # remove infinities
+  pd <- pd[! apply(pd, 1L, \(f) any(is.infinite(f))), , drop = FALSE]
   
   # content check
-  if (is.null(diagram) || all(is.na(diagram))) {
-    stop("`landscape()` requires non-empty, non-missing persistence data.")
+  if (is.null(pd) || all(is.na(pd))) {
+    stop("`landscape()` requires non-empty/missing finite persistence data.")
   }
   
-  # infer any missing parameters from the diagram
+  # infer any missing parameters
   xmin <- xmin %||% 0
-  xmax <- xmax %||% max(diagram)
-  if (! xmin < xmax) stop("Must have `xmin < xmax`.")
+  xmax <- xmax %||% max(pd)
   # grid of between 100 and 1000 intervals of length a power of 10
+  # TODO: Make this a non-default option.
   by <- by %||% (10 ^ (floor(log(xmax - xmin, 10)) - 2L))
-  
+
   # construct persistence landscape
-  new(PersistenceLandscape, diagram, exact, xmin, xmax, by)
+  new(PersistenceLandscape, pd, exact, xmin, xmax, by)
 }
 
 #' @rdname landscape
