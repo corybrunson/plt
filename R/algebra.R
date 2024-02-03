@@ -11,6 +11,9 @@
 #'   length divides that of `x`, but with no other attributes.
 #' @param t_vals A numeric vector of equally-spaced values assumed to be the
 #'   grid support of a discrete persistence landscape.
+#' @param num_levels Number of levels to vectorize; may me more or less than
+#'   `pl_num_levels(pl)`.
+#' @param drop_levels Logical; whether to omit levels that are empty in all PLs.
 #' @example inst/examples/ex-algebra.R
 NULL
 

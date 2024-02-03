@@ -11,6 +11,7 @@
 \alias{as_persistence.diagram}
 \alias{as_persistence.PHom}
 \alias{print.persistence}
+\alias{format.persistence}
 \alias{get_pairs}
 \alias{as.data.frame.persistence}
 \title{Efficient Format for Persistence Data (Diagrams)}
@@ -28,6 +29,8 @@ as_persistence(x, ...)
 \method{as_persistence}{PHom}(x, ...)
 
 \method{print}{persistence}(x, ...)
+
+\method{format}{persistence}(x, ...)
 
 get_pairs(x, degree, ...)
 

@@ -3,7 +3,6 @@
 \docType{package}
 \name{plt-package}
 \alias{plt-package}
-\alias{_PACKAGE}
 \alias{plt}
 \title{'plt' package}
 \description{

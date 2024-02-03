@@ -2,8 +2,6 @@
 test_that("limits that don't contain support generate a warning/error", {
   sq <- rbind(c(0, 0), c(0, 1), c(1, 1), c(1, 0))
   ph <- TDA::ripsDiag(sq, maxdimension = 2L, maxscale = 1.5)
-  expect_warning(landscape(ph, degree = 1, xmax = .4))
-  expect_warning(landscape(ph, degree = 1, xmin = .3, xmax = 1))
   expect_error(landscape(ph, degree = 1, xmax = .4))
   expect_error(landscape(ph, degree = 1, xmin = .3, xmax = 1))
 })
@@ -151,7 +149,7 @@ test_that("toExact from discrete is correct", {
 test_that("`discretize` from discrete is correct", {
   pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, by=0.1)
   
-  expect_error(pl$discretize(), NA)
+  expect_warning(pl$discretize(), "discrete")
 })
 
 test_that("getInternal from discrete is correct from diagram", {

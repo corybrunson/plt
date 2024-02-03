@@ -137,6 +137,8 @@ print.persistence <- function(x, ...) {
   invisible(x)
 }
 
+#' @rdname as_persistence
+#' @export
 format.persistence <- function(x, ...) {
   # parameters
   if (is.na(x$max_dim)) x$max_dim <- length(x$pairs) - 1L

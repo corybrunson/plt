@@ -28,6 +28,7 @@ test_that("Addition expands domain as needed.", {
   expect_equal(unique(round(diff(pl12$getInternal()[, , 1L]), digits = 1L)), .2)
   expect_equal(
     pl12$getInternal()[, , 2L],
-    c(seq(0, 1, .2), rep(1, 4), seq(1, 0, -.2))
+    # NOTE: assumes `xmin = 0`
+    c(rep(0, 5L), seq(0, 1, .2), rep(1, 4), seq(1, 0, -.2))
   )
 })

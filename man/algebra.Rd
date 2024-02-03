@@ -19,6 +19,9 @@ pl_devectorize(x, t_vals = NULL, drop_levels = FALSE)
 \arguments{
 \item{pl}{A persistence landscape as returned by \code{landscape()}.}
 
+\item{num_levels}{Number of levels to vectorize; may me more or less than
+\code{pl_num_levels(pl)}.}
+
 \item{...}{Persistence landscapes or lists of persistence landscapes.}
 
 \item{x}{A numeric vector, optionally with an attribute \code{"t_vals"} whose
@@ -26,6 +29,8 @@ length divides that of \code{x}, but with no other attributes.}
 
 \item{t_vals}{A numeric vector of equally-spaced values assumed to be the
 grid support of a discrete persistence landscape.}
+
+\item{drop_levels}{Logical; whether to omit levels that are empty in all PLs.}
 }
 \description{
 Convert between persistence landscapes and their vectorizations,

@@ -11,6 +11,7 @@ plot(pl_d, xaxt = "n", yaxt = "n")
 
 # vectorize PLs
 vec_e <- pl_vectorize(pl_e)
+# FIXME: `Error: Cannot delimit to a domain that contains not the support.`
 vec_d <- pl_vectorize(pl_d)
 length(vec_e)
 attributes(vec_e)
@@ -27,6 +28,7 @@ par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 
 # vectorize a list
 pl_lst <- list(pl_e, pl_discretize(pl_delimit(pl_e, by = 0.05)), pl_d)
+# FIXME
 m <- pl_vectorize(pl_lst)
 # de-vectorize the matrix
 pl_devectorize(m)
