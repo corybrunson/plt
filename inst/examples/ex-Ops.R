@@ -39,6 +39,7 @@ pl2d %*% pl2d
 pl2 %*% pl2d
 
 \dontrun{
+
 set.seed(031537L)
 
 # compute exact landscape for a large sample
@@ -61,4 +62,5 @@ pl_avg <- Reduce(`+`, pl_list) / length(pl_list)
 # compute the distance between the exact landscapes
 pl_diff <- pl - pl_avg
 print(pl_diff %*% pl_diff)
+
 }

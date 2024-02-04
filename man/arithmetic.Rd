@@ -96,19 +96,19 @@ some are vectorizations of the preceding: \code{vmin}, \code{vmax}, \code{vrange
 \examples{
 
 # scale a landscape
-x <- tdaunif::sample_torus_tube(4, 2.5)
+x <- tdaunif::sample_torus_tube(40, 2.5)
 pd <- ripserr::vietoris_rips(x, dim = 1L, threshold = 2)
-pl <- landscape(pd$pairs[[1]], exact = FALSE, xmax = 2.5, by=0.1)
+pl <- landscape(pd, degree = 1, exact = FALSE, xmax = 2.5, by=0.1)
 print(pl$getInternal()[2, , ])
 print(pl$scale(0.5)$getInternal()[2, , ])
 
 # create two landscapes from the same sampling distribution
-x <- tdaunif::sample_torus_tube(4, 2.5)
-y <- tdaunif::sample_torus_tube(4, 2.5)
+x <- tdaunif::sample_torus_tube(40, 2.5)
+y <- tdaunif::sample_torus_tube(40, 2.5)
 x_pd <- ripserr::vietoris_rips(x, dim = 1, threshold = 2)
 y_pd <- ripserr::vietoris_rips(y, dim = 1, threshold = 2)
-x_pl <- landscape(x_pd$pairs[[1]], exact = FALSE, xmax = 2.5, by = 0.1)
-y_pl <- landscape(y_pd$pairs[[1]], exact = FALSE, xmax = 2.5, by = 0.1)
+x_pl <- landscape(x_pd, degree = 1, exact = FALSE, xmax = 2.5, by = 0.1)
+y_pl <- landscape(y_pd, degree = 1, exact = FALSE, xmax = 2.5, by = 0.1)
 
 # compare landscapes and calculate mean landscape
 print(x_pl$getInternal())
@@ -116,6 +116,7 @@ print(y_pl$getInternal())
 print(pl_mean(list(x_pl, y_pl))$getInternal())
 
 \dontrun{
+
 set.seed(492869L)
 
 # compute landscape for a large sample
@@ -138,6 +139,7 @@ pl_avg <- pl_mean(pl_list)
 # compute the distance between the landscapes
 pl_diff <- pl$add(pl_avg$scale(-1))
 print(pl_inner(pl_diff, pl_diff))
+
 }
 }
 \seealso{
