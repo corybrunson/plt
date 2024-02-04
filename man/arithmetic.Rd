@@ -143,5 +143,7 @@ print(pl_inner(pl_diff, pl_diff))
 }
 }
 \seealso{
-PersistenceLandscape-methods
+\link{Rcpp_PersistenceLandscape-methods} for prefix and infix syntax.
+
+\link{algebra}, \link{analysis}, \link{inference} for other landscape functions.
 }

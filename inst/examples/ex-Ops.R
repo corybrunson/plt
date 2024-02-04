@@ -32,10 +32,9 @@ plot(pl2d, xlim = c(0, 1.2), n_levels = n_lev)
 plot(pl1 + pl2d, xlim = c(0, 1.2), n_levels = n_lev)
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))
 
-# inner products of similar landscapes
+# inner products of equal or similar landscapes
 pl2 %*% pl2
 pl2d %*% pl2d
-# FIXME: This should not be much smaller than the above two.
 pl2 %*% pl2d
 
 \dontrun{

@@ -12,7 +12,7 @@
 #' @param p Positive integer or infinity; the power used to compute an integral.
 #' @return A persistence landscape (an object of S4 class
 #'   'Rcpp_PersistenceLandscape'), a real number, or a vector of real numbers.
-#' @seealso PersistenceLandscape-methods
+#' @seealso [arithmetic], [algebra], [inference] for other landscape functions.
 #' @example inst/examples/ex-analysis.R
 NULL
 

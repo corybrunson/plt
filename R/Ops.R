@@ -11,10 +11,9 @@
 #'
 #' @docType methods
 #' @name Rcpp_PersistenceLandscape-methods
-#' @aliases Arithmetic
-#' @aliases matmult
 #' @aliases + - * / %*%
 #' @include PersistenceLandscape.R
+
 #' @usage
 #' ## S4 methods for signature
 #' ## 'Rcpp_PersistenceLandscape,missing'
@@ -35,10 +34,12 @@
 #' e1 + e2
 #' e1 - e2
 #' x \%*\% y
+
 #' @param e1,e2,x,y Arguments of unary and binary operators.
 #' @return A persistence landscape (an object of S4 class
 #'   'Rcpp_PersistenceLandscape').
-#' @seealso arithmetic-operations
+#' @seealso [base::Arithmetic] and [base::matmult] for base methods;
+#'   [arithmetic] for function syntax and extensions.
 #' @example inst/examples/ex-Ops.R
 NULL
 

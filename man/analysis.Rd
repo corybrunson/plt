@@ -72,5 +72,5 @@ pl_integrate(pl_e, p = 5)
 pl_integrate(pl_ef, p = 5)
 }
 \seealso{
-PersistenceLandscape-methods
+\link{arithmetic}, \link{algebra}, \link{inference} for other landscape functions.
 }

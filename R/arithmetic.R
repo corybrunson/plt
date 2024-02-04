@@ -27,7 +27,8 @@
 #' @return A persistence landscape (an object of S4 class
 #'   'Rcpp_PersistenceLandscape'), a list of persistence landscapes, a real
 #'   number, or a vector of real numbers.
-#' @seealso PersistenceLandscape-methods
+#' @seealso [Rcpp_PersistenceLandscape-methods] for prefix and infix syntax.
+#' @seealso [algebra], [analysis], [inference] for other landscape functions.
 #' @example inst/examples/ex-arithmetic.R
 NULL
 

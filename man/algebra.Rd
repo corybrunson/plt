@@ -71,3 +71,6 @@ m <- pl_vectorize(pl_lst)
 pl_devectorize(m)
 pl_devectorize(m, drop_levels = TRUE)
 }
+\seealso{
+\link{arithmetic}, \link{analysis}, \link{inference} for other landscape functions.
+}

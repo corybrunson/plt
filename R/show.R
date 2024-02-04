@@ -6,6 +6,8 @@
 #' @aliases show,Rcpp_PersistenceLandscape-method
 #' @include PersistenceLandscape.R
 #' @param object A [PersistenceLandscape] object.
+#' @seealso [Rcpp_PersistenceLandscape-class] for the exported C++ class and
+#'   [landscape()] for the R wrapper.
 #' @example inst/examples/ex-PersistenceLandscape.R
 #' @export
 setMethod(

@@ -28,6 +28,7 @@
 #' @return `landscape()` returns a persistence landscape (an object of S4 class
 #'   'Rcpp_PersistenceLandscape'). Other functions return summary information
 #'   about such an object.
+#' @seealso [Rcpp_PersistenceLandscape-class] for the exported C++ class.
 #' @example inst/examples/ex-landscape-exact.R
 #' @example inst/examples/ex-landscape-discrete.R
 #' @export

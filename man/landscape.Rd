@@ -125,3 +125,6 @@ pl <- landscape(pd, degree = 1L, by = 0.1, xmax = 2)
 print(pl)
 plot(pl)
 }
+\seealso{
+\linkS4class{Rcpp_PersistenceLandscape} for the exported C++ class.
+}

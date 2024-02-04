@@ -64,3 +64,7 @@ plot(landscape(pd, degree = 2L, xmin = 0, xmax = 1.5, by = 0.01),
      palette = c("red", "green", "blue"), lwd = 1)
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 }
+\seealso{
+\linkS4class{Rcpp_PersistenceLandscape} for the exported C++ class and
+\code{\link[=landscape]{landscape()}} for the R wrapper.
+}

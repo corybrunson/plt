@@ -180,6 +180,7 @@ NumericVector getInternalDiscrete(
 //' @field min_x Infimum (left endpoint) of the support of a discrete PL.
 //' @field max_x Supremum (right endpoint) of the support of a discrete PL.
 //' @field dx Resolution of the representation of a discrete PL.
+//' @seealso [landscape()] for the R wrapper.
 //' @example inst/examples/ex-PersistenceLandscape.R
 //' @export
 class PersistenceLandscape {

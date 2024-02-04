@@ -139,5 +139,5 @@ bench::mark(
 }
 }
 \seealso{
-PersistenceLandscape-methods
+\link{arithmetic}, \link{algebra}, \link{analysis} for other landscape functions.
 }

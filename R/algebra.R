@@ -14,6 +14,7 @@
 #' @param num_levels Number of levels to vectorize; may me more or less than
 #'   `pl_num_levels(pl)`.
 #' @param drop_levels Logical; whether to omit levels that are empty in all PLs.
+#' @seealso [arithmetic], [analysis], [inference] for other landscape functions.
 #' @example inst/examples/ex-algebra.R
 NULL
 

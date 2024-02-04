@@ -137,3 +137,6 @@ show(pl2)
 pl3$getInternal()
 pl3$xBy()
 }
+\seealso{
+\code{\link[=landscape]{landscape()}} for the R wrapper.
+}

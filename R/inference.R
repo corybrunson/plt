@@ -40,7 +40,7 @@
 #'   (z-test only) a confidence interval for the estimated difference in means.
 #'   Depends on the choice of `conf.level`.
 #'   }
-#' @seealso PersistenceLandscape-methods
+#' @seealso [arithmetic], [algebra], [analysis] for other landscape functions.
 #' @example inst/examples/ex-inference.R
 NULL
 
