@@ -907,17 +907,27 @@ PersistenceLandscape delimitDiscreteLandscape(
     stop("New `min_x` is not on the grid of this PL.");
   }
   
-  // initialize result
+  // initialize result with same grid resolution
   PersistenceLandscape out;
   out.exact = false;
-  // anchor new range to old grid
-  // int orig_ran = std::ceil((pl.max_x - pl.min_x) / pl.dx);
-  int orig_ran = pl.land[0].size();
-  int min_diff = std::round((min_x - pl.min_x) / pl.dx);
-  int max_diff = std::ceil((max_x - pl.min_x) / pl.dx) - orig_ran;
-  out.min_x = pl.min_x + min_diff * pl.dx;
-  out.max_x = pl.max_x + max_diff * pl.dx;
   out.dx = pl.dx;
+  
+  // original number of grid points, less one (number of hops)
+  // int orig_len = std::ceil((pl.max_x - pl.min_x) / pl.dx);
+  int orig_len = pl.land[0].size() - 1;
+  // number of grid points between old & new minima
+  // (as checked above, both must lie on same grid)
+  int min_diff = std::round((min_x - pl.min_x) / pl.dx);
+  // number of additional grid points needed to reach new `max_x`
+  int max_diff = std::ceil((max_x - pl.min_x) / pl.dx) - orig_len;
+  
+  // CONVENTION: While `min_x` defines the grid, `max_x` can be any greater
+  // value, not necessarily on the grid.
+  
+  // start at the new `min_x`, but as located on the old grid
+  out.min_x = pl.min_x + min_diff * pl.dx;
+  // end at the new `max_x`, regardless of the grid
+  out.max_x = max_x;
   
   // standard approach to combining discrete landscapes:
   // use grid elements of first where possible
@@ -929,7 +939,7 @@ PersistenceLandscape delimitDiscreteLandscape(
     
     std::vector<std::pair<double, double>> level_out;
     
-    // lead zeros, if any (min_diff < 0)
+    // lead zeros, if any (`min_diff < 0`)
     for (int j = 0; j < -std::min(min_diff, 0); j++) {
       level_out.push_back(std::make_pair(
           pl.min_x + (min_diff + j) * pl.dx,
@@ -944,10 +954,10 @@ PersistenceLandscape delimitDiscreteLandscape(
       level_out.push_back(pl.land[i][j]);
     }
     
-    // lag zeros, if any (max_diff > 0)
+    // lag zeros, if any (`max_diff > 0`)
     for (int j = 0; j < std::max(max_diff, 0); j++) {
       level_out.push_back(std::make_pair(
-          pl.min_x + (orig_ran + j) * pl.dx,
+          pl.min_x + (orig_len + j + 1) * pl.dx,
           0
       ));
     }
