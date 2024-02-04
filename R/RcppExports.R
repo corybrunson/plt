@@ -9,7 +9,7 @@
 #' @details The C++ class 'PersistenceLandscape' is exposed as the S4 class
 #'   'Rcpp_PersistenceLandscape' via the `RCPP_MODULE()` macro provided by
 #'   **[Rcpp][Rcpp::Rcpp-package]**. See
-#'   <https://github.com/r-pkg-examples/rcpp-modules-student> for an
+#'   <https://github.com/coatless-r-n-d/rcpp-modules-student> for an
 #'   introduction. New objects should be created from persistence data
 #'   (diagrams) using [landscape()].
 #' @field new Constructor.
