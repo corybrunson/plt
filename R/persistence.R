@@ -1,6 +1,6 @@
 #' @title Efficient Format for Persistence Data (Diagrams)
 #' @description Transform persistence data to the format used by **plt**.
-#' 
+#'
 #' @details
 #'
 #' This class and function will soon be spun off to a lower-level package that
@@ -9,12 +9,12 @@
 #'
 #' @name as_persistence
 #' @aliases persistence diagram persistence_diagram
-#' @param x Persistence data to be transformed; either a ≥3-column matrix (or
-#'   object coercible to one) with dimension/degree, start/birth, and end/death
-#'   columns, a list whose first element is such an object, an object of class
-#'   'PHom' as returned by `[ripserr::vietoris_rips()]`, or (a list as returned
-#'   by a `*Diag()` function in **TDA** (e.g. `[TDA::ripsDiag()]`) whose first
-#'   element is) an object of class 'diagram'.
+#' @param x Persistence data to be transformed; either a \eqn{\geq 3}-column
+#'   matrix (or object coercible to one) with dimension/degree, start/birth, and
+#'   end/death columns, a list whose first element is such an object, an object
+#'   of class 'PHom' as returned by `[ripserr::vietoris_rips()]`, or (a list as
+#'   returned by a `*Diag()` function in **TDA** (e.g. `[TDA::ripsDiag()]`)
+#'   whose first element is) an object of class 'diagram'.
 #' @param ... Parameters passed to methods.
 #' @param degree Non-negative integer; the homology degree for which to recover
 #'   a matrix of persistence pairs.

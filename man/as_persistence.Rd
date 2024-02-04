@@ -37,12 +37,12 @@ get_pairs(x, degree, ...)
 \method{as.data.frame}{persistence}(x, row.names = NULL, optional = TRUE, ...)
 }
 \arguments{
-\item{x}{Persistence data to be transformed; either a ≥3-column matrix (or
-object coercible to one) with dimension/degree, start/birth, and end/death
-columns, a list whose first element is such an object, an object of class
-'PHom' as returned by \verb{[ripserr::vietoris_rips()]}, or (a list as returned
-by a \verb{*Diag()} function in \strong{TDA} (e.g. \verb{[TDA::ripsDiag()]}) whose first
-element is) an object of class 'diagram'.}
+\item{x}{Persistence data to be transformed; either a \eqn{\geq 3}-column
+matrix (or object coercible to one) with dimension/degree, start/birth, and
+end/death columns, a list whose first element is such an object, an object
+of class 'PHom' as returned by \verb{[ripserr::vietoris_rips()]}, or (a list as
+returned by a \verb{*Diag()} function in \strong{TDA} (e.g. \verb{[TDA::ripsDiag()]})
+whose first element is) an object of class 'diagram'.}
 
 \item{...}{Parameters passed to methods.}
 
