@@ -86,10 +86,10 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>Until the package is on CRAN, use <strong>remotes</strong> to install the package from the GitHub repository as follows:</p>
+<p>Until the package is on CRAN, use <strong>pak</strong> to install the package from the GitHub repository as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
-<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/plt"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"corybrunson/plt"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively—and especially if you want to contribute—you can clone or download the code repository and, from within the directory, install the package from source:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -113,7 +113,7 @@
 <li>
 <strong>ripserr</strong> and <strong>TDA</strong> provide functions to compute persistence data from point clouds and distance matrices.</li>
 </ul>
-<p><strong>plt</strong> introduces the ‘Rcpp_PersistenceLandscape’ S4 class, which is exposed using <strong>Rcpp</strong> from the underlying ‘PersistenceLandscape’ C++ class. Instances of this class can be created using <code>new()</code> but the recommended way is to use <code><a href="reference/landscape.html">landscape()</a></code>. This function accepts either a single matrix of persistence data or a specially formatted list with the class <code>'persistence_diagram"</code>. The <code>$pairs</code> entry of the list is itself a list, of a 2-column matrix of persistence pairs for each homological degree from 0 (<code>$pairs[[1]]</code>) to the maximum degree calculated. The generic converter <code><a href="reference/as_persistence.html">as_persistence()</a></code> includes methods for outputs from <code><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">ripserr::vietoris_rips()</a></code> and from <code>TDA::*Diag()</code>.</p>
+<p><strong>plt</strong> introduces the ‘Rcpp_PersistenceLandscape’ S4 class, which is exposed using <strong>Rcpp</strong> from the underlying ‘PersistenceLandscape’ C++ class. Instances of this class can be created using <code>new()</code> but the recommended way is to use <code><a href="reference/landscape.html">landscape()</a></code>. This function accepts either a single matrix of persistence data or a specially formatted list with the class <code>'persistence_diagram"</code>. The <code>$pairs</code> entry of the list is itself a list, of a 2-column matrix of persistence pairs for each homological degree from 0 (<code>$pairs[[1]]</code>) to the maximum degree calculated. The generic converter <code><a href="reference/as_persistence.html">as_persistence()</a></code> includes methods for outputs from <code><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">ripserr::vietoris_rips()</a></code> and from <code>TDA::*Diag()</code>; it operates under the hood of `landscape(), but we invoke it explicitly here for illustration.</p>
 <div class="section level3">
 <h3 id="calculation">Calculation<a class="anchor" aria-label="anchor" href="#calculation"></a>
 </h3>
@@ -158,7 +158,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Persistence landscape (exact format) of 2 levels over (0.2,0.6)</span></span></code></pre></div>
+<span><span class="co">#&gt; Persistence landscape (exact format) of 2 levels over (0,0.636)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="class">Class<a class="anchor" aria-label="anchor" href="#class"></a>
@@ -227,58 +227,56 @@
 <p>Exactly computed landscapes can be converted to discrete landscape objects, but the other direction is not well-defined. Below, we view a portion of the discretized exact landscape, using the default bounds and resolution given to <code>pl1</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># default conversion to discrete uses `by = 0.001`</span></span>
-<span><span class="va">pl1_</span> <span class="op">&lt;-</span> <span class="va">pl1</span><span class="op">$</span><span class="fu">toDiscrete</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">pl1_</span> <span class="op">&lt;-</span> <span class="va">pl1</span><span class="op">$</span><span class="fu">discretize</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl1_</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1]   2 411   2</span></span>
+<span><span class="co">#&gt; [1]   2 636   2</span></span>
 <span><span class="co"># print first 12 x-coordinates</span></span>
 <span><span class="va">pl1_</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">230L</span>, <span class="fl">270L</span><span class="op">)</span>, , drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]</span></span>
-<span><span class="co">#&gt; [1,] 0.4541884 0.4551884 0.4561884 0.4571884 0.4581884 0.4591884 0.4601884</span></span>
-<span><span class="co">#&gt; [2,] 0.4541884 0.4551884 0.4561884 0.4571884 0.4581884 0.4591884 0.4601884</span></span>
-<span><span class="co">#&gt;           [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]</span></span>
-<span><span class="co">#&gt; [1,] 0.4611884 0.4621884 0.4631884 0.4641884 0.4651884 0.4661884 0.4671884</span></span>
-<span><span class="co">#&gt; [2,] 0.4611884 0.4621884 0.4631884 0.4641884 0.4651884 0.4661884 0.4671884</span></span>
-<span><span class="co">#&gt;          [,15]     [,16]     [,17]     [,18]     [,19]     [,20]     [,21]</span></span>
-<span><span class="co">#&gt; [1,] 0.4681884 0.4691884 0.4701884 0.4711884 0.4721884 0.4731884 0.4741884</span></span>
-<span><span class="co">#&gt; [2,] 0.4681884 0.4691884 0.4701884 0.4711884 0.4721884 0.4731884 0.4741884</span></span>
-<span><span class="co">#&gt;          [,22]     [,23]     [,24]     [,25]     [,26]     [,27]     [,28]</span></span>
-<span><span class="co">#&gt; [1,] 0.4751884 0.4761884 0.4771884 0.4781884 0.4791884 0.4801884 0.4811884</span></span>
-<span><span class="co">#&gt; [2,] 0.4751884 0.4761884 0.4771884 0.4781884 0.4791884 0.4801884 0.4811884</span></span>
-<span><span class="co">#&gt;          [,29]     [,30]     [,31]     [,32]     [,33]     [,34]     [,35]</span></span>
-<span><span class="co">#&gt; [1,] 0.4821884 0.4831884 0.4841884 0.4851884 0.4861884 0.4871884 0.4881884</span></span>
-<span><span class="co">#&gt; [2,] 0.4821884 0.4831884 0.4841884 0.4851884 0.4861884 0.4871884 0.4881884</span></span>
-<span><span class="co">#&gt;          [,36]     [,37]     [,38]     [,39]     [,40]     [,41]</span></span>
-<span><span class="co">#&gt; [1,] 0.4891884 0.4901884 0.4911884 0.4921884 0.4931884 0.4941884</span></span>
-<span><span class="co">#&gt; [2,] 0.4891884 0.4901884 0.4911884 0.4921884 0.4931884 0.4941884</span></span>
+<span><span class="co">#&gt;       [,1] [,2]  [,3]  [,4]  [,5]  [,6]  [,7]  [,8]  [,9] [,10] [,11] [,12]</span></span>
+<span><span class="co">#&gt; [1,] 0.229 0.23 0.231 0.232 0.233 0.234 0.235 0.236 0.237 0.238 0.239  0.24</span></span>
+<span><span class="co">#&gt; [2,] 0.229 0.23 0.231 0.232 0.233 0.234 0.235 0.236 0.237 0.238 0.239  0.24</span></span>
+<span><span class="co">#&gt;      [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]</span></span>
+<span><span class="co">#&gt; [1,] 0.241 0.242 0.243 0.244 0.245 0.246 0.247 0.248 0.249  0.25 0.251 0.252</span></span>
+<span><span class="co">#&gt; [2,] 0.241 0.242 0.243 0.244 0.245 0.246 0.247 0.248 0.249  0.25 0.251 0.252</span></span>
+<span><span class="co">#&gt;      [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35] [,36]</span></span>
+<span><span class="co">#&gt; [1,] 0.253 0.254 0.255 0.256 0.257 0.258 0.259  0.26 0.261 0.262 0.263 0.264</span></span>
+<span><span class="co">#&gt; [2,] 0.253 0.254 0.255 0.256 0.257 0.258 0.259  0.26 0.261 0.262 0.263 0.264</span></span>
+<span><span class="co">#&gt;      [,37] [,38] [,39] [,40] [,41]</span></span>
+<span><span class="co">#&gt; [1,] 0.265 0.266 0.267 0.268 0.269</span></span>
+<span><span class="co">#&gt; [2,] 0.265 0.266 0.267 0.268 0.269</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; , , 2</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;           [,1]      [,2]      [,3]      [,4]   [,5]      [,6]      [,7]</span></span>
-<span><span class="co">#&gt; [1,] 0.1525661 0.1515746 0.1505831 0.1495915 0.1486 0.1476085 0.1466169</span></span>
-<span><span class="co">#&gt; [2,] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000 0.0000000 0.0000000</span></span>
-<span><span class="co">#&gt;           [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]</span></span>
-<span><span class="co">#&gt; [1,] 0.1456254 0.1446339 0.1436424 0.1426508 0.1416593 0.1406678 0.1396762</span></span>
-<span><span class="co">#&gt; [2,] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span></span>
-<span><span class="co">#&gt;          [,15]     [,16]     [,17]     [,18]     [,19]     [,20]     [,21]</span></span>
-<span><span class="co">#&gt; [1,] 0.1386847 0.1376932 0.1367016 0.1357101 0.1347186 0.1337271 0.1327355</span></span>
-<span><span class="co">#&gt; [2,] 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000</span></span>
-<span><span class="co">#&gt;         [,22]     [,23]     [,24]     [,25]     [,26]     [,27]        [,28]</span></span>
-<span><span class="co">#&gt; [1,] 0.131744 0.1307525 0.1297609 0.1287694 0.1277779 0.1267864 0.1257948213</span></span>
-<span><span class="co">#&gt; [2,] 0.000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0000000 0.0009884309</span></span>
-<span><span class="co">#&gt;            [,29]       [,30]       [,31]       [,32]       [,33]       [,34]</span></span>
-<span><span class="co">#&gt; [1,] 0.124803292 0.123811762 0.122820233 0.121828703 0.120837174 0.119845644</span></span>
-<span><span class="co">#&gt; [2,] 0.001976862 0.002965293 0.003953724 0.004942154 0.005930585 0.006919016</span></span>
-<span><span class="co">#&gt;            [,35]       [,36]       [,37]      [,38]      [,39]     [,40]</span></span>
-<span><span class="co">#&gt; [1,] 0.118854114 0.117862585 0.116871055 0.11587953 0.11488800 0.1138965</span></span>
-<span><span class="co">#&gt; [2,] 0.007907447 0.008895878 0.009884309 0.01087274 0.01186117 0.0128496</span></span>
-<span><span class="co">#&gt;           [,41]</span></span>
-<span><span class="co">#&gt; [1,] 0.11290494</span></span>
-<span><span class="co">#&gt; [2,] 0.01383803</span></span></code></pre></div>
+<span><span class="co">#&gt;              [,1]         [,2]         [,3]         [,4]         [,5]</span></span>
+<span><span class="co">#&gt; [1,] 0.0006539916 5.241935e-05 4.985605e-05 4.729276e-05 4.472946e-05</span></span>
+<span><span class="co">#&gt; [2,] 0.0000000000 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span><span class="co">#&gt;              [,6]         [,7]         [,8]         [,9]        [,10]</span></span>
+<span><span class="co">#&gt; [1,] 4.216616e-05 3.960287e-05 3.703957e-05 3.447627e-05 3.191297e-05</span></span>
+<span><span class="co">#&gt; [2,] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span><span class="co">#&gt;             [,11]        [,12]        [,13]        [,14]        [,15]</span></span>
+<span><span class="co">#&gt; [1,] 2.934968e-05 2.678638e-05 2.422308e-05 2.165979e-05 1.909649e-05</span></span>
+<span><span class="co">#&gt; [2,] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span><span class="co">#&gt;             [,16]        [,17]       [,18]      [,19]        [,20]        [,21]</span></span>
+<span><span class="co">#&gt; [1,] 1.653319e-05 1.396989e-05 1.14066e-05 8.8433e-06 6.280002e-06 3.716705e-06</span></span>
+<span><span class="co">#&gt; [2,] 0.000000e+00 0.000000e+00 0.00000e+00 0.0000e+00 0.000000e+00 0.000000e+00</span></span>
+<span><span class="co">#&gt;             [,22]        [,23]       [,24]       [,25]       [,26]      [,27]</span></span>
+<span><span class="co">#&gt; [1,] 1.153408e-06 0.0009623328 0.001923512 0.002884692 0.003845871 0.00480705</span></span>
+<span><span class="co">#&gt; [2,] 0.000000e+00 0.0000000000 0.000000000 0.000000000 0.000000000 0.00000000</span></span>
+<span><span class="co">#&gt;           [,28]       [,29]       [,30]       [,31]       [,32]      [,33]</span></span>
+<span><span class="co">#&gt; [1,] 0.00576823 0.006729409 0.007690589 0.008651768 0.009612947 0.01057413</span></span>
+<span><span class="co">#&gt; [2,] 0.00000000 0.000000000 0.000000000 0.000000000 0.000000000 0.00000000</span></span>
+<span><span class="co">#&gt;            [,34]      [,35]       [,36]       [,37]       [,38]       [,39]</span></span>
+<span><span class="co">#&gt; [1,] 0.009677368 0.00878061 0.007883851 0.006987093 0.006090334 0.005193576</span></span>
+<span><span class="co">#&gt; [2,] 0.000000000 0.00000000 0.000000000 0.000000000 0.000000000 0.000000000</span></span>
+<span><span class="co">#&gt;            [,40]       [,41]</span></span>
+<span><span class="co">#&gt; [1,] 0.004296817 0.003400059</span></span>
+<span><span class="co">#&gt; [2,] 0.000000000 0.000000000</span></span></code></pre></div>
 <p>We can also specify the bounds and the resolution of the discretization:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pl1_</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl1</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">pl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_delimit</a></span><span class="op">(</span><span class="va">pl1</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="va">pl1_</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
 <span><span class="va">pl1_</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -304,7 +302,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span>, palette <span class="op">=</span> <span class="st">"terrain"</span>, n_levels <span class="op">=</span> <span class="va">n_levs</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1d</span>, palette <span class="op">=</span> <span class="st">"terrain"</span>, n_levels <span class="op">=</span> <span class="va">n_levs</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/README-unnamed-chunk-12-1.png"><!-- --></p>
+<p><img src="reference/figures/unnamed-chunk-12-1.png"><!-- --></p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>

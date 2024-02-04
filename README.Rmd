@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "man/figures/README-"
+  fig.path = "man/figures/"
 )
 library(plt)
 ```
@@ -23,11 +23,11 @@ This is an R package interface to a C++ library to efficienctly compute and calc
 
 ## Installation
 
-Until the package is on CRAN, use **remotes** to install the package from the GitHub repository as follows:
+Until the package is on CRAN, use **pak** to install the package from the GitHub repository as follows:
 
 ```{r, eval=FALSE}
-install.packages("remotes")
-remotes::install_github("corybrunson/plt", build_vignettes = TRUE)
+install.packages("pak")
+pak::install_github("corybrunson/plt", build_vignettes = TRUE)
 ```
 
 Alternatively---and especially if you want to contribute---you can clone or download the code repository and, from within the directory, install the package from source:

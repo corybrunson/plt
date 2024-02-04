@@ -105,6 +105,11 @@ interpolate.</p></dd>
 <dd><p>Logical; whether to silence messages.</p></dd>
 
 </dl></div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="PersistenceLandscape.html">Rcpp_PersistenceLandscape</a> for the exported C++ class and
+<code><a href="landscape.html">landscape()</a></code> for the R wrapper.</p></div>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -114,7 +119,7 @@ interpolate.</p></dd>
 <span class="r-in"><span><span class="va">rpp</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/real-projective-planes.html" class="external-link">sample_projective_plane</a></span><span class="op">(</span><span class="fl">48L</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compute persistence data, retaining parameters</span></span></span>
-<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_persistence.html">as_persistence</a></span><span class="op">(</span><span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">rpp</span>, dim <span class="op">=</span> <span class="fl">2L</span>, threshold <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">rpp</span>, dim <span class="op">=</span> <span class="fl">2L</span>, threshold <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># plot landscapes</span></span></span>

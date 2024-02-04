@@ -98,15 +98,15 @@ arise from the Hilbert space structure on persistence landscapes (Bubenik,
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>pl1, pl2</dt>
-<dd><p>Persistent landscapes.</p></dd>
+<dd><p>Persistence landscapes.</p></dd>
 
 
 <dt>pl_list</dt>
-<dd><p>A list of persistent landscapes.</p></dd>
+<dd><p>A list of persistence landscapes.</p></dd>
 
 
 <dt>pl</dt>
-<dd><p>Persistent landscapes.</p></dd>
+<dd><p>Persistence landscapes.</p></dd>
 
 
 <dt>mult</dt>
@@ -119,8 +119,8 @@ moment.</p></dd>
 
 
 <dt>level</dt>
-<dd><p>Positive integer; the level of the persistence landscape (up
-to) whose moment to calculate.</p></dd>
+<dd><p>Positive integer; the level of the persistence landscape (up to)
+whose moment to calculate.</p></dd>
 
 
 <dt>center</dt>
@@ -132,44 +132,46 @@ to) whose moment to calculate.</p></dd>
     
 
 <p>A persistence landscape (an object of S4 class
-'Rcpp_PersistenceLandscape'), a real number, or a vector of real numbers.</p>
+'Rcpp_PersistenceLandscape'), a list of persistence landscapes, a real
+number, or a vector of real numbers.</p>
     </div>
     <div id="details">
     <h2>Details</h2>
     <p>These functions are prefixed <code>pl_*()</code> to help users access them via
 tab-completion. Some take their names from the underlying S4 class methods
 and are only provided to enable composition via pipes: <code>add</code>, <code>scale</code>,
-<code>abs</code>, <code>inner</code>, <code>min</code> (<code>minimum</code>), <code>max</code> (<code>maximum</code>), and <code>moment</code>;
-<code>range</code> combines <code>min</code> and <code>max</code>. Others mimic classic R functions to
-handle lists of persistence landscapes: <code>sum</code>, <code>diff</code>, <code>mean</code>, <code>var</code>, and
-<code>sd</code>. Finally, some are vectorizations of the preceding: <code>vmin</code>, <code>vmax</code>,
-<code>vrange</code>, and <code>vmoment</code>.</p>
+<code>abs</code>, <code>inner</code>, <code>min</code> (<code>minimum</code>), <code>max</code> (<code>maximum</code>), and <code>moment</code>; <code>range</code>
+combines <code>min</code> and <code>max</code>. Others mimic classic R functions to handle lists
+of persistence landscapes: <code>sum</code>, <code>diff</code>, <code>mean</code>, <code>var</code>, and <code>sd</code>. Finally,
+some are vectorizations of the preceding: <code>vmin</code>, <code>vmax</code>, <code>vrange</code>, and
+<code>vmoment</code>.</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
-    <div class="dont-index"><p>PersistenceLandscape-methods</p></div>
+    <div class="dont-index"><p><a href="Rcpp_PersistenceLandscape-methods.html">Rcpp_PersistenceLandscape-methods</a> for prefix and infix syntax.</p>
+<p><a href="algebra.html">algebra</a>, <a href="analysis.html">analysis</a>, <a href="inference.html">inference</a> for other landscape functions.</p></div>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># scale a landscape</span></span></span>
-<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_persistence.html">as_persistence</a></span><span class="op">(</span><span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">x</span>, dim <span class="op">=</span> <span class="fl">1L</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">x</span>, dim <span class="op">=</span> <span class="fl">1L</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
-<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">pairs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, xmax <span class="op">=</span> <span class="fl">2.5</span>, by<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, xmax <span class="op">=</span> <span class="fl">2.5</span>, by<span class="op">=</span><span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span>, , <span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]       [,2]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  0.0 0.00000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  0.1 0.10000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  0.2 0.20000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.3 0.30000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.4 0.40000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.5 0.41779648</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  0.6 0.31779648</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.7 0.21779648</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  0.8 0.11779648</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  0.9 0.01779648</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  0.1 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  0.2 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.3 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.4 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.5 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  0.6 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.7 0.05167421</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  0.8 0.04113183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  0.9 0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [11,]  1.0 0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [12,]  1.1 0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [13,]  1.2 0.00000000</span>
@@ -187,43 +189,43 @@ handle lists of persistence landscapes: <code>sum</code>, <code>diff</code>, <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> [25,]  2.4 0.00000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [26,]  2.5 0.00000000</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">scale</span><span class="op">(</span><span class="fl">0.5</span><span class="op">)</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span>, , <span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]        [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  0.0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  0.1 0.050000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  0.2 0.100000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.3 0.150000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.4 0.200000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.5 0.208898239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  0.6 0.158898239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.7 0.108898239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  0.8 0.058898239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  0.9 0.008898239</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]  1.0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]  1.1 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]  1.2 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]  1.3 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]  1.4 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]  1.5 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]  1.6 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]  1.7 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]  1.8 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [20,]  1.9 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [21,]  2.0 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [22,]  2.1 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [23,]  2.2 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [24,]  2.3 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [25,]  2.4 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [26,]  2.5 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       [,1]       [,2]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]  0.0 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,]  0.1 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,]  0.2 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,]  0.3 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,]  0.4 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,]  0.5 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,]  0.6 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,]  0.7 0.02583710</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,]  0.8 0.02056591</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [10,]  0.9 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [11,]  1.0 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [12,]  1.1 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13,]  1.2 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [14,]  1.3 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [15,]  1.4 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [16,]  1.5 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [17,]  1.6 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]  1.7 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19,]  1.8 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [20,]  1.9 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [21,]  2.0 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [22,]  2.1 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [23,]  2.2 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [24,]  2.3 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [25,]  2.4 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [26,]  2.5 0.00000000</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># create two landscapes from the same sampling distribution</span></span></span>
-<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">x_pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_persistence.html">as_persistence</a></span><span class="op">(</span><span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">x</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">40</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x_pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">x</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
-<span class="r-in"><span><span class="va">y_pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_persistence.html">as_persistence</a></span><span class="op">(</span><span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">y</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y_pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">y</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
-<span class="r-in"><span><span class="va">x_pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">x_pd</span><span class="op">$</span><span class="va">pairs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, xmax <span class="op">=</span> <span class="fl">2.5</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">y_pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">y_pd</span><span class="op">$</span><span class="va">pairs</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, xmax <span class="op">=</span> <span class="fl">2.5</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">x_pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">x_pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, xmax <span class="op">=</span> <span class="fl">2.5</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">y_pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">y_pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, xmax <span class="op">=</span> <span class="fl">2.5</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compare landscapes and calculate mean landscape</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x_pl</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -233,25 +235,50 @@ handle lists of persistence landscapes: <code>sum</code>, <code>diff</code>, <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4]      [,5]      [,6]      [,7]       [,8]      [,9]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0  0.1  0.2  0.3 0.4000000 0.5000000 0.6000000 0.70000000 0.8000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0  0.1  0.2  0.3 0.4000000 0.5000000 0.5385641 0.43856414 0.3385641</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0  0.1  0.2  0.3 0.3548517 0.2548517 0.1548517 0.05485168 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,10]     [,11]      [,12]    [,13]    [,14]    [,15]    [,16]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8143040 0.7143040 0.61430402 0.514304 0.414304 0.314304 0.214304</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.2385641 0.1385641 0.03856414 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.0000000 0.0000000 0.00000000 0.000000 0.000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,17]      [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.114304 0.01430402     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.000000 0.00000000     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.000000 0.00000000     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5] [,6]        [,7]         [,8]       [,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0    0    0    0    0    0 0.050136363 0.1415052864 0.04424601</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0    0    0    0    0    0 0.009642749 0.0016243337 0.04150529</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0    0    0    0    0    0 0.000000000 0.0005088148 0.04056985</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0    0    0    0    0    0 0.000000000 0.0000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]    0    0    0    0    0    0 0.000000000 0.0000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]    0    0    0    0    0    0 0.000000000 0.0000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]    0    0    0    0    0    0 0.000000000 0.0000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]    0    0    0    0    0    0 0.000000000 0.0000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           [,10] [,11] [,12]      [,13] [,14] [,15] [,16] [,17] [,18] [,19]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.02227656     0     0 0.05048058     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.00000000     0     0 0.00000000     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.00000000     0     0 0.00000000     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.00000000     0     0 0.00000000     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] 0.00000000     0     0 0.00000000     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] 0.00000000     0     0 0.00000000     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,] 0.00000000     0     0 0.00000000     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,] 0.00000000     0     0 0.00000000     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]     0     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">y_pl</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , 1</span>
@@ -260,25 +287,45 @@ handle lists of persistence landscapes: <code>sum</code>, <code>diff</code>, <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3]      [,4]       [,5]      [,6]      [,7]      [,8]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0  0.1  0.2 0.3000000 0.40000000 0.5000000 0.6000000 0.5347691</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0  0.1  0.2 0.3000000 0.40000000 0.3288382 0.2288382 0.1288382</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0  0.1  0.2 0.1589957 0.05899566 0.0000000 0.0000000 0.0000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            [,9]     [,10]     [,11]     [,12]      [,13] [,14] [,15] [,16]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.43476914 0.3347691 0.2347691 0.1347691 0.03476914     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.02883823 0.0000000 0.0000000 0.0000000 0.00000000     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.00000000 0.0000000 0.0000000 0.0000000 0.00000000     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     0     0     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     0     0     0     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     0     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]       [,6]        [,7]        [,8]        [,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0    0    0    0    0 0.03722113 0.137221129 0.095184528 0.004993068</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0    0    0    0    0 0.00000000 0.013504139 0.080211838 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0    0    0    0    0 0.00000000 0.004595203 0.039436042 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0    0    0    0    0 0.00000000 0.000000000 0.032114568 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]    0    0    0    0    0 0.00000000 0.000000000 0.008034788 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]    0    0    0    0    0 0.00000000 0.000000000 0.000000000 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]    0    0    0    0    0 0.00000000 0.000000000 0.000000000 0.000000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,10]      [,11]     [,12]    [,13]      [,14] [,15] [,16] [,17] [,18]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     0 0.07482755 0.1748276 0.185926 0.08592595     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     0 0.00000000 0.0000000 0.000000 0.00000000     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     0 0.00000000 0.0000000 0.000000 0.00000000     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]     0 0.00000000 0.0000000 0.000000 0.00000000     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]     0 0.00000000 0.0000000 0.000000 0.00000000     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]     0 0.00000000 0.0000000 0.000000 0.00000000     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]     0 0.00000000 0.0000000 0.000000 0.00000000     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]     0     0     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">pl_mean</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">x_pl</span>, <span class="va">y_pl</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , 1</span>
@@ -287,44 +334,66 @@ handle lists of persistence landscapes: <code>sum</code>, <code>diff</code>, <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]    0  0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8   0.9     1   1.1   1.2   1.3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]   1.4   1.5   1.6   1.7   1.8   1.9     2   2.1   2.2   2.3   2.4   2.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3]      [,4]      [,5]      [,6]       [,7]       [,8]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0  0.1  0.2 0.3000000 0.4000000 0.5000000 0.60000000 0.61738457</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0  0.1  0.2 0.3000000 0.4000000 0.4144191 0.38370118 0.28370118</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0  0.1  0.2 0.2294978 0.2069237 0.1274258 0.07742584 0.02742584</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           [,9]     [,10]      [,11]      [,12]     [,13]    [,14]    [,15]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6173846 0.5745366 0.47453658 0.37453658 0.2745366 0.207152 0.157152</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.1837012 0.1192821 0.06928207 0.01928207 0.0000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.0000000 0.0000000 0.00000000 0.00000000 0.0000000 0.000000 0.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,16]      [,17]       [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.107152 0.05715201 0.007152012     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.000000 0.00000000 0.000000000     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.000000 0.00000000 0.000000000     0     0     0     0     0     0     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,26]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1] [,2] [,3] [,4] [,5]       [,6]        [,7]        [,8]       [,9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]    0    0    0    0    0 0.01861056 0.093678746 0.118344907 0.02461954</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]    0    0    0    0    0 0.00000000 0.011573444 0.040918086 0.02075264</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]    0    0    0    0    0 0.00000000 0.002297601 0.019972428 0.02028493</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0    0    0    0    0 0.00000000 0.000000000 0.016057284 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]    0    0    0    0    0 0.00000000 0.000000000 0.004017394 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]    0    0    0    0    0 0.00000000 0.000000000 0.000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]    0    0    0    0    0 0.00000000 0.000000000 0.000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]    0    0    0    0    0 0.00000000 0.000000000 0.000000000 0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           [,10]      [,11]      [,12]     [,13]      [,14] [,15] [,16] [,17]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.01113828 0.03741378 0.08741378 0.1182033 0.04296298     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 0.00000000 0.00000000 0.00000000 0.0000000 0.00000000     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 0.00000000 0.00000000 0.00000000 0.0000000 0.00000000     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 0.00000000 0.00000000 0.00000000 0.0000000 0.00000000     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,] 0.00000000 0.00000000 0.00000000 0.0000000 0.00000000     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,] 0.00000000 0.00000000 0.00000000 0.0000000 0.00000000     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,] 0.00000000 0.00000000 0.00000000 0.0000000 0.00000000     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,] 0.00000000 0.00000000 0.00000000 0.0000000 0.00000000     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,18] [,19] [,20] [,21] [,22] [,23] [,24] [,25] [,26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,]     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [5,]     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [6,]     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [7,]     0     0     0     0     0     0     0     0     0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [8,]     0     0     0     0     0     0     0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">492869L</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compute landscape for a large sample</span></span></span>
 <span class="r-in"><span><span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_persistence.html">as_persistence</a></span><span class="op">(</span><span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pt</span>, dim <span class="op">=</span> <span class="fl">2</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pt</span>, dim <span class="op">=</span> <span class="fl">2</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, by <span class="op">=</span> <span class="fl">0.1</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compute landscapes for a large sample of small samples</span></span></span>
 <span class="r-in"><span><span class="va">pl_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">pti</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span>  <span class="va">pdi</span> <span class="op">&lt;-</span> <span class="fu"><a href="as_persistence.html">as_persistence</a></span><span class="op">(</span><span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pti</span>, dim <span class="op">=</span> <span class="fl">2</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="va">pdi</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pti</span>, dim <span class="op">=</span> <span class="fl">2</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">pli</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pdi</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>, by <span class="op">=</span> <span class="fl">0.1</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">pl_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">pl_list</span>, <span class="va">pli</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
@@ -335,6 +404,7 @@ handle lists of persistence landscapes: <code>sum</code>, <code>diff</code>, <co
 <span class="r-in"><span><span class="co"># compute the distance between the landscapes</span></span></span>
 <span class="r-in"><span><span class="va">pl_diff</span> <span class="op">&lt;-</span> <span class="va">pl</span><span class="op">$</span><span class="fu">add</span><span class="op">(</span><span class="va">pl_avg</span><span class="op">$</span><span class="fu">scale</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">pl_inner</span><span class="op">(</span><span class="va">pl_diff</span>, <span class="va">pl_diff</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

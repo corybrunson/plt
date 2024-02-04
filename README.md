@@ -10,12 +10,12 @@ efficienctly compute and calculate with persistence landscapes.[^2]
 
 ## Installation
 
-Until the package is on CRAN, use **remotes** to install the package
-from the GitHub repository as follows:
+Until the package is on CRAN, use **pak** to install the package from
+the GitHub repository as follows:
 
 ``` r
-install.packages("remotes")
-remotes::install_github("corybrunson/plt", build_vignettes = TRUE)
+install.packages("pak")
+pak::install_github("corybrunson/plt", build_vignettes = TRUE)
 ```
 
 Alternatively—and especially if you want to contribute—you can clone or
@@ -73,71 +73,16 @@ eight and compute the persistence diagram of the point cloud:
 set.seed(513611L)
 pc <- tdaunif::sample_lemniscate_gerono(60, sd = .1)
 pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
 print(pd)
-#>    dimension     birth      death
-#> 1          0 0.0000000 0.01918952
-#> 2          0 0.0000000 0.01947548
-#> 3          0 0.0000000 0.02604350
-#> 4          0 0.0000000 0.04218479
-#> 5          0 0.0000000 0.04542467
-#> 6          0 0.0000000 0.05941691
-#> 7          0 0.0000000 0.06030423
-#> 8          0 0.0000000 0.06260854
-#> 9          0 0.0000000 0.06478082
-#> 10         0 0.0000000 0.06766925
-#> 11         0 0.0000000 0.07158685
-#> 12         0 0.0000000 0.07398253
-#> 13         0 0.0000000 0.07623591
-#> 14         0 0.0000000 0.07662517
-#> 15         0 0.0000000 0.07896342
-#> 16         0 0.0000000 0.08043306
-#> 17         0 0.0000000 0.08642298
-#> 18         0 0.0000000 0.08698163
-#> 19         0 0.0000000 0.08850341
-#> 20         0 0.0000000 0.08850349
-#> 21         0 0.0000000 0.09024332
-#> 22         0 0.0000000 0.09502309
-#> 23         0 0.0000000 0.09673399
-#> 24         0 0.0000000 0.10001714
-#> 25         0 0.0000000 0.10007503
-#> 26         0 0.0000000 0.10147098
-#> 27         0 0.0000000 0.10290514
-#> 28         0 0.0000000 0.11388282
-#> 29         0 0.0000000 0.11527285
-#> 30         0 0.0000000 0.12074671
-#> 31         0 0.0000000 0.12093951
-#> 32         0 0.0000000 0.12170977
-#> 33         0 0.0000000 0.13435379
-#> 34         0 0.0000000 0.13492348
-#> 35         0 0.0000000 0.13563400
-#> 36         0 0.0000000 0.13846410
-#> 37         0 0.0000000 0.14438541
-#> 38         0 0.0000000 0.14806602
-#> 39         0 0.0000000 0.16101999
-#> 40         0 0.0000000 0.16433348
-#> 41         0 0.0000000 0.16487642
-#> 42         0 0.0000000 0.17046509
-#> 43         0 0.0000000 0.18270262
-#> 44         0 0.0000000 0.18502783
-#> 45         0 0.0000000 0.18551972
-#> 46         0 0.0000000 0.19104680
-#> 47         0 0.0000000 0.19117990
-#> 48         0 0.0000000 0.19144013
-#> 49         0 0.0000000 0.19311162
-#> 50         0 0.0000000 0.19403676
-#> 51         0 0.0000000 0.20145942
-#> 52         0 0.0000000 0.20234674
-#> 53         0 0.0000000 0.20856429
-#> 54         0 0.0000000 0.21921402
-#> 55         0 0.0000000 0.24334202
-#> 56         0 0.0000000 0.24700342
-#> 57         0 0.0000000 0.24971202
-#> 58         0 0.0000000 0.25881722
-#> 59         0 0.0000000 0.37692215
-#> 60         1 0.4809292 0.63582254
-#> 61         1 0.3016234 0.60751718
-#> 62         1 0.2504500 0.27279150
-#> 63         1 0.2251884 0.23008714
+#> PHom object containing persistence data for 63 features.
+#> 
+#> Contains:
+#> * 59 0-dim features
+#> * 4 1-dim features
+#> 
+#> Radius/diameter: min = 0; max = 0.63582.
 ```
 
 We the convert the persistence data to the preferred persistence diagram
@@ -350,7 +295,7 @@ plot(pl1, palette = "terrain", n_levels = n_levs, asp = 1)
 plot(pl1d, palette = "terrain", n_levels = n_levs, asp = 1)
 ```
 
-![](man/figures/README-unnamed-chunk-12-1.png)<!-- -->
+![](man/figures/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))

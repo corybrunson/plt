@@ -74,6 +74,9 @@
 <span><span class="co"># S3 method for persistence</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
+<span><span class="co"># S3 method for persistence</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">get_pairs</span><span class="op">(</span><span class="va">x</span>, <span class="va">degree</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for persistence</span></span>
@@ -151,303 +154,32 @@ can be imported by others as needed. Refer to
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># sample points</span></span></span>
-<span class="r-in"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">5</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># compute persistence</span></span></span>
-<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">as_persistence</span><span class="op">(</span><span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">points</span>, dim <span class="op">=</span> <span class="fl">2L</span>, threshold <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># sample from a cylinder</span></span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/ellipses.html" class="external-link">sample_cylinder_elliptical</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># calculate PH using {ripserr}</span></span></span>
+<span class="r-in"><span><span class="va">ph</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">x</span>, dim <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">as_persistence</span><span class="op">(</span><span class="va">ph</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 'persistence' data computed up to degree 1:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * 0-degree features: 59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * 1-degree features:  8 </span>
+<span class="r-in"><span><span class="co"># calculate PH using {TDA}</span></span></span>
+<span class="r-in"><span><span class="va">ph</span> <span class="op">&lt;-</span> <span class="fu">TDA</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TDA/man/alphaComplexDiag.html" class="external-link">alphaComplexDiag</a></span><span class="op">(</span><span class="va">x</span>, maxdimension <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">as_persistence</span><span class="op">(</span><span class="va">ph</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 'persistence' data computed up to degree 1:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * 0-degree features: 60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * 1-degree features: 36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> threshold = 1.004018 </span>
+<span class="r-in"><span><span class="co"># create a 'persistence' object directly from a matrix</span></span></span>
+<span class="r-in"><span><span class="fu">as_persistence</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">unclass</a></span><span class="op">(</span><span class="va">ph</span><span class="op">$</span><span class="va">diagram</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'persistence' data computed up to degree 2:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * 0-degree features: 99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * 1-degree features: 30</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> * 2-degree features:  3 </span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># compute persistence landscapes for 0-cycles</span></span></span>
-<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (exact format) of 18 levels over (0.2,0.5)</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># first landscape layer</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]        [,2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1,]      -Inf 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [2,] 0.1841997 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [3,] 0.1970361 0.012836394</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [4,] 0.2029271 0.006945354</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [5,] 0.2086739 0.012692192</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [6,] 0.2189746 0.002391490</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7,] 0.2200501 0.003466974</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [8,] 0.2235171 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [9,] 0.2392045 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [10,] 0.2863393 0.047134773</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [11,] 0.3019868 0.031487302</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [12,] 0.3260822 0.055582734</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13,] 0.3409272 0.040737740</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [14,] 0.3490902 0.048900744</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [15,] 0.3611159 0.036875049</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [16,] 0.3892998 0.065058978</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [17,] 0.4543588 0.000000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [18,]       Inf 0.000000000</span>
-<span class="r-in"><span><span class="co"># plot all landscape layers</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="as_persistence-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># coerce to discrete</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="as_persistence-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="va">pl_</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">.5</span>, by <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl_</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="as_persistence-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="va">pl_</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">.5</span>, by <span class="op">=</span> <span class="fl">.001</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl_</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="as_persistence-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># sample points</span></span></span>
-<span class="r-in"><span><span class="va">points</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">60L</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># compute persistence data, retaining parameters</span></span></span>
-<span class="r-in"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">as_persistence</span><span class="op">(</span><span class="fu">TDA</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TDA/man/ripsDiag.html" class="external-link">ripsDiag</a></span><span class="op">(</span><span class="va">points</span>, maxdimension <span class="op">=</span> <span class="fl">2L</span>, maxscale <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pd</span><span class="op">$</span><span class="va">pairs</span><span class="op">[[</span><span class="fl">2L</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 17  2</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># compute persistence landscape for 1-dimensional cycles</span></span></span>
-<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 17 levels over (0.5,1.2)</span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># landscape dimensions</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  17 765   2</span>
-<span class="r-in"><span><span class="co"># landscape values</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> , , 1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           [,1]      [,2]      [,3]      [,4]      [,5]      [,6]      [,7]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.4528869 0.4538869 0.4548869 0.4558869 0.4568869 0.4578869 0.4588869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           [,8]      [,9]     [,10]     [,11]     [,12]     [,13]     [,14]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.4598869 0.4608869 0.4618869 0.4628869 0.4638869 0.4648869 0.4658869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,15]     [,16]     [,17]     [,18]     [,19]     [,20]     [,21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.4668869 0.4678869 0.4688869 0.4698869 0.4708869 0.4718869 0.4728869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,22]     [,23]     [,24]     [,25]     [,26]     [,27]     [,28]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.4738869 0.4748869 0.4758869 0.4768869 0.4778869 0.4788869 0.4798869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,29]     [,30]     [,31]     [,32]     [,33]     [,34]     [,35]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.4808869 0.4818869 0.4828869 0.4838869 0.4848869 0.4858869 0.4868869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,36]     [,37]     [,38]     [,39]     [,40]     [,41]     [,42]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.4878869 0.4888869 0.4898869 0.4908869 0.4918869 0.4928869 0.4938869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,43]     [,44]     [,45]     [,46]     [,47]     [,48]     [,49]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.4948869 0.4958869 0.4968869 0.4978869 0.4988869 0.4998869 0.5008869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,50]     [,51]     [,52]     [,53]     [,54]     [,55]     [,56]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5018869 0.5028869 0.5038869 0.5048869 0.5058869 0.5068869 0.5078869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,57]     [,58]     [,59]     [,60]     [,61]     [,62]     [,63]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5088869 0.5098869 0.5108869 0.5118869 0.5128869 0.5138869 0.5148869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,64]     [,65]     [,66]     [,67]     [,68]     [,69]     [,70]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5158869 0.5168869 0.5178869 0.5188869 0.5198869 0.5208869 0.5218869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,71]     [,72]     [,73]     [,74]     [,75]     [,76]     [,77]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5228869 0.5238869 0.5248869 0.5258869 0.5268869 0.5278869 0.5288869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,78]     [,79]     [,80]     [,81]     [,82]     [,83]     [,84]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5298869 0.5308869 0.5318869 0.5328869 0.5338869 0.5348869 0.5358869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,85]     [,86]     [,87]     [,88]     [,89]     [,90]     [,91]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5368869 0.5378869 0.5388869 0.5398869 0.5408869 0.5418869 0.5428869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,92]     [,93]     [,94]     [,95]     [,96]     [,97]     [,98]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5438869 0.5448869 0.5458869 0.5468869 0.5478869 0.5488869 0.5498869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          [,99]    [,100]    [,101]    [,102]    [,103]    [,104]    [,105]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5508869 0.5518869 0.5528869 0.5538869 0.5548869 0.5558869 0.5568869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,106]    [,107]    [,108]    [,109]    [,110]    [,111]    [,112]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5578869 0.5588869 0.5598869 0.5608869 0.5618869 0.5628869 0.5638869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,113]    [,114]    [,115]    [,116]    [,117]    [,118]    [,119]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5648869 0.5658869 0.5668869 0.5678869 0.5688869 0.5698869 0.5708869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,120]    [,121]    [,122]    [,123]    [,124]    [,125]    [,126]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5718869 0.5728869 0.5738869 0.5748869 0.5758869 0.5768869 0.5778869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,127]    [,128]    [,129]    [,130]    [,131]    [,132]    [,133]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5788869 0.5798869 0.5808869 0.5818869 0.5828869 0.5838869 0.5848869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,134]    [,135]    [,136]    [,137]    [,138]    [,139]    [,140]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5858869 0.5868869 0.5878869 0.5888869 0.5898869 0.5908869 0.5918869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,141]    [,142]    [,143]    [,144]    [,145]    [,146]    [,147]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5928869 0.5938869 0.5948869 0.5958869 0.5968869 0.5978869 0.5988869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,148]    [,149]    [,150]    [,151]    [,152]    [,153]    [,154]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.5998869 0.6008869 0.6018869 0.6028869 0.6038869 0.6048869 0.6058869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,155]    [,156]    [,157]    [,158]    [,159]    [,160]    [,161]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6068869 0.6078869 0.6088869 0.6098869 0.6108869 0.6118869 0.6128869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,162]    [,163]    [,164]    [,165]    [,166]    [,167]    [,168]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6138869 0.6148869 0.6158869 0.6168869 0.6178869 0.6188869 0.6198869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,169]    [,170]    [,171]    [,172]    [,173]    [,174]    [,175]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6208869 0.6218869 0.6228869 0.6238869 0.6248869 0.6258869 0.6268869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,176]    [,177]    [,178]    [,179]    [,180]    [,181]    [,182]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6278869 0.6288869 0.6298869 0.6308869 0.6318869 0.6328869 0.6338869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,183]    [,184]    [,185]    [,186]    [,187]    [,188]    [,189]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6348869 0.6358869 0.6368869 0.6378869 0.6388869 0.6398869 0.6408869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,190]    [,191]    [,192]    [,193]    [,194]    [,195]    [,196]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6418869 0.6428869 0.6438869 0.6448869 0.6458869 0.6468869 0.6478869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,197]    [,198]    [,199]    [,200]    [,201]    [,202]    [,203]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6488869 0.6498869 0.6508869 0.6518869 0.6528869 0.6538869 0.6548869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,204]    [,205]    [,206]    [,207]    [,208]    [,209]    [,210]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6558869 0.6568869 0.6578869 0.6588869 0.6598869 0.6608869 0.6618869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,211]    [,212]    [,213]    [,214]    [,215]    [,216]    [,217]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6628869 0.6638869 0.6648869 0.6658869 0.6668869 0.6678869 0.6688869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,218]    [,219]    [,220]    [,221]    [,222]    [,223]    [,224]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6698869 0.6708869 0.6718869 0.6728869 0.6738869 0.6748869 0.6758869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,225]    [,226]    [,227]    [,228]    [,229]    [,230]    [,231]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6768869 0.6778869 0.6788869 0.6798869 0.6808869 0.6818869 0.6828869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,232]    [,233]    [,234]    [,235]    [,236]    [,237]    [,238]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6838869 0.6848869 0.6858869 0.6868869 0.6878869 0.6888869 0.6898869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,239]    [,240]    [,241]    [,242]    [,243]    [,244]    [,245]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6908869 0.6918869 0.6928869 0.6938869 0.6948869 0.6958869 0.6968869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,246]    [,247]    [,248]    [,249]    [,250]    [,251]    [,252]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.6978869 0.6988869 0.6998869 0.7008869 0.7018869 0.7028869 0.7038869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,253]    [,254]    [,255]    [,256]    [,257]    [,258]    [,259]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7048869 0.7058869 0.7068869 0.7078869 0.7088869 0.7098869 0.7108869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,260]    [,261]    [,262]    [,263]    [,264]    [,265]    [,266]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7118869 0.7128869 0.7138869 0.7148869 0.7158869 0.7168869 0.7178869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,267]    [,268]    [,269]    [,270]    [,271]    [,272]    [,273]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7188869 0.7198869 0.7208869 0.7218869 0.7228869 0.7238869 0.7248869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,274]    [,275]    [,276]    [,277]    [,278]    [,279]    [,280]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7258869 0.7268869 0.7278869 0.7288869 0.7298869 0.7308869 0.7318869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,281]    [,282]    [,283]    [,284]    [,285]    [,286]    [,287]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7328869 0.7338869 0.7348869 0.7358869 0.7368869 0.7378869 0.7388869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,288]    [,289]    [,290]    [,291]    [,292]    [,293]    [,294]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7398869 0.7408869 0.7418869 0.7428869 0.7438869 0.7448869 0.7458869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,295]    [,296]    [,297]    [,298]    [,299]    [,300]    [,301]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7468869 0.7478869 0.7488869 0.7498869 0.7508869 0.7518869 0.7528869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,302]    [,303]    [,304]    [,305]    [,306]    [,307]    [,308]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7538869 0.7548869 0.7558869 0.7568869 0.7578869 0.7588869 0.7598869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,309]    [,310]    [,311]    [,312]    [,313]    [,314]    [,315]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7608869 0.7618869 0.7628869 0.7638869 0.7648869 0.7658869 0.7668869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,316]    [,317]    [,318]    [,319]    [,320]    [,321]    [,322]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7678869 0.7688869 0.7698869 0.7708869 0.7718869 0.7728869 0.7738869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,323]    [,324]    [,325]    [,326]    [,327]    [,328]    [,329]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7748869 0.7758869 0.7768869 0.7778869 0.7788869 0.7798869 0.7808869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,330]    [,331]    [,332]    [,333]    [,334]    [,335]    [,336]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7818869 0.7828869 0.7838869 0.7848869 0.7858869 0.7868869 0.7878869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,337]    [,338]    [,339]    [,340]    [,341]    [,342]    [,343]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7888869 0.7898869 0.7908869 0.7918869 0.7928869 0.7938869 0.7948869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,344]    [,345]    [,346]    [,347]    [,348]    [,349]    [,350]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.7958869 0.7968869 0.7978869 0.7988869 0.7998869 0.8008869 0.8018869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,351]    [,352]    [,353]    [,354]    [,355]    [,356]    [,357]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8028869 0.8038869 0.8048869 0.8058869 0.8068869 0.8078869 0.8088869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,358]    [,359]    [,360]    [,361]    [,362]    [,363]    [,364]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8098869 0.8108869 0.8118869 0.8128869 0.8138869 0.8148869 0.8158869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,365]    [,366]    [,367]    [,368]    [,369]    [,370]    [,371]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8168869 0.8178869 0.8188869 0.8198869 0.8208869 0.8218869 0.8228869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,372]    [,373]    [,374]    [,375]    [,376]    [,377]    [,378]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8238869 0.8248869 0.8258869 0.8268869 0.8278869 0.8288869 0.8298869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,379]    [,380]    [,381]    [,382]    [,383]    [,384]    [,385]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8308869 0.8318869 0.8328869 0.8338869 0.8348869 0.8358869 0.8368869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,386]    [,387]    [,388]    [,389]    [,390]    [,391]    [,392]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8378869 0.8388869 0.8398869 0.8408869 0.8418869 0.8428869 0.8438869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,393]    [,394]    [,395]    [,396]    [,397]    [,398]    [,399]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8448869 0.8458869 0.8468869 0.8478869 0.8488869 0.8498869 0.8508869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,400]    [,401]    [,402]    [,403]    [,404]    [,405]    [,406]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8518869 0.8528869 0.8538869 0.8548869 0.8558869 0.8568869 0.8578869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,407]    [,408]    [,409]    [,410]    [,411]    [,412]    [,413]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8588869 0.8598869 0.8608869 0.8618869 0.8628869 0.8638869 0.8648869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,414]    [,415]    [,416]    [,417]    [,418]    [,419]    [,420]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8658869 0.8668869 0.8678869 0.8688869 0.8698869 0.8708869 0.8718869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,421]    [,422]    [,423]    [,424]    [,425]    [,426]    [,427]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8728869 0.8738869 0.8748869 0.8758869 0.8768869 0.8778869 0.8788869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,428]    [,429]    [,430]    [,431]    [,432]    [,433]    [,434]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8798869 0.8808869 0.8818869 0.8828869 0.8838869 0.8848869 0.8858869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,435]    [,436]    [,437]    [,438]    [,439]    [,440]    [,441]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8868869 0.8878869 0.8888869 0.8898869 0.8908869 0.8918869 0.8928869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,442]    [,443]    [,444]    [,445]    [,446]    [,447]    [,448]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.8938869 0.8948869 0.8958869 0.8968869 0.8978869 0.8988869 0.8998869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,449]    [,450]    [,451]    [,452]    [,453]    [,454]    [,455]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9008869 0.9018869 0.9028869 0.9038869 0.9048869 0.9058869 0.9068869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,456]    [,457]    [,458]    [,459]    [,460]    [,461]    [,462]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9078869 0.9088869 0.9098869 0.9108869 0.9118869 0.9128869 0.9138869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,463]    [,464]    [,465]    [,466]    [,467]    [,468]    [,469]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9148869 0.9158869 0.9168869 0.9178869 0.9188869 0.9198869 0.9208869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,470]    [,471]    [,472]    [,473]    [,474]    [,475]    [,476]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9218869 0.9228869 0.9238869 0.9248869 0.9258869 0.9268869 0.9278869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,477]    [,478]    [,479]    [,480]    [,481]    [,482]    [,483]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9288869 0.9298869 0.9308869 0.9318869 0.9328869 0.9338869 0.9348869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,484]    [,485]    [,486]    [,487]    [,488]    [,489]    [,490]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9358869 0.9368869 0.9378869 0.9388869 0.9398869 0.9408869 0.9418869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,491]    [,492]    [,493]    [,494]    [,495]    [,496]    [,497]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9428869 0.9438869 0.9448869 0.9458869 0.9468869 0.9478869 0.9488869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,498]    [,499]    [,500]    [,501]    [,502]    [,503]    [,504]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9498869 0.9508869 0.9518869 0.9528869 0.9538869 0.9548869 0.9558869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,505]    [,506]    [,507]    [,508]    [,509]    [,510]    [,511]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9568869 0.9578869 0.9588869 0.9598869 0.9608869 0.9618869 0.9628869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,512]    [,513]    [,514]    [,515]    [,516]    [,517]    [,518]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9638869 0.9648869 0.9658869 0.9668869 0.9678869 0.9688869 0.9698869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,519]    [,520]    [,521]    [,522]    [,523]    [,524]    [,525]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9708869 0.9718869 0.9728869 0.9738869 0.9748869 0.9758869 0.9768869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,526]    [,527]    [,528]    [,529]    [,530]    [,531]    [,532]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9778869 0.9788869 0.9798869 0.9808869 0.9818869 0.9828869 0.9838869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,533]    [,534]    [,535]    [,536]    [,537]    [,538]    [,539]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9848869 0.9858869 0.9868869 0.9878869 0.9888869 0.9898869 0.9908869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,540]    [,541]    [,542]    [,543]    [,544]    [,545]    [,546]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9918869 0.9928869 0.9938869 0.9948869 0.9958869 0.9968869 0.9978869</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         [,547]    [,548]   [,549]   [,550]   [,551]   [,552]   [,553]   [,554]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 0.9988869 0.9998869 1.000887 1.001887 1.002887 1.003887 1.004887 1.005887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,555]   [,556]   [,557]   [,558]   [,559]   [,560]   [,561]   [,562]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.006887 1.007887 1.008887 1.009887 1.010887 1.011887 1.012887 1.013887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,563]   [,564]   [,565]   [,566]   [,567]   [,568]   [,569]   [,570]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.014887 1.015887 1.016887 1.017887 1.018887 1.019887 1.020887 1.021887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,571]   [,572]   [,573]   [,574]   [,575]   [,576]   [,577]   [,578]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.022887 1.023887 1.024887 1.025887 1.026887 1.027887 1.028887 1.029887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,579]   [,580]   [,581]   [,582]   [,583]   [,584]   [,585]   [,586]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.030887 1.031887 1.032887 1.033887 1.034887 1.035887 1.036887 1.037887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,587]   [,588]   [,589]   [,590]   [,591]   [,592]   [,593]   [,594]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.038887 1.039887 1.040887 1.041887 1.042887 1.043887 1.044887 1.045887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,595]   [,596]   [,597]   [,598]   [,599]   [,600]   [,601]   [,602]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.046887 1.047887 1.048887 1.049887 1.050887 1.051887 1.052887 1.053887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,603]   [,604]   [,605]   [,606]   [,607]   [,608]   [,609]   [,610]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.054887 1.055887 1.056887 1.057887 1.058887 1.059887 1.060887 1.061887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,611]   [,612]   [,613]   [,614]   [,615]   [,616]   [,617]   [,618]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.062887 1.063887 1.064887 1.065887 1.066887 1.067887 1.068887 1.069887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,619]   [,620]   [,621]   [,622]   [,623]   [,624]   [,625]   [,626]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.070887 1.071887 1.072887 1.073887 1.074887 1.075887 1.076887 1.077887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,627]   [,628]   [,629]   [,630]   [,631]   [,632]   [,633]   [,634]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.078887 1.079887 1.080887 1.081887 1.082887 1.083887 1.084887 1.085887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,635]   [,636]   [,637]   [,638]   [,639]   [,640]   [,641]   [,642]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.086887 1.087887 1.088887 1.089887 1.090887 1.091887 1.092887 1.093887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,643]   [,644]   [,645]   [,646]   [,647]   [,648]   [,649]   [,650]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.094887 1.095887 1.096887 1.097887 1.098887 1.099887 1.100887 1.101887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,651]   [,652]   [,653]   [,654]   [,655]   [,656]   [,657]   [,658]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.102887 1.103887 1.104887 1.105887 1.106887 1.107887 1.108887 1.109887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,659]   [,660]   [,661]   [,662]   [,663]   [,664]   [,665]   [,666]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.110887 1.111887 1.112887 1.113887 1.114887 1.115887 1.116887 1.117887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,667]   [,668]   [,669]   [,670]   [,671]   [,672]   [,673]   [,674]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.118887 1.119887 1.120887 1.121887 1.122887 1.123887 1.124887 1.125887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,675]   [,676]   [,677]   [,678]   [,679]   [,680]   [,681]   [,682]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.126887 1.127887 1.128887 1.129887 1.130887 1.131887 1.132887 1.133887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,683]   [,684]   [,685]   [,686]   [,687]   [,688]   [,689]   [,690]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.134887 1.135887 1.136887 1.137887 1.138887 1.139887 1.140887 1.141887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,691]   [,692]   [,693]   [,694]   [,695]   [,696]   [,697]   [,698]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.142887 1.143887 1.144887 1.145887 1.146887 1.147887 1.148887 1.149887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,699]   [,700]   [,701]   [,702]   [,703]   [,704]   [,705]   [,706]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.150887 1.151887 1.152887 1.153887 1.154887 1.155887 1.156887 1.157887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,707]   [,708]   [,709]   [,710]   [,711]   [,712]   [,713]   [,714]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.158887 1.159887 1.160887 1.161887 1.162887 1.163887 1.164887 1.165887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,715]   [,716]   [,717]   [,718]   [,719]   [,720]   [,721]   [,722]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.166887 1.167887 1.168887 1.169887 1.170887 1.171887 1.172887 1.173887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,723]   [,724]   [,725]   [,726]   [,727]   [,728]   [,729]   [,730]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.174887 1.175887 1.176887 1.177887 1.178887 1.179887 1.180887 1.181887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,731]   [,732]   [,733]   [,734]   [,735]   [,736]   [,737]   [,738]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.182887 1.183887 1.184887 1.185887 1.186887 1.187887 1.188887 1.189887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,739]   [,740]   [,741]   [,742]   [,743]   [,744]   [,745]   [,746]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.190887 1.191887 1.192887 1.193887 1.194887 1.195887 1.196887 1.197887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,747]   [,748]   [,749]   [,750]   [,751]   [,752]   [,753]   [,754]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.198887 1.199887 1.200887 1.201887 1.202887 1.203887 1.204887 1.205887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,755]   [,756]   [,757]   [,758]   [,759]   [,760]   [,761]   [,762]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.206887 1.207887 1.208887 1.209887 1.210887 1.211887 1.212887 1.213887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        [,763]   [,764]   [,765]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 1.214887 1.215887 1.216887</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [ reached getOption("max.print") -- omitted 5 row(s) and 1 matrix slice(s) ]</span>
-<span class="r-in"><span><span class="co"># plot landscape</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="as_persistence-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># custom parameters</span></span></span>
-<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1L</span>, by <span class="op">=</span> <span class="fl">0.1</span>, xmax <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 17 levels over (0.5,1.3)</span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="as_persistence-6.png" alt="" width="700" height="433"></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * 0-degree features: 60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * 1-degree features: 36</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> * 2-degree features: 20 </span>
 </code></pre></div>
     </div>
   </div>

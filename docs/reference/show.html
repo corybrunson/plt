@@ -66,6 +66,11 @@ used for <code><a href="https://rdrr.io/r/base/print.html" class="external-link"
 <dd><p>A <a href="PersistenceLandscape.html">PersistenceLandscape</a> object.</p></dd>
 
 </dl></div>
+    <div id="see-also">
+    <h2>See also</h2>
+    <div class="dont-index"><p><a href="PersistenceLandscape.html">Rcpp_PersistenceLandscape</a> for the exported C++ class and
+<code><a href="landscape.html">landscape()</a></code> for the R wrapper.</p></div>
+    </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
@@ -122,13 +127,13 @@ used for <code><a href="https://rdrr.io/r/base/print.html" class="external-link"
 <span class="r-out co"><span class="r-pr">#&gt;</span> [8,]  Inf 0.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (exact format) of 3 levels over (0,4)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (exact format) of 3 levels over (0,10)</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Internal representation:  exact </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of levels:  3 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Representation limits: ( 0 , 4.5 ) </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">toDiscrete</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">discretize</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]    3 1001    2</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3003</span>
@@ -279,7 +284,7 @@ used for <code><a href="https://rdrr.io/r/base/print.html" class="external-link"
 <span class="r-out co"><span class="r-pr">#&gt;</span> [7,]  Inf  0.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (exact format) of 3 levels over (0,5)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (exact format) of 3 levels over (0,10)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># discrete landscape</span></span></span>
 <span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu">new</span><span class="op">(</span></span></span>
@@ -308,12 +313,13 @@ used for <code><a href="https://rdrr.io/r/base/print.html" class="external-link"
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0  0.0  0.0  0.0  0.0  0.0  0.0    0  0.0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 4 levels over (0,4)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 4 levels over (0,5)</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">toDiscrete</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl</span><span class="op">$</span><span class="fu">discretize</span><span class="op">(</span><span class="op">)</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1]  4 11  2</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Discrete landscapes cannot yet be re-discretized.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 44</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      level   x  fx</span>
@@ -385,10 +391,10 @@ used for <code><a href="https://rdrr.io/r/base/print.html" class="external-link"
 <span class="r-out co"><span class="r-pr">#&gt;</span> [4,]    0    0    0    0    0    0    0    0    0     0     0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">show</span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 4 levels over (0,4)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 4 levels over (0,5)</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">pl3</span> <span class="op">&lt;-</span> <span class="va">pl</span><span class="op">$</span><span class="fu">add</span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 4 levels over (0,4)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 4 levels over (0,5)</span>
 <span class="r-in"><span><span class="va">pl3</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> , , 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

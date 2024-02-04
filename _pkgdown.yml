@@ -19,5 +19,6 @@ reference:
   contents:
   - '`Rcpp_PersistenceLandscape-methods`'
   - '`arithmetic`'
-  - '`calculus`'
+  - '`algebra`'
+  - '`analysis`'
   - '`inference`'
