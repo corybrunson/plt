@@ -9,7 +9,7 @@
   x,
   replace_inf = NULL,
   n_levels = NULL,
-  palette = "viridis",
+  palette = "default",
   alpha = NULL,
   rev = FALSE,
   ...,
@@ -27,12 +27,13 @@ replace \code{Inf} (and its negative will replace \code{-Inf}) in the plot.}
 determined to be the number of levels in \code{pl} or \code{x}.}
 
 \item{palette}{Character; either a color palette from
-\code{\link[grDevices:palettes]{grDevices::hcl.pals()}}, or the name of a palette function documented there
-(e.g. \code{'rainbow()'}), or a vector of colors for \code{\link[grDevices:colorRamp]{grDevices::colorRamp()}} to
-interpolate.}
+\code{\link[grDevices:palette]{grDevices::palette.pals()}} or \code{\link[grDevices:palettes]{grDevices::hcl.pals()}}, or the name of a
+palette function documented there (e.g. \code{'rainbow()'}), or a vector of
+colors for \code{\link[grDevices:colorRamp]{grDevices::colorRamp()}} to interpolate. The default \code{palette = "default"} uses the current default via \verb{[palette()]}.}
 
-\item{alpha, rev}{Parameters passed to \code{\link[grDevices:palettes]{grDevices::hcl.colors()}},
-\code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}.}
+\item{alpha, rev}{Parameters passed to \code{\link[grDevices:palette]{grDevices::palette.colors()}},
+\code{\link[grDevices:palettes]{grDevices::hcl.colors()}}, or \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}. Note that
+\code{recycle = TRUE} is set internally.}
 
 \item{...}{Additional parameters passed to \code{\link[base:plot]{base::plot()}}. Values passed to
 \code{type} or \code{col} will be ignored with a message.}

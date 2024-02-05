@@ -11,11 +11,13 @@
 #' @param n_levels Integer; number of levels to plot. If `NULL` (the default),
 #'   determined to be the number of levels in `pl` or `x`.
 #' @param palette Character; either a color palette from
-#'   [grDevices::hcl.pals()], or the name of a palette function documented there
-#'   (e.g. `'rainbow()'`), or a vector of colors for [grDevices::colorRamp()] to
-#'   interpolate.
-#' @param alpha,rev Parameters passed to [grDevices::hcl.colors()],
-#'   [grDevices::colorRampPalette()].
+#'   [grDevices::palette.pals()] or [grDevices::hcl.pals()], or the name of a
+#'   palette function documented there (e.g. `'rainbow()'`), or a vector of
+#'   colors for [grDevices::colorRamp()] to interpolate. The default `palette =
+#'   "default"` uses the current default via `[palette()]`.
+#' @param alpha,rev Parameters passed to [grDevices::palette.colors()],
+#'   [grDevices::hcl.colors()], or [grDevices::colorRampPalette()]. Note that
+#'   `recycle = TRUE` is set internally.
 #' @param ... Additional parameters passed to [base::plot()]. Values passed to
 #'   `type` or `col` will be ignored with a message.
 #' @param silent Logical; whether to silence messages.
@@ -28,7 +30,7 @@ setMethod(
   c(x = "Rcpp_PersistenceLandscape"),
   function(
     x, replace_inf = NULL, n_levels = NULL,
-    palette = "viridis", alpha = NULL, rev = FALSE, ...,
+    palette = "default", alpha = NULL, rev = FALSE, ...,
     silent = TRUE
   ) {
     # pre-process parameters
@@ -131,7 +133,39 @@ colorLevels <- function(n, palette, alpha, rev) {
   
   if (length(palette) == 1L) {
     
+    # default palette
+    if (palette == "default") {
+      
+      # mimic `recycle = TRUE`
+      pal <- rep_len(grDevices::palette(), n)
+      # adapted from `gplots::col2hex`
+      pal <- grDevices::col2rgb(pal)
+      pal <- grDevices::rgb(
+        red = pal[1L, ] / 255,
+        green = pal[2L, ] / 255,
+        blue = pal[3L, ] / 255
+      )
+      pal <- substr(pal, 1L, 7L)
+      # adapted from `grDevices::palette.colors()`
+      if (! is.null(alpha)) {
+        alpha <- rep_len(alpha, n)
+        alpha <- format(
+          as.hexmode(round(alpha * 255 + 1e-04)),
+          width = 2L, upper.case = TRUE
+        )
+        pal <- paste0(pal, alpha)
+      }
+      return(pal)
+      
+    }
+    
     # palette name
+    pal <- try(grDevices::palette.colors(
+      n, palette = palette,
+      alpha = alpha, recycle = TRUE
+    ), silent = TRUE)
+    if (! inherits(pal, "try-error")) return(pal)
+    # HCL palette name
     pal <- try(grDevices::hcl.colors(
       n, palette = palette,
       alpha = alpha, rev = rev
@@ -139,12 +173,12 @@ colorLevels <- function(n, palette, alpha, rev) {
     if (! inherits(pal, "try-error")) return(pal)
     
     # palette function
-    pal_fun <- try(utils::getFromNamespace(palette, "grDevices"))
+    pal_fun <- try(utils::getFromNamespace(palette, "grDevices"), silent = TRUE)
     if (! inherits(pal_fun, "try-error"))
       return(pal_fun(n = n, alpha = alpha, rev = rev))
     
     # single color
-    pal <- try(grDevices::col2rgb(palette))
+    pal <- try(grDevices::col2rgb(palette), silent = TRUE)
     if (! inherits(pal, "try-error")) return(rep(palette, n))
     
   } else {
@@ -159,6 +193,6 @@ colorLevels <- function(n, palette, alpha, rev) {
   }
   
   # oops
-  stop("`palette = '", palette, "'` is not a valid palette or color.")
+  stop("`palette = '", palette, "'` is not a recognized palette or color.")
   
 }
