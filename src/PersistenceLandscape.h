@@ -6,7 +6,7 @@ using namespace Rcpp;
 // Section: Helpers
 
 // TODO: Make this a user-settable option through {Rcpp}.
-double epsi = 0.000005;
+double epsi = 0.0000005;
 inline bool almostEqual(double a, double b) {
   if (fabs(a - b) < epsi)
     return true;

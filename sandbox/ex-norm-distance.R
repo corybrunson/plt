@@ -5,7 +5,7 @@ devtools::load_all()
 
 # TODO: When `epsi` in 'PersistenceLandscape.h' is made into a user-settable
 # option, set this equal to that option.
-epsi <- 0.000005
+epsi <- 0.0000005
 
 # insert critical points (y = 0)
 insert_critical <- function(x) {
