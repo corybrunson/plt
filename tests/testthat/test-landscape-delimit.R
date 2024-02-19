@@ -3,7 +3,7 @@ sq <- rbind(c(0, 0), c(0, 1), c(1, 1), c(1, 0))
 ph <- TDA::alphaComplexDiag(sq)
 # undo bug in `alphaComplexDiag()`
 ph$diagram[, 2:3] <- sqrt(ph$diagram[, 2:3])
-pl <- landscape(ph, degree = 1, xmax = 1, by = 0.01)
+pl <- landscape(ph, degree = 1, xmax = 1, xby = 0.01)
 
 test_that("`$delimit()` throws error iff limits contain not PL support", {
   supp <- pl_support(pl)

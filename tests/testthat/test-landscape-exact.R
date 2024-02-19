@@ -62,12 +62,12 @@ test_that("getInternal from discrete is correct from diagram", {
   pd <- suppressWarnings(
     as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2)))
   pl <- landscape(pd, degree = 1L, exact = TRUE,
-                  xmax = 2.5, by = 0.1)
+                  xmax = 2.5, xby = 0.1)
   
   pdref <- suppressWarnings(
     as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2)))
   plref <- landscape(pdref, degree = 1L, exact = TRUE,
-                     xmax = 2.5, by = 0.1)
+                     xmax = 2.5, xby = 0.1)
   
   expect_equal(pl$getInternal(), plref$getInternal())
 })

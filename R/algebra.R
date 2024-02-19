@@ -59,8 +59,8 @@ pl_vectorize <- function(...) {
   exacts <- vapply(args, \(x) x$isExact(), FALSE)
   if (! almostUnique(xbys[! exacts]))
     stop("All discrete PLs must have (almost) equal resolution `dx`.")
-  xby <- if (any(! exacts)) args[! exacts][[1L]]$xBy() else args[[1L]]$xBy()
-  args[exacts] <- lapply(args[exacts], pl_delimit, by = xby)
+  xby1 <- if (any(! exacts)) args[! exacts][[1L]]$xBy() else args[[1L]]$xBy()
+  args[exacts] <- lapply(args[exacts], pl_delimit, xby = xby1)
   
   # union of limits of all PLs
   xmin <- min(vapply(args, \(x) x$xMin(), 0))

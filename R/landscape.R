@@ -22,7 +22,7 @@
 #' @param xmin,xmax Domain thresholds for discrete PL; if not specified, then
 #'   taken to be the support of the PL constructed from the data or the internal
 #'   values of the 'Rcpp_PersistenceLandscape' object.
-#' @param by Domain grid diameter for discrete PL; if not specified, then set to
+#' @param xby Domain grid diameter for discrete PL; if not specified, then set to
 #'   the power of 10 that yields between 100 and 1000 intervals.
 #' @param pl A persistence landscape as returned by `landscape()`.
 #' @return `landscape()` returns a persistence landscape (an object of S4 class
@@ -35,7 +35,7 @@
 landscape <- function(
     pd, degree = NULL,
     exact = FALSE,
-    xmin = NULL, xmax = NULL, by = NULL
+    xmin = NULL, xmax = NULL, xby = NULL
 ) {
   
   # birth-death pairs matrix `diagram`
@@ -63,10 +63,10 @@ landscape <- function(
   xmax <- xmax %||% max(pd)
   # grid of between 100 and 1000 intervals of length a power of 10
   # TODO: Make this a non-default option.
-  by <- by %||% (10 ^ (floor(log(xmax - xmin, 10)) - 2L))
+  xby <- xby %||% (10 ^ (floor(log(xmax - xmin, 10)) - 2L))
 
   # construct persistence landscape
-  new(PersistenceLandscape, pd, exact, xmin, xmax, by)
+  new(PersistenceLandscape, pd, exact, xmin, xmax, xby)
 }
 
 #' @rdname landscape
@@ -134,11 +134,11 @@ pl_support <- function(pl) {
 
 #' @rdname landscape
 #' @export
-pl_delimit <- function(pl, xmin = NULL, xmax = NULL, by = NULL) {
+pl_delimit <- function(pl, xmin = NULL, xmax = NULL, xby = NULL) {
   if (is.null(xmin)) xmin <- pl$xMin()
   if (is.null(xmax)) xmax <- pl$xMax()
-  if (is.null(by)) by <- pl$xBy()
-  pl$delimit(xmin, xmax, by)
+  if (is.null(xby)) xby <- pl$xBy()
+  pl$delimit(xmin, xmax, xby)
 }
 
 #' @rdname landscape

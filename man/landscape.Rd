@@ -17,7 +17,7 @@ landscape(
   exact = FALSE,
   xmin = NULL,
   xmax = NULL,
-  by = NULL
+  xby = NULL
 )
 
 pl_is_exact(pl)
@@ -30,7 +30,7 @@ pl_limits(pl)
 
 pl_support(pl)
 
-pl_delimit(pl, xmin = NULL, xmax = NULL, by = NULL)
+pl_delimit(pl, xmin = NULL, xmax = NULL, xby = NULL)
 
 pl_discretize(pl)
 }
@@ -49,7 +49,7 @@ discrete.}
 taken to be the support of the PL constructed from the data or the internal
 values of the 'Rcpp_PersistenceLandscape' object.}
 
-\item{by}{Domain grid diameter for discrete PL; if not specified, then set to
+\item{xby}{Domain grid diameter for discrete PL; if not specified, then set to
 the power of 10 that yields between 100 and 1000 intervals.}
 
 \item{pl}{A persistence landscape as returned by \code{landscape()}.}
@@ -89,17 +89,17 @@ plot(pl)
 
 # coerce to discrete at different resolutions
 plot(pl, xlim = c(0, .5))
-pl <- pl_delimit(pl, xmin = 0, xmax = .5, by = .01)
+pl <- pl_delimit(pl, xmin = 0, xmax = .5, xby = .01)
 pl_ <- pl_discretize(pl)
 plot(pl_)
-pl <- pl_delimit(pl, xmin = 0, xmax = .5, by = .001)
+pl <- pl_delimit(pl, xmin = 0, xmax = .5, xby = .001)
 pl_ <- pl_discretize(pl)
 plot(pl_)
 
 # ensure grid when discretizing
-pl_cut <- pl_discretize(pl_delimit(pl, by = 0.1))
+pl_cut <- pl_discretize(pl_delimit(pl, xby = 0.1))
 pl_cut$getInternal()[1, , 1]
-pl_cut <- pl_discretize(pl_delimit(pl, xmin = 0, xmax = pi, by = 0.1))
+pl_cut <- pl_discretize(pl_delimit(pl, xmin = 0, xmax = pi, xby = 0.1))
 pl_cut$getInternal()[1, , 1]
 
 # sample points
@@ -121,7 +121,7 @@ print(head(pl$getInternal()))
 plot(pl)
 
 # custom parameters
-pl <- landscape(pd, degree = 1L, by = 0.1, xmax = 2)
+pl <- landscape(pd, degree = 1L, xby = 0.1, xmax = 2)
 print(pl)
 plot(pl)
 }

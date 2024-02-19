@@ -15,15 +15,15 @@ plot(pl)
 
 # coerce to discrete at different resolutions
 plot(pl, xlim = c(0, .5))
-pl <- pl_delimit(pl, xmin = 0, xmax = .5, by = .01)
+pl <- pl_delimit(pl, xmin = 0, xmax = .5, xby = .01)
 pl_ <- pl_discretize(pl)
 plot(pl_)
-pl <- pl_delimit(pl, xmin = 0, xmax = .5, by = .001)
+pl <- pl_delimit(pl, xmin = 0, xmax = .5, xby = .001)
 pl_ <- pl_discretize(pl)
 plot(pl_)
 
 # ensure grid when discretizing
-pl_cut <- pl_discretize(pl_delimit(pl, by = 0.1))
+pl_cut <- pl_discretize(pl_delimit(pl, xby = 0.1))
 pl_cut$getInternal()[1, , 1]
-pl_cut <- pl_discretize(pl_delimit(pl, xmin = 0, xmax = pi, by = 0.1))
+pl_cut <- pl_discretize(pl_delimit(pl, xmin = 0, xmax = pi, xby = 0.1))
 pl_cut$getInternal()[1, , 1]

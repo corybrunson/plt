@@ -108,8 +108,8 @@ pl_norm(ple1, p = 2)
 pl_norm(ple1, p = 1)
 
 # two discrete persistence landscapes
-pl1 <- landscape(pd1, degree = 1, xmin = 0, xmax = 1.5, by = 0.01)
-pl2 <- landscape(pd2, degree = 1, xmin = 0, xmax = 1.5, by = 0.01)
+pl1 <- landscape(pd1, degree = 1, xmin = 0, xmax = 1.5, xby = 0.01)
+pl2 <- landscape(pd2, degree = 1, xmin = 0, xmax = 1.5, xby = 0.01)
 
 # inf norm
 pl_norm_discrete(pl1, p = Inf)

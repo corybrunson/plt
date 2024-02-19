@@ -11,7 +11,7 @@ plot(pl_e, xlim = c(0, 5))
 pl_ef <- pl_indicator(pl_e, f)
 plot(pl_ef, xlim = c(0, 5))
 # discrete landscape
-pl_d <- landscape(pd, degree = 1, xmin = 0, xmax = 5, by = .2)
+pl_d <- landscape(pd, degree = 1, xmin = 0, xmax = 5, xby = .2)
 plot(pl_d)
 # pl_df <- pl_d$indicator(f, 0)
 pl_df <- pl_indicator(pl_d, f)

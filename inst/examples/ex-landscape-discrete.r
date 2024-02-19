@@ -18,6 +18,6 @@ print(head(pl$getInternal()))
 plot(pl)
 
 # custom parameters
-pl <- landscape(pd, degree = 1L, by = 0.1, xmax = 2)
+pl <- landscape(pd, degree = 1L, xby = 0.1, xmax = 2)
 print(pl)
 plot(pl)

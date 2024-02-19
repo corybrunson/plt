@@ -164,7 +164,7 @@ print(pl1$getInternal())
 
 An alternative, approximate construction computes the value of each
 level of the landscape at each point on a 1-dimensional grid, ranging
-from `xmin` to `xmax` at increments of `by`. A landscape constructed
+from `xmin` to `xmax` at increments of `xby`. A landscape constructed
 using a discrete approximation is stored as a 3-dimensional array of
 dimensions (levels, values, 2), with one level per feature (some of
 which may be trivial) and one value per grid point, stored as $x,y$
@@ -173,7 +173,7 @@ pairs along the third dimension.
 ``` r
 b_ran <- pl_support(pl1)
 pl1d <- landscape(pd, degree = 1,
-                  xmin = b_ran[[1L]], xmax = b_ran[[2L]], by = 0.05)
+                  xmin = b_ran[[1L]], xmax = b_ran[[2L]], xby = 0.05)
 print(dim(pl1d$getInternal()))
 #> [1] 4 9 2
 print(pl1d$getInternal())
@@ -210,7 +210,7 @@ portion of the discretized exact landscape, using the default bounds and
 resolution given to `pl1`:
 
 ``` r
-# default conversion to discrete uses `by = 0.001`
+# default conversion to discrete uses `xby = 0.001`
 pl1_ <- pl1$discretize()
 print(dim(pl1_$getInternal()))
 #> [1]   2 636   2
@@ -262,7 +262,7 @@ pl1_$getInternal()[, seq(230L, 270L), , drop = FALSE]
 We can also specify the bounds and the resolution of the discretization:
 
 ``` r
-pl1 <- pl_delimit(pl1, xmin = 0, xmax = 1, by = 0.1)
+pl1 <- pl_delimit(pl1, xmin = 0, xmax = 1, xby = 0.1)
 pl1_ <- pl_discretize(pl1)
 pl1_$getInternal()
 #> , , 1

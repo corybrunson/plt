@@ -5,7 +5,7 @@ par(mfrow = c(2L, 2L), mar = rep(.5, 4))
 x <- tdaunif::sample_klein_flat(60, ar = 2)
 pd <- ripserr::vietoris_rips(x, dim = 1L, threshold = 2)
 pl_e <- landscape(pd, degree = 1L, exact = TRUE)
-pl_d <- landscape(pd, degree = 1L, exact = FALSE, xmax = 2, by = 0.05)
+pl_d <- landscape(pd, degree = 1L, exact = FALSE, xmax = 2, xby = 0.05)
 plot(pl_e, xaxt = "n", yaxt = "n")
 plot(pl_d, xaxt = "n", yaxt = "n")
 
@@ -26,7 +26,7 @@ plot(pl_d_, xaxt = "n", yaxt = "n")
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 
 # vectorize a list
-pl_lst <- list(pl_e, pl_discretize(pl_delimit(pl_e, by = 0.05)), pl_d)
+pl_lst <- list(pl_e, pl_discretize(pl_delimit(pl_e, xby = 0.05)), pl_d)
 m <- pl_vectorize(pl_lst)
 # de-vectorize the matrix
 pl_devectorize(m)
