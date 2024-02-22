@@ -75,7 +75,7 @@ persistence data using persistence landscapes. See Section 3 of Bubenik
 <span>  exact <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  xmin <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xmax <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xby <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  alternative <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"two.sided"</span>, <span class="st">"less"</span>, <span class="st">"greater"</span><span class="op">)</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  supports <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -133,9 +133,9 @@ taken to be the support of the PL constructed from the data or the internal
 values of the 'Rcpp_PersistenceLandscape' object.</p></dd>
 
 
-<dt>by</dt>
-<dd><p>Domain grid diameter for discrete PL; if not specified, then set to
-the power of 10 that yields between 100 and 1000 intervals.</p></dd>
+<dt>xby</dt>
+<dd><p>Domain grid diameter for discrete PL; if not specified, then set
+to the power of 10 that yields between 100 and 1000 intervals.</p></dd>
 
 
 <dt>complete</dt>

@@ -1,4 +1,4 @@
-#' @title Norms, Distances, and Integrals of Persistence Landscapes
+#' @title Integrals, Distances, and Norms of Persistence Landscapes
 #' @description Calculate distances and perform infinitesimal calculus on
 #'   persistence landscapes. See Section 3 of Bubenik (2015).
 #'

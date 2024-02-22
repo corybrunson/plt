@@ -59,7 +59,7 @@
 <span>  <span class="va">x</span>,</span>
 <span>  replace_inf <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_levels <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  palette <span class="op">=</span> <span class="st">"viridis"</span>,</span>
+<span>  palette <span class="op">=</span> <span class="st">"default"</span>,</span>
 <span>  alpha <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  rev <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span>,</span>
@@ -86,14 +86,15 @@ determined to be the number of levels in <code>pl</code> or <code>x</code>.</p><
 
 <dt>palette</dt>
 <dd><p>Character; either a color palette from
-<code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">grDevices::hcl.pals()</a></code>, or the name of a palette function documented there
-(e.g. <code>'rainbow()'</code>), or a vector of colors for <code><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">grDevices::colorRamp()</a></code> to
-interpolate.</p></dd>
+<code><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">grDevices::palette.pals()</a></code> or <code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">grDevices::hcl.pals()</a></code>, or the name of a
+palette function documented there (e.g. <code>'rainbow()'</code>), or a vector of
+colors for <code><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">grDevices::colorRamp()</a></code> to interpolate. The default <code>palette = "default"</code> uses the current default via <code>[palette()]</code>.</p></dd>
 
 
 <dt>alpha, rev</dt>
-<dd><p>Parameters passed to <code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">grDevices::hcl.colors()</a></code>,
-<code><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">grDevices::colorRampPalette()</a></code>.</p></dd>
+<dd><p>Parameters passed to <code><a href="https://rdrr.io/r/grDevices/palette.html" class="external-link">grDevices::palette.colors()</a></code>,
+<code><a href="https://rdrr.io/r/grDevices/palettes.html" class="external-link">grDevices::hcl.colors()</a></code>, or <code><a href="https://rdrr.io/r/grDevices/colorRamp.html" class="external-link">grDevices::colorRampPalette()</a></code>. Note that
+<code>recycle = TRUE</code> is set internally.</p></dd>
 
 
 <dt>...</dt>
@@ -125,13 +126,13 @@ interpolate.</p></dd>
 <span class="r-in"><span><span class="co"># plot landscapes</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># palette name</span></span></span>
-<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">0L</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.5</span>, by <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">0L</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.5</span>, xby <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>     palette <span class="op">=</span> <span class="st">"Cork"</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># palette function name</span></span></span>
-<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1L</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.5</span>, by <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1L</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.5</span>, xby <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>     palette <span class="op">=</span> <span class="st">"topo.colors"</span>, lwd <span class="op">=</span> <span class="fl">1</span>, rev <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># custom color ramp</span></span></span>
-<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">2L</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.5</span>, by <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span><span class="fu">plot</span><span class="op">(</span><span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">2L</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.5</span>, xby <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>     palette <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span>, <span class="st">"blue"</span><span class="op">)</span>, lwd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span></span>

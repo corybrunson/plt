@@ -60,7 +60,7 @@
 <span>  exact <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  xmin <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  xmax <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  by <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  xby <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">pl_is_exact</span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span>
@@ -73,7 +73,7 @@
 <span></span>
 <span><span class="fu">pl_support</span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="cn">NULL</span>, xmax <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span><span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="cn">NULL</span>, xmax <span class="op">=</span> <span class="cn">NULL</span>, xby <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">pl_discretize</span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -102,9 +102,9 @@ taken to be the support of the PL constructed from the data or the internal
 values of the 'Rcpp_PersistenceLandscape' object.</p></dd>
 
 
-<dt>by</dt>
-<dd><p>Domain grid diameter for discrete PL; if not specified, then set to
-the power of 10 that yields between 100 and 1000 intervals.</p></dd>
+<dt>xby</dt>
+<dd><p>Domain grid diameter for discrete PL; if not specified, then set
+to the power of 10 that yields between 100 and 1000 intervals.</p></dd>
 
 
 <dt>pl</dt>
@@ -122,12 +122,17 @@ about such an object.</p>
     <div id="details">
     <h2>Details</h2>
     <p><code>landscape()</code> is a wrapper around the S4 class constructor
-<code>[methods:new()]</code>. The <code>pl_*()</code> helper functions take a persistence
-landscape as returned by <code>landscape()</code> and return its representation
-(<code>pl_is_exact()</code> and <code>pl_type()</code>), the number of levels
-(<code>pl_num_levels()</code>), the endpoints of its internal representation
-(excluding infinities) (<code>pl_limits()</code>), and the endpoints of its support,
-i.e. of the points at which its value is nonzero (<code>pl_support()</code>).</p>
+<code>[methods:new()]</code>. The <code>pl_*()</code> helper functions query a persistence
+landscape as returned by <code>landscape()</code> for specific information or
+manipulate its internal representation.</p>
+<p>Use <code>pl_is_exact()</code> and <code>pl_type()</code> to get a landscape's internal
+representation, <code>pl_num_levels()</code> its number of levels, <code>pl_limits()</code> the
+endpoints of its internal representation (excluding infinities), and
+<code>pl_support()</code> the infimum and supremum of its support (the points at which
+its value is nonzero).</p>
+<p>Use <code>pl_delimit()</code> to change the limits of a PL and <code>pl_discretize()</code> to
+convert an exact landscape to a discrete one (using its internally-stored
+range and resolution).</p>
     </div>
     <div id="see-also">
     <h2>See also</h2>
@@ -184,20 +189,20 @@ i.e. of the points at which its value is nonzero (<code>pl_support()</code>).</p
 <span class="r-in"><span><span class="co"># coerce to discrete at different resolutions</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">.5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="landscape-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">.5</span>, by <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">.5</span>, xby <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pl_</span> <span class="op">&lt;-</span> <span class="fu">pl_discretize</span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl_</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="landscape-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">.5</span>, by <span class="op">=</span> <span class="fl">.001</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">.5</span>, xby <span class="op">=</span> <span class="fl">.001</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pl_</span> <span class="op">&lt;-</span> <span class="fu">pl_discretize</span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl_</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="landscape-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># ensure grid when discretizing</span></span></span>
-<span class="r-in"><span><span class="va">pl_cut</span> <span class="op">&lt;-</span> <span class="fu">pl_discretize</span><span class="op">(</span><span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pl_cut</span> <span class="op">&lt;-</span> <span class="fu">pl_discretize</span><span class="op">(</span><span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xby <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pl_cut</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, , <span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0 0.1 0.2 0.3 0.4 0.5</span>
-<span class="r-in"><span><span class="va">pl_cut</span> <span class="op">&lt;-</span> <span class="fu">pl_discretize</span><span class="op">(</span><span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="va">pi</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pl_cut</span> <span class="op">&lt;-</span> <span class="fu">pl_discretize</span><span class="op">(</span><span class="fu">pl_delimit</span><span class="op">(</span><span class="va">pl</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="va">pi</span>, xby <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pl_cut</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span>, , <span class="fl">1</span><span class="op">]</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [20] 1.9 2.0 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 3.0 3.1 3.2</span>
@@ -412,7 +417,7 @@ i.e. of the points at which its value is nonzero (<code>pl_support()</code>).</p
 <span class="r-plt img"><img src="landscape-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># custom parameters</span></span></span>
-<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu">landscape</span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1L</span>, by <span class="op">=</span> <span class="fl">0.1</span>, xmax <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu">landscape</span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1L</span>, xby <span class="op">=</span> <span class="fl">0.1</span>, xmax <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Persistence landscape (discrete format) of 19 levels over (0,2)</span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>

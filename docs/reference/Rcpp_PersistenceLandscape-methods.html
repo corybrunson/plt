@@ -54,25 +54,29 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co">## S4 methods for signature</span></span>
-<span><span class="co">## 'Rcpp_PersistenceLandscape,missing'</span></span>
-<span><span class="op">+</span><span class="va">e1</span></span>
-<span><span class="op">-</span><span class="va">e1</span></span>
-<span></span>
-<span><span class="co">## S4 methods for signature</span></span>
-<span><span class="co">## 'numeric,Rcpp_PersistenceLandscape'</span></span>
-<span><span class="va">e1</span> <span class="op">*</span> <span class="va">e2</span></span>
-<span></span>
-<span><span class="co">## S4 methods for signature</span></span>
-<span><span class="co">## 'Rcpp_PersistenceLandscape,numeric'</span></span>
-<span><span class="va">e1</span> <span class="op">*</span> <span class="va">e2</span></span>
-<span><span class="va">e1</span> <span class="op">/</span> <span class="va">e2</span></span>
-<span></span>
-<span><span class="co">## S4 methods for signature</span></span>
-<span><span class="co">## 'Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape'</span></span>
-<span><span class="va">e1</span> <span class="op">+</span> <span class="va">e2</span></span>
-<span><span class="va">e1</span> <span class="op">-</span> <span class="va">e2</span></span>
-<span><span class="va">x</span> <span class="op">%*%</span> <span class="va">y</span></span></code></pre></div>
+    <div class="sourceCode"><pre><code># S4 method for Rcpp_PersistenceLandscape,missing
++(e1, e2)
+
+# S4 method for Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape
++(e1, e2)
+
+# S4 method for Rcpp_PersistenceLandscape,missing
+-(e1, e2)
+
+# S4 method for Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape
+-(e1, e2)
+
+# S4 method for numeric,Rcpp_PersistenceLandscape
+*(e1, e2)
+
+# S4 method for Rcpp_PersistenceLandscape,numeric
+*(e1, e2)
+
+# S4 method for Rcpp_PersistenceLandscape,numeric
+/(e1, e2)
+
+# S4 method for Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape
+%*%(x, y)</code></pre></div>
     </div>
 
     <div id="arguments">
@@ -117,22 +121,23 @@ on persistence landscapes.</p>
 <span class="r-in"><span><span class="va">pl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd2</span>, degree <span class="op">=</span> <span class="fl">1L</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fl">2L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># position? positing? (sticking a plus sign in front leaves something unchanged)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="op">+</span><span class="va">pl1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="op">+</span><span class="va">pl2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># negation</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="op">-</span><span class="va">pl1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># scalar multiplication</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl2</span> <span class="op">*</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># addition</span></span></span>
+<span class="r-in"><span><span class="co"># addition &amp; other-way scalar multiplication</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">*</span> <span class="va">pl2</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co"># subtraction</span></span></span>
+<span class="r-in"><span><span class="co"># subtraction and scalar division</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">-</span> <span class="va">pl2</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="Rcpp_PersistenceLandscape-methods-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># add an exact landscape to a discrete one</span></span></span>
 <span class="r-in"><span><span class="va">pl2d</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd2</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">FALSE</span>,</span></span>
-<span class="r-in"><span>                  xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.2</span>, by <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                  xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1.2</span>, xby <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># plot the summand landscapes and their sum with consistent parameters;</span></span></span>
 <span class="r-in"><span><span class="co"># the exact landscape is automatically converted to a discrete one</span></span></span>
 <span class="r-in"><span><span class="va">n_lev</span> <span class="op">&lt;-</span> <span class="fu"><a href="landscape.html">pl_num_levels</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span></span>
@@ -144,11 +149,11 @@ on persistence landscapes.</p>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># inner products of equal or similar landscapes</span></span></span>
-<span class="r-in"><span><span class="va">pl2</span> <span class="op">%*%</span> <span class="va">pl2</span></span></span>
+<span class="r-in"><span><span class="va">pl2</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04529366</span>
-<span class="r-in"><span><span class="va">pl2d</span> <span class="op">%*%</span> <span class="va">pl2d</span></span></span>
+<span class="r-in"><span><span class="va">pl2d</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2d</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04529371</span>
-<span class="r-in"><span><span class="va">pl2</span> <span class="op">%*%</span> <span class="va">pl2d</span></span></span>
+<span class="r-in"><span><span class="va">pl2</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2d</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04526804</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
@@ -174,7 +179,7 @@ on persistence landscapes.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># compute the distance between the exact landscapes</span></span></span>
 <span class="r-in"><span><span class="va">pl_diff</span> <span class="op">&lt;-</span> <span class="va">pl</span> <span class="op">-</span> <span class="va">pl_avg</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl_diff</span> <span class="op">%*%</span> <span class="va">pl_diff</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl_diff</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl_diff</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>

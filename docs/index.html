@@ -121,7 +121,10 @@
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">513611L</span><span class="op">)</span></span>
 <span><span class="va">pc</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/lemniscates.html" class="external-link">sample_lemniscate_gerono</a></span><span class="op">(</span><span class="fl">60</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
-<span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pc</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pc</span>, asp <span class="op">=</span> <span class="fl">1</span>, pch <span class="op">=</span> <span class="fl">16L</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-5-1.png"><!-- --></p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pc</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
 <span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span>
@@ -133,7 +136,7 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Radius/diameter: min = 0; max = 0.63582.</span></span></code></pre></div>
 <p>We the convert the persistence data to the preferred persistence diagram format and inspect some of its features:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/as_persistence.html">as_persistence</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pd</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 'persistence' data computed up to degree 1:</span></span>
@@ -154,17 +157,25 @@
 <span><span class="co">#&gt; [2,] 0.3016234 0.6075172</span></span>
 <span><span class="co">#&gt; [3,] 0.2504500 0.2727915</span></span>
 <span><span class="co">#&gt; [4,] 0.2251884 0.2300871</span></span></code></pre></div>
-<p>This allows us to compute a persistence landscape—in this case, for the 1-dimensional features. Here we compute the landscape exactly, which can be cost-prohibitive for larger persistence data:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>This allows us to compute a persistence landscape—in this case, for the 1-dimensional features. Here we compute the landscape exactly, which can be cost-prohibitive for larger persistence data, and print its summary:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Persistence landscape (exact format) of 2 levels over (0,0.636)</span></span></code></pre></div>
+<span><span class="co">#&gt; Persistence landscape (exact format) of 2 levels over (0,0.636)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Internal representation:  exact </span></span>
+<span><span class="co">#&gt; Number of levels:  2 </span></span>
+<span><span class="co">#&gt; Representation limits: ( 0.22519 , 0.6358 ) </span></span>
+<span><span class="co">#&gt; Landscape range: ( 0 , 0.06329 ) </span></span>
+<span><span class="co">#&gt; Magnitude:  0.0026959 </span></span>
+<span><span class="co">#&gt; Integral:   0.029522</span></span></code></pre></div>
+<p>Some advanced concepts like the magnitude of a landscape will be explained below.</p>
 </div>
 <div class="section level3">
 <h3 id="class">Class<a class="anchor" aria-label="anchor" href="#class"></a>
 </h3>
 <p>The object <code>pl1</code> is not an array, but rather an object that encapsulates both the data that encode a landscape and several basic operations that can be performed on it. This allows us to work with persistence landscapes without worrying about pre-processing their representations. At any point, the underlying encoding of the landscape can be extracted using <code>$getInternal()</code>, which in the case of an exactly calculated landscape returns a list of 2-column matrices, each matrix containing coordinates that define one level of the landscape as a piecewise linear function:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 2</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -191,11 +202,11 @@
 <span><span class="co">#&gt; [3,] 0.5442232 0.06329396</span></span>
 <span><span class="co">#&gt; [4,] 0.6075172 0.00000000</span></span>
 <span><span class="co">#&gt; [5,]       Inf 0.00000000</span></span></code></pre></div>
-<p>An alternative, approximate construction computes the value of each level of the landscape at each point on a 1-dimensional grid, ranging from <code>xmin</code> to <code>xmax</code> at increments of <code>by</code>. A landscape constructed using a discrete approximation is stored as a 3-dimensional array of dimensions (levels, values, 2), with one level per feature (some of which may be trivial) and one value per grid point, stored as <span class="math inline"><em>x</em>, <em>y</em></span> pairs along the third dimension.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>An alternative, approximate construction computes the value of each level of the landscape at each point on a 1-dimensional grid, ranging from <code>xmin</code> to <code>xmax</code> at increments of <code>xby</code>. A landscape constructed using a discrete approximation is stored as a 3-dimensional array of dimensions (levels, values, 2), with one level per feature (some of which may be trivial) and one value per grid point, stored as <span class="math inline"><em>x</em>, <em>y</em></span> pairs along the third dimension.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">b_ran</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_support</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
 <span><span class="va">pl1d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                  xmin <span class="op">=</span> <span class="va">b_ran</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span>, xmax <span class="op">=</span> <span class="va">b_ran</span><span class="op">[[</span><span class="fl">2L</span><span class="op">]</span><span class="op">]</span>, by <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
+<span>                  xmin <span class="op">=</span> <span class="va">b_ran</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span>, xmax <span class="op">=</span> <span class="va">b_ran</span><span class="op">[[</span><span class="fl">2L</span><span class="op">]</span><span class="op">]</span>, xby <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl1d</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 4 9 2</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl1d</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
@@ -225,8 +236,8 @@
 <span><span class="co">#&gt; [3,] 0.00000000</span></span>
 <span><span class="co">#&gt; [4,] 0.00000000</span></span></code></pre></div>
 <p>Exactly computed landscapes can be converted to discrete landscape objects, but the other direction is not well-defined. Below, we view a portion of the discretized exact landscape, using the default bounds and resolution given to <code>pl1</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># default conversion to discrete uses `by = 0.001`</span></span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># default conversion to discrete uses `xby = 0.001`</span></span>
 <span><span class="va">pl1_</span> <span class="op">&lt;-</span> <span class="va">pl1</span><span class="op">$</span><span class="fu">discretize</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl1_</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1]   2 636   2</span></span>
@@ -274,8 +285,8 @@
 <span><span class="co">#&gt; [1,] 0.004296817 0.003400059</span></span>
 <span><span class="co">#&gt; [2,] 0.000000000 0.000000000</span></span></code></pre></div>
 <p>We can also specify the bounds and the resolution of the discretization:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_delimit</a></span><span class="op">(</span><span class="va">pl1</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_delimit</a></span><span class="op">(</span><span class="va">pl1</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">1</span>, xby <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="va">pl1_</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
 <span><span class="va">pl1_</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
@@ -297,19 +308,58 @@
 <h3 id="visualization">Visualization<a class="anchor" aria-label="anchor" href="#visualization"></a>
 </h3>
 <p><strong>plt</strong> provides a <code><a href="reference/plot.html">plot()</a></code> method for the ‘Rcpp_PersistenceLandscape’ class. It uses <strong>grDevices</strong> to build color palettes, and as such its default palette is viridis; but the user may supply the name of a recognized palette or a sequence of colors between which to interpolate:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">n_levs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="fu"><a href="reference/landscape.html">pl_num_levels</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span>, <span class="fu"><a href="reference/landscape.html">pl_num_levels</a></span><span class="op">(</span><span class="va">pl1d</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span>, palette <span class="op">=</span> <span class="st">"terrain"</span>, n_levels <span class="op">=</span> <span class="va">n_levs</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1d</span>, palette <span class="op">=</span> <span class="st">"terrain"</span>, n_levels <span class="op">=</span> <span class="va">n_levs</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-12-1.png"><!-- --></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div class="section level3"><h3 id="vector-operations">Vector Operations<a class="anchor" aria-label="anchor" href="#vector-operations"></a>
-</h3></div>
-<div class="section level3"><h3 id="inner-product">Inner Product<a class="anchor" aria-label="anchor" href="#inner-product"></a>
-</h3></div>
+<div class="section level3">
+<h3 id="hilbert-space-operations">Hilbert Space Operations<a class="anchor" aria-label="anchor" href="#hilbert-space-operations"></a>
+</h3>
+<p>Several infix operators have been taught to work in the natural way with landscapes, so that users can explore vector space operations and inner products more conveniently:</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># a new landscape and its discretization</span></span>
+<span><span class="va">pc2</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/circles.html" class="external-link">sample_circle</a></span><span class="op">(</span><span class="fl">60</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span><span class="va">pd2</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pc2</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc2, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span><span class="va">pl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd2</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="va">pl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_delimit</a></span><span class="op">(</span><span class="va">pl2</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">2</span>, xby <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="va">pl2_</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span>
+<span><span class="co"># illustrations</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fl">2L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># vector space operations on exact landscapes</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl2</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">+</span> <span class="va">pl2</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co"># vector space operations on discrete landscapes</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1_</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="op">-</span><span class="va">pl2_</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1_</span> <span class="op">-</span> <span class="va">pl2_</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-13-1.png"><!-- --></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># inner product of exact and discrete landscapes</span></span>
+<span><span class="va">pl1</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2</span></span>
+<span><span class="co">#&gt; [1] 3.137778e-05</span></span>
+<span><span class="va">pl1</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2_</span></span>
+<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>(Note that the operations automatically reconcile the different ranges of the landscapes.)</p>
+</div>
+<div class="section level3">
+<h3 id="calculus">Calculus<a class="anchor" aria-label="anchor" href="#calculus"></a>
+</h3>
+<p>TODO: integrals, distances, norms</p>
+</div>
+<div class="section level3">
+<h3 id="statistical-analysis">Statistical Analysis<a class="anchor" aria-label="anchor" href="#statistical-analysis"></a>
+</h3>
+<p>TODO: means &amp; hypothesis testing</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>

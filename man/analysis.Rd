@@ -8,7 +8,7 @@
 \alias{pl_norm}
 \alias{pl_indicator}
 \alias{pl_indicator_form}
-\title{Norms, Distances, and Integrals of Persistence Landscapes}
+\title{Integrals, Distances, and Norms of Persistence Landscapes}
 \usage{
 pl_integrate(pl, p = 1)
 
