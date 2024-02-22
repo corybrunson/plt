@@ -39,8 +39,8 @@ print.summary.Rcpp_PersistenceLandscape <- function(
   )
   cat("Landscape range: (",
       fmt(x$range[[1L]]), ",", fmt(x$range[[2L]]), ")", "\n")
-  # cat("Magnitude: ", fmt(x$magnitude), "\n")
-  # cat("Integral:  ", fmt(x$integral), "\n")
+  cat("Magnitude: ", fmt(x$magnitude), "\n")
+  cat("Integral:  ", fmt(x$integral), "\n")
 }
 
 #' @rdname PersistenceLandscape
