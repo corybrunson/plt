@@ -9,31 +9,9 @@
 #'   which extends [matrix multiplication][base::matmult] to the inner product
 #'   on persistence landscapes.
 #'
-#' @docType methods
 #' @name Rcpp_PersistenceLandscape-methods
-#' @aliases + - * / %*%
+#' @docType methods
 #' @include PersistenceLandscape.R
-
-#' @usage
-#' ## S4 methods for signature
-#' ## 'Rcpp_PersistenceLandscape,missing'
-#' +e1
-#' -e1
-#' 
-#' ## S4 methods for signature
-#' ## 'numeric,Rcpp_PersistenceLandscape'
-#' e1 * e2
-#' 
-#' ## S4 methods for signature
-#' ## 'Rcpp_PersistenceLandscape,numeric'
-#' e1 * e2
-#' e1 / e2
-#' 
-#' ## S4 methods for signature
-#' ## 'Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape'
-#' e1 + e2
-#' e1 - e2
-#' x \%*\% y
 
 #' @param e1,e2,x,y Arguments of unary and binary operators.
 #' @return A persistence landscape (an object of S4 class
@@ -45,7 +23,6 @@ NULL
 
 #' @rdname Rcpp_PersistenceLandscape-methods
 #' @aliases Rcpp_PersistenceLandscape,missing-method
-#' @usage NULL
 #' @export
 setMethod(
   `+`,
@@ -57,7 +34,6 @@ setMethod(
 
 #' @rdname Rcpp_PersistenceLandscape-methods
 #' @aliases Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape-method
-#' @usage NULL
 #' @export
 setMethod(
   `+`,
@@ -67,7 +43,6 @@ setMethod(
 
 #' @rdname Rcpp_PersistenceLandscape-methods
 #' @aliases Rcpp_PersistenceLandscape,missing-method
-#' @usage NULL
 #' @export
 setMethod(
   `-`,
@@ -79,7 +54,6 @@ setMethod(
 
 #' @rdname Rcpp_PersistenceLandscape-methods
 #' @aliases Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape-method
-#' @usage NULL
 #' @export
 setMethod(
   `-`,
@@ -107,7 +81,6 @@ setMethod(
 
 #' @rdname Rcpp_PersistenceLandscape-methods
 #' @aliases Rcpp_PersistenceLandscape,numeric-method
-#' @usage NULL
 #' @export
 setMethod(
   `/`,
@@ -117,7 +90,6 @@ setMethod(
 
 #' @rdname Rcpp_PersistenceLandscape-methods
 #' @aliases Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape-method
-#' @usage NULL
 #' @export
 setMethod(
   `%*%`,

@@ -8,15 +8,16 @@ pl1 <- landscape(pd1, degree = 1L, exact = TRUE)
 pl2 <- landscape(pd2, degree = 1L, exact = TRUE)
 # plot
 par(mfrow = c(3L, 2L), mar = c(0, 2, 0, 2))
-plot(pl1)
-plot(pl2)
+# position? positing? (sticking a plus sign in front leaves something unchanged)
+plot(+pl1)
+plot(+pl2)
 # negation
 plot(-pl1)
 # scalar multiplication
 plot(pl2 * 3)
-# addition
+# addition & other-way scalar multiplication
 plot(pl1 + 2 * pl2)
-# subtraction
+# subtraction and scalar division
 plot(pl1 - pl2 / 2)
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))
 

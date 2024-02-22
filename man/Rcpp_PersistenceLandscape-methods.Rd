@@ -3,11 +3,6 @@
 \docType{methods}
 \name{Rcpp_PersistenceLandscape-methods}
 \alias{Rcpp_PersistenceLandscape-methods}
-\alias{+}
-\alias{-}
-\alias{*}
-\alias{/}
-\alias{\%*\%}
 \alias{+,Rcpp_PersistenceLandscape,missing-method}
 \alias{Rcpp_PersistenceLandscape,missing-method}
 \alias{+,Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape-method}
@@ -22,29 +17,21 @@
 \alias{\%*\%,Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape-method}
 \title{Prefix and Infix Operators for Persistence Landscapes}
 \usage{
-## S4 methods for signature
-## 'Rcpp_PersistenceLandscape,missing'
-+e1
--e1
+\S4method{+}{Rcpp_PersistenceLandscape,missing}(e1, e2)
 
-## S4 methods for signature
-## 'numeric,Rcpp_PersistenceLandscape'
-e1 * e2
+\S4method{+}{Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape}(e1, e2)
 
-## S4 methods for signature
-## 'Rcpp_PersistenceLandscape,numeric'
-e1 * e2
-e1 / e2
+\S4method{-}{Rcpp_PersistenceLandscape,missing}(e1, e2)
 
-## S4 methods for signature
-## 'Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape'
-e1 + e2
-e1 - e2
-x \%*\% y
+\S4method{-}{Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape}(e1, e2)
 
 \S4method{*}{numeric,Rcpp_PersistenceLandscape}(e1, e2)
 
 \S4method{*}{Rcpp_PersistenceLandscape,numeric}(e1, e2)
+
+\S4method{/}{Rcpp_PersistenceLandscape,numeric}(e1, e2)
+
+\S4method{\%*\%}{Rcpp_PersistenceLandscape,Rcpp_PersistenceLandscape}(x, y)
 }
 \arguments{
 \item{e1, e2, x, y}{Arguments of unary and binary operators.}
@@ -75,15 +62,16 @@ pl1 <- landscape(pd1, degree = 1L, exact = TRUE)
 pl2 <- landscape(pd2, degree = 1L, exact = TRUE)
 # plot
 par(mfrow = c(3L, 2L), mar = c(0, 2, 0, 2))
-plot(pl1)
-plot(pl2)
+# position? positing? (sticking a plus sign in front leaves something unchanged)
+plot(+pl1)
+plot(+pl2)
 # negation
 plot(-pl1)
 # scalar multiplication
 plot(pl2 * 3)
-# addition
+# addition & other-way scalar multiplication
 plot(pl1 + 2 * pl2)
-# subtraction
+# subtraction and scalar division
 plot(pl1 - pl2 / 2)
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1))
 
