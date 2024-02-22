@@ -62,8 +62,8 @@ discrete.}
 taken to be the support of the PL constructed from the data or the internal
 values of the 'Rcpp_PersistenceLandscape' object.}
 
-\item{xby}{Domain grid diameter for discrete PL; if not specified, then set to
-the power of 10 that yields between 100 and 1000 intervals.}
+\item{xby}{Domain grid diameter for discrete PL; if not specified, then set
+to the power of 10 that yields between 100 and 1000 intervals.}
 
 \item{complete}{Logical; whether to compute averages between all combinations
 from the two lists of landscapes.}

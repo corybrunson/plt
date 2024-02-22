@@ -41,6 +41,10 @@ e1 / e2
 e1 + e2
 e1 - e2
 x \%*\% y
+
+\S4method{*}{numeric,Rcpp_PersistenceLandscape}(e1, e2)
+
+\S4method{*}{Rcpp_PersistenceLandscape,numeric}(e1, e2)
 }
 \arguments{
 \item{e1, e2, x, y}{Arguments of unary and binary operators.}

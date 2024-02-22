@@ -49,8 +49,8 @@ discrete.}
 taken to be the support of the PL constructed from the data or the internal
 values of the 'Rcpp_PersistenceLandscape' object.}
 
-\item{xby}{Domain grid diameter for discrete PL; if not specified, then set to
-the power of 10 that yields between 100 and 1000 intervals.}
+\item{xby}{Domain grid diameter for discrete PL; if not specified, then set
+to the power of 10 that yields between 100 and 1000 intervals.}
 
 \item{pl}{A persistence landscape as returned by \code{landscape()}.}
 }
@@ -64,12 +64,19 @@ Compute persistence landscapes from persistence data.
 }
 \details{
 \code{landscape()} is a wrapper around the S4 class constructor
-\verb{[methods:new()]}. The \verb{pl_*()} helper functions take a persistence
-landscape as returned by \code{landscape()} and return its representation
-(\code{pl_is_exact()} and \code{pl_type()}), the number of levels
-(\code{pl_num_levels()}), the endpoints of its internal representation
-(excluding infinities) (\code{pl_limits()}), and the endpoints of its support,
-i.e. of the points at which its value is nonzero (\code{pl_support()}).
+\verb{[methods:new()]}. The \verb{pl_*()} helper functions query a persistence
+landscape as returned by \code{landscape()} for specific information or
+manipulate its internal representation.
+
+Use \code{pl_is_exact()} and \code{pl_type()} to get a landscape's internal
+representation, \code{pl_num_levels()} its number of levels, \code{pl_limits()} the
+endpoints of its internal representation (excluding infinities), and
+\code{pl_support()} the infimum and supremum of its support (the points at which
+its value is nonzero).
+
+Use \code{pl_delimit()} to change the limits of a PL and \code{pl_discretize()} to
+convert an exact landscape to a discrete one (using its internally-stored
+range and resolution).
 }
 \examples{
 

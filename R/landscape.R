@@ -2,12 +2,19 @@
 #' @description Compute persistence landscapes from persistence data.
 #'
 #' @details `landscape()` is a wrapper around the S4 class constructor
-#'   `[methods:new()]`. The `pl_*()` helper functions take a persistence
-#'   landscape as returned by `landscape()` and return its representation
-#'   (`pl_is_exact()` and `pl_type()`), the number of levels
-#'   (`pl_num_levels()`), the endpoints of its internal representation
-#'   (excluding infinities) (`pl_limits()`), and the endpoints of its support,
-#'   i.e. of the points at which its value is nonzero (`pl_support()`).
+#'   `[methods:new()]`. The `pl_*()` helper functions query a persistence
+#'   landscape as returned by `landscape()` for specific information or
+#'   manipulate its internal representation.
+#'
+#'   Use `pl_is_exact()` and `pl_type()` to get a landscape's internal
+#'   representation, `pl_num_levels()` its number of levels, `pl_limits()` the
+#'   endpoints of its internal representation (excluding infinities), and
+#'   `pl_support()` the infimum and supremum of its support (the points at which
+#'   its value is nonzero).
+#'   
+#'   Use `pl_delimit()` to change the limits of a PL and `pl_discretize()` to
+#'   convert an exact landscape to a discrete one (using its internally-stored
+#'   range and resolution).
 #'
 #' @name landscape
 #' @include plt-package.R
@@ -22,8 +29,8 @@
 #' @param xmin,xmax Domain thresholds for discrete PL; if not specified, then
 #'   taken to be the support of the PL constructed from the data or the internal
 #'   values of the 'Rcpp_PersistenceLandscape' object.
-#' @param xby Domain grid diameter for discrete PL; if not specified, then set to
-#'   the power of 10 that yields between 100 and 1000 intervals.
+#' @param xby Domain grid diameter for discrete PL; if not specified, then set
+#'   to the power of 10 that yields between 100 and 1000 intervals.
 #' @param pl A persistence landscape as returned by `landscape()`.
 #' @return `landscape()` returns a persistence landscape (an object of S4 class
 #'   'Rcpp_PersistenceLandscape'). Other functions return summary information
