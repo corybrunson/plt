@@ -9,10 +9,10 @@ summary.Rcpp_PersistenceLandscape <- function(object, ...) {
     n.levels = pl_num_levels(object),
     limits = pl_limits(object),
     resolution = if (object$isExact()) NA_real_ else object$xBy(),
-    support = pl_support(object)
-    # range = c(pl_min(object), pl_max(object)),
-    # magnitude = object %*% object,
-    # integral = pl_integrate(object)
+    support = pl_support(object),
+    range = c(pl_min(object), pl_max(object)),
+    magnitude = object %*% object,
+    integral = pl_integrate(object)
   )
   class(res) <- "summary.Rcpp_PersistenceLandscape"
   res
@@ -37,8 +37,8 @@ print.summary.Rcpp_PersistenceLandscape <- function(
       paste0(" at resolution ", format(round(x$resolution))),
     "\n"
   )
-  # cat("Landscape range: (",
-  #     fmt(x$range[[1L]]), ",", fmt(x$range[[2L]]), ")", "\n")
+  cat("Landscape range: (",
+      fmt(x$range[[1L]]), ",", fmt(x$range[[2L]]), ")", "\n")
   # cat("Magnitude: ", fmt(x$magnitude), "\n")
   # cat("Integral:  ", fmt(x$integral), "\n")
 }
