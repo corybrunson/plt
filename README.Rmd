@@ -68,6 +68,7 @@ To begin an illustration, we noisily sample 60 points from a figure eight and co
 ```{r}
 set.seed(513611L)
 pc <- tdaunif::sample_lemniscate_gerono(60, sd = .1)
+plot(pc, asp = 1, pch = 16L)
 pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
 print(pd)
 ```
@@ -82,12 +83,15 @@ print(head(pd$pairs[[2]]))
 ```
 
 This allows us to compute a persistence landscape---in this case, for the 1-dimensional features.
-Here we compute the landscape exactly, which can be cost-prohibitive for larger persistence data:
+Here we compute the landscape exactly, which can be cost-prohibitive for larger persistence data, and print its summary:
 
 ```{r}
 pl1 <- landscape(pd, degree = 1, exact = TRUE)
 print(pl1)
+summary(pl1)
 ```
+
+Some advanced concepts like the magnitude of a landscape will be explained below.
 
 ### Class
 
@@ -143,13 +147,42 @@ plot(pl1d, palette = "terrain", n_levels = n_levs, asp = 1)
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 ```
 
-### Vector Operations
+### Hilbert Space Operations
 
+Several infix operators have been taught to work in the natural way with landscapes, so that users can explore vector space operations and inner products more conveniently:
 
+```{r}
+# a new landscape and its discretization
+pc2 <- tdaunif::sample_circle(60, sd = .1)
+pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
+pl2 <- landscape(pd2, degree = 1, exact = TRUE)
+pl2 <- pl_delimit(pl2, xmin = 0, xmax = 2, xby = 0.1)
+pl2_ <- pl_discretize(pl2)
+# illustrations
+par(mfcol = c(3L, 2L), mar = c(2, 2, 0, 2))
+# vector space operations on exact landscapes
+plot(pl1 * 2)
+plot(pl2 / 2)
+plot(pl1 * 2 + pl2 / 2)
+# vector space operations on discrete landscapes
+plot(pl1_)
+plot(-pl2_)
+plot(pl1_ - pl2_)
+par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
+# inner product of exact and discrete landscapes
+pl1 %*% pl2
+pl1 %*% pl2_
+```
 
-### Inner Product
+(Note that the operations automatically reconcile the different ranges of the landscapes.)
 
+### Calculus
 
+TODO: integrals, distances, norms
+
+### Statistical Analysis
+
+TODO: means & hypothesis testing
 
 ## Acknowledgments
 
