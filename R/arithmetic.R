@@ -20,7 +20,8 @@
 #' @param pl_list A list of persistence landscapes.
 #' @param mult Double; a real-valued scale factor.
 #' @param level Positive integer; the level of the persistence landscape (up to)
-#'   whose moment to calculate.
+#'   whose moment to calculate. This value is internally decreased by `1L` to
+#'   prevent off-by-one errors when passing to C++ code.
 #' @param p Positive integer or infinity; the power used to compute a norm or
 #'   moment.
 #' @param center Double; where to center the moment.
@@ -101,12 +102,16 @@ pl_min <- function(pl, level = 1L) {
 #' @rdname arithmetic
 #' @export
 pl_max <- function(pl, level = 1L) {
+  # prevent off-by-one error
+  level <- level - 1L
   pl$maximum(level)
 }
 
 #' @rdname arithmetic
 #' @export
 pl_range <- function(pl, level = 1L) {
+  # prevent off-by-one error
+  level <- level - 1L
   c(pl$minimum(level), pl$maximum(level))
 }
 
@@ -114,6 +119,8 @@ pl_range <- function(pl, level = 1L) {
 #' @export
 pl_vmin <- function(pl, level = pl_num_levels(pl)) {
   if (level < 1L) return(numeric(0L))
+  # prevent off-by-one error
+  level <- level - 1L
   vapply(seq(level), function(l) pl$minimum(l), 0.)
 }
 
@@ -121,6 +128,8 @@ pl_vmin <- function(pl, level = pl_num_levels(pl)) {
 #' @export
 pl_vmax <- function(pl, level = pl_num_levels(pl)) {
   if (level < 1L) return(numeric(0L))
+  # prevent off-by-one error
+  level <- level - 1L
   vapply(seq(level), function(l) pl$maximum(l), 0.)
 }
 
@@ -128,6 +137,8 @@ pl_vmax <- function(pl, level = pl_num_levels(pl)) {
 #' @export
 pl_vrange <- function(pl, level = pl_num_levels(pl)) {
   if (level < 1L) return(cbind(numeric(0L), numeric(0L)))
+  # prevent off-by-one error
+  level <- level - 1L
   cbind(
     vapply(seq(level), function(l) pl$minimum(l), 0.),
     vapply(seq(level), function(l) pl$maximum(l), 0.)
@@ -138,6 +149,8 @@ pl_vrange <- function(pl, level = pl_num_levels(pl)) {
 #' @export
 pl_moment <- function(pl, p = 1L, center = 0, level = 1L) {
   p <- ensure_p(p)
+  # prevent off-by-one error
+  level <- level - 1L
   pl$moment(p, center, level)
 }
 
@@ -145,6 +158,8 @@ pl_moment <- function(pl, p = 1L, center = 0, level = 1L) {
 #' @export
 pl_vmoment <- function(pl, p = 1L, center = 0, level = pl_num_levels(pl)) {
   p <- ensure_p(p)
+  # prevent off-by-one error
+  level <- level - 1L
   vapply(
     seq(level),
     function(l) pl$moment(p, center, l),

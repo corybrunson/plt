@@ -54,20 +54,24 @@ landscape <- function(
       stop("There is no `as_persistence()` method for object `pd`.")
     if (is.null(degree))
       stop("`landscape()` requires a homological degree (`degree = <int>`).")
-    pd <- pd$pairs[[degree + 1L]]
+    pd <- if (length(pd$pairs) == 0L) {
+      matrix(NA_real_, nrow = 0L, ncol = 2L)
+    } else {
+      pd <- pd$pairs[[degree + 1L]]
+    }
   }
   
   # remove infinities
   pd <- pd[! apply(pd, 1L, \(f) any(is.infinite(f))), , drop = FALSE]
   
   # content check
-  if (is.null(pd) || all(is.na(pd))) {
-    stop("`landscape()` requires non-empty/missing finite persistence data.")
+  if (is.null(pd) || (nrow(pd) > 0L && all(is.na(pd)))) {
+    stop("`landscape()` requires non-missing finite persistence data.")
   }
   
   # infer any missing parameters
   xmin <- xmin %||% 0
-  xmax <- xmax %||% max(pd)
+  xmax <- xmax %||% if (nrow(pd) == 0L) 1 else max(pd)
   # grid of between 100 and 1000 intervals of length a power of 10
   # TODO: Make this a non-default option.
   xby <- xby %||% (10 ^ (floor(log(xmax - xmin, 10)) - 2L))

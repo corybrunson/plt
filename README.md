@@ -15,7 +15,7 @@ the GitHub repository as follows:
 
 ``` r
 install.packages("pak")
-pak::install_github("corybrunson/plt", build_vignettes = TRUE)
+pak::pkg_install("corybrunson/plt")
 ```
 
 Alternatively—and especially if you want to contribute—you can clone or
@@ -79,16 +79,71 @@ plot(pc, asp = 1, pch = 16L)
 
 ``` r
 pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
 print(pd)
-#> PHom object containing persistence data for 63 features.
-#> 
-#> Contains:
-#> * 59 0-dim features
-#> * 4 1-dim features
-#> 
-#> Radius/diameter: min = 0; max = 0.63582.
+#>    dimension     birth      death
+#> 1          0 0.0000000 0.01918952
+#> 2          0 0.0000000 0.01947548
+#> 3          0 0.0000000 0.02604350
+#> 4          0 0.0000000 0.04218479
+#> 5          0 0.0000000 0.04542467
+#> 6          0 0.0000000 0.05941691
+#> 7          0 0.0000000 0.06030423
+#> 8          0 0.0000000 0.06260854
+#> 9          0 0.0000000 0.06478082
+#> 10         0 0.0000000 0.06766925
+#> 11         0 0.0000000 0.07158685
+#> 12         0 0.0000000 0.07398253
+#> 13         0 0.0000000 0.07623591
+#> 14         0 0.0000000 0.07662517
+#> 15         0 0.0000000 0.07896342
+#> 16         0 0.0000000 0.08043306
+#> 17         0 0.0000000 0.08642298
+#> 18         0 0.0000000 0.08698163
+#> 19         0 0.0000000 0.08850341
+#> 20         0 0.0000000 0.08850349
+#> 21         0 0.0000000 0.09024332
+#> 22         0 0.0000000 0.09502309
+#> 23         0 0.0000000 0.09673399
+#> 24         0 0.0000000 0.10001714
+#> 25         0 0.0000000 0.10007503
+#> 26         0 0.0000000 0.10147098
+#> 27         0 0.0000000 0.10290514
+#> 28         0 0.0000000 0.11388282
+#> 29         0 0.0000000 0.11527285
+#> 30         0 0.0000000 0.12074671
+#> 31         0 0.0000000 0.12093951
+#> 32         0 0.0000000 0.12170977
+#> 33         0 0.0000000 0.13435379
+#> 34         0 0.0000000 0.13492348
+#> 35         0 0.0000000 0.13563400
+#> 36         0 0.0000000 0.13846410
+#> 37         0 0.0000000 0.14438541
+#> 38         0 0.0000000 0.14806602
+#> 39         0 0.0000000 0.16101999
+#> 40         0 0.0000000 0.16433348
+#> 41         0 0.0000000 0.16487642
+#> 42         0 0.0000000 0.17046509
+#> 43         0 0.0000000 0.18270262
+#> 44         0 0.0000000 0.18502783
+#> 45         0 0.0000000 0.18551972
+#> 46         0 0.0000000 0.19104680
+#> 47         0 0.0000000 0.19117990
+#> 48         0 0.0000000 0.19144013
+#> 49         0 0.0000000 0.19311162
+#> 50         0 0.0000000 0.19403676
+#> 51         0 0.0000000 0.20145942
+#> 52         0 0.0000000 0.20234674
+#> 53         0 0.0000000 0.20856429
+#> 54         0 0.0000000 0.21921402
+#> 55         0 0.0000000 0.24334202
+#> 56         0 0.0000000 0.24700342
+#> 57         0 0.0000000 0.24971202
+#> 58         0 0.0000000 0.25881722
+#> 59         0 0.0000000 0.37692215
+#> 60         1 0.4809292 0.63582254
+#> 61         1 0.3016234 0.60751718
+#> 62         1 0.2504500 0.27279150
+#> 63         1 0.2251884 0.23008714
 ```
 
 We the convert the persistence data to the preferred persistence diagram
@@ -129,7 +184,7 @@ summary(pl1)
 #> Internal representation:  exact 
 #> Number of levels:  2 
 #> Representation limits: ( 0.22519 , 0.6358 ) 
-#> Landscape range: ( 0 , 0.06329 ) 
+#> Landscape range: ( 0 , 0.15295 ) 
 #> Magnitude:  0.0026959 
 #> Integral:   0.029522
 ```
@@ -319,40 +374,44 @@ par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 
 ### Hilbert Space Operations
 
+To illustrate these features, we first generate a companion data set:
+
+``` r
+# a new landscape and its discretization
+pc2 <- tdaunif::sample_circle(60, sd = .1) / 2
+pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
+pl2 <- landscape(pd2, degree = 1, exact = TRUE)
+pl2 <- pl_delimit(pl2, xmin = 0, xmax = 2, xby = 0.1)
+pl2_ <- pl_discretize(pl2)
+```
+
 Several infix operators have been taught to work in the natural way with
 landscapes, so that users can explore vector space operations and inner
 products more conveniently:
 
 ``` r
-# a new landscape and its discretization
-pc2 <- tdaunif::sample_circle(60, sd = .1)
-pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
-#> Warning in vietoris_rips.matrix(pc2, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-pl2 <- landscape(pd2, degree = 1, exact = TRUE)
-pl2 <- pl_delimit(pl2, xmin = 0, xmax = 2, xby = 0.1)
-pl2_ <- pl_discretize(pl2)
-# illustrations
 par(mfcol = c(3L, 2L), mar = c(2, 2, 0, 2))
 # vector space operations on exact landscapes
 plot(pl1 * 2)
-plot(pl2 / 2)
-plot(pl1 * 2 + pl2 / 2)
+plot(pl2)
+plot(pl1 * 2 + pl2)
 # vector space operations on discrete landscapes
 plot(pl1_)
 plot(-pl2_)
-plot(pl1_ - pl2_)
+plot(2 * pl1_ - pl2_)
 ```
 
-![](man/figures/unnamed-chunk-13-1.png)<!-- -->
+![](man/figures/unnamed-chunk-14-1.png)<!-- -->
 
 ``` r
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
-# inner product of exact and discrete landscapes
+# inner products of exact and discrete landscapes
 pl1 %*% pl2
-#> [1] 3.137778e-05
+#> [1] 0.004056106
+pl1_ %*% pl2_
+#> [1] 0.003609078
 pl1 %*% pl2_
-#> [1] 0
+#> [1] 0.003609078
 ```
 
 (Note that the operations automatically reconcile the different ranges
@@ -360,7 +419,67 @@ of the landscapes.)
 
 ### Calculus
 
-TODO: integrals, distances, norms
+The `summary()` method above reported the magnitude and the integral of
+the persistence landscape `pl1`. The magnitude is the inner product of
+`pl1` with itself: `pl1 %*% pl1 = 0.0026959`. Meanwhile, the integral is
+the (signed) area under the curve, itself also a linear operator:
+
+``` r
+pl_integrate(pl1)
+#> [1] 0.02952152
+pl_integrate(pl2)
+#> [1] 0.06142127
+pl_integrate(pl1) * 2 - pl_integrate(pl2)
+#> [1] -0.002378238
+pl_integrate(pl1 * 2 - pl2)
+#> [1] -0.002378238
+```
+
+The distance between two landscapes is defined in terms of the integral
+of their absolute difference for finite norms and the maximum pointwise
+distance for the infinite norm: $$
+\lVert L - L' \rVert_p =
+\begin{cases}
+\displaystyle \left( \sum_{k}{ \int{ {\lVert L_k - L'_k \rVert_p}^p } } \right)^\frac{1}{p} & 1 \leq p < \infty \\
+\displaystyle \max_k{ \lvert L_k - L'_k \rvert} & p = \infty
+\end{cases}
+$$ Note that, because `pl_integrate()` defaults to the 1-norm and
+`pl_distance()` defaults to the 2-norm, we must be careful when
+comparing their results:
+
+``` r
+# using the 1-norm
+pl_integrate(pl_abs(pl1 * 2 - pl2), p = 1)
+#> [1] 0.04709364
+pl_distance(pl1 * 2, pl2, p = 1)
+#> [1] 0.04709364
+
+# using the 2-norm
+pl_integrate(pl_abs(pl1 * 2 - pl2), p = 2) ^ (1/2)
+#> [1] 0.06767872
+pl_distance(pl1 * 2, pl2, p = 2)
+#> [1] 0.06767872
+
+# using the infinity norm
+pl_integrate(pl_abs(pl1 * 2 - pl2), p = Inf) # nope!
+#> [1] 0
+pl_max(pl_abs(pl1 * 2 - pl2))
+#> [1] 0.151667
+pl_distance(pl1 * 2, pl2, p = Inf)
+#> [1] 0.151667
+```
+
+The norm of a persistence landscape is then defined as its distance from
+the null landscape that is constant at zero.
+
+``` r
+pd0 <- data.frame(start = double(0L), end = double(0L))
+pl0 <- landscape(pd0, degree = 1, exact = TRUE)
+pl_distance(pl1, pl0)
+#> [1] 0.05192161
+pl_norm(pl1)
+#> [1] 0.05192161
+```
 
 ### Statistical Analysis
 

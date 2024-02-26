@@ -55,8 +55,12 @@ as_persistence.default <- function(
   pd$pairs <- list()
   
   # concatenate a matrix for each dimension
-  if (is.null(max_dim)) max_dim <- max(x[, 1L, drop = TRUE])
-  for (i in seq(0L, max_dim)) {
+  if (is.null(max_dim)) max_dim <- if (nrow(x) == 0L) {
+    -Inf
+  } else {
+    max(x[, 1L, drop = TRUE])
+  }
+  if (max_dim >= 0) for (i in seq(0L, max_dim)) {
     pd$pairs[[i + 1L]] <- x[x[, 1L] == i, c(2L, 3L), drop = FALSE]
     dimnames(pd$pairs[[i + 1L]]) <- NULL
   }
@@ -140,6 +144,10 @@ print.persistence <- function(x, ...) {
 #' @rdname as_persistence
 #' @export
 format.persistence <- function(x, ...) {
+  # empty persistence data
+  if (pd$max_dim == -Inf && length(pd$pairs) == 0L)
+    return("empty 'persistence' data")
+  
   # parameters
   if (is.na(x$max_dim)) x$max_dim <- length(x$pairs) - 1L
   

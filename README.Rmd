@@ -27,7 +27,7 @@ Until the package is on CRAN, use **pak** to install the package from the GitHub
 
 ```{r, eval=FALSE}
 install.packages("pak")
-pak::install_github("corybrunson/plt", build_vignettes = TRUE)
+pak::pkg_install("corybrunson/plt")
 ```
 
 Alternatively---and especially if you want to contribute---you can clone or download the code repository and, from within the directory, install the package from source:
@@ -149,28 +149,33 @@ par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 
 ### Hilbert Space Operations
 
-Several infix operators have been taught to work in the natural way with landscapes, so that users can explore vector space operations and inner products more conveniently:
+To illustrate these features, we first generate a companion data set:
 
 ```{r}
 # a new landscape and its discretization
-pc2 <- tdaunif::sample_circle(60, sd = .1)
+pc2 <- tdaunif::sample_circle(60, sd = .1) / 2
 pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
 pl2 <- landscape(pd2, degree = 1, exact = TRUE)
 pl2 <- pl_delimit(pl2, xmin = 0, xmax = 2, xby = 0.1)
 pl2_ <- pl_discretize(pl2)
-# illustrations
+```
+
+Several infix operators have been taught to work in the natural way with landscapes, so that users can explore vector space operations and inner products more conveniently:
+
+```{r}
 par(mfcol = c(3L, 2L), mar = c(2, 2, 0, 2))
 # vector space operations on exact landscapes
 plot(pl1 * 2)
-plot(pl2 / 2)
-plot(pl1 * 2 + pl2 / 2)
+plot(pl2)
+plot(pl1 * 2 + pl2)
 # vector space operations on discrete landscapes
 plot(pl1_)
 plot(-pl2_)
-plot(pl1_ - pl2_)
+plot(2 * pl1_ - pl2_)
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
-# inner product of exact and discrete landscapes
+# inner products of exact and discrete landscapes
 pl1 %*% pl2
+pl1_ %*% pl2_
 pl1 %*% pl2_
 ```
 
@@ -178,7 +183,50 @@ pl1 %*% pl2_
 
 ### Calculus
 
-TODO: integrals, distances, norms
+The `summary()` method above reported the magnitude and the integral of the persistence landscape `pl1`.
+The magnitude is the inner product of `pl1` with itself: `pl1 %*% pl1 = `r pl1 %*% pl1``.
+Meanwhile, the integral is the (signed) area under the curve, itself also a linear operator:
+
+```{r}
+pl_integrate(pl1)
+pl_integrate(pl2)
+pl_integrate(pl1) * 2 - pl_integrate(pl2)
+pl_integrate(pl1 * 2 - pl2)
+```
+
+The distance between two landscapes is defined in terms of the integral of their absolute difference for finite norms and the maximum pointwise distance for the infinite norm:
+$$
+\lVert L - L' \rVert_p =
+\begin{cases}
+\displaystyle \left( \sum_{k}{ \int{ {\lVert L_k - L'_k \rVert_p}^p } } \right)^\frac{1}{p} & 1 \leq p < \infty \\
+\displaystyle \max_k{ \lvert L_k - L'_k \rvert} & p = \infty
+\end{cases}
+$$
+Note that, because `pl_integrate()` defaults to the 1-norm and `pl_distance()` defaults to the 2-norm, we must be careful when comparing their results:
+
+```{r}
+# using the 1-norm
+pl_integrate(pl_abs(pl1 * 2 - pl2), p = 1)
+pl_distance(pl1 * 2, pl2, p = 1)
+
+# using the 2-norm
+pl_integrate(pl_abs(pl1 * 2 - pl2), p = 2) ^ (1/2)
+pl_distance(pl1 * 2, pl2, p = 2)
+
+# using the infinity norm
+pl_integrate(pl_abs(pl1 * 2 - pl2), p = Inf) # nope!
+pl_max(pl_abs(pl1 * 2 - pl2))
+pl_distance(pl1 * 2, pl2, p = Inf)
+```
+
+The norm of a persistence landscape is then defined as its distance from the null landscape that is constant at zero.
+
+```{r}
+pd0 <- data.frame(start = double(0L), end = double(0L))
+pl0 <- landscape(pd0, degree = 1, exact = TRUE)
+pl_distance(pl1, pl0)
+pl_norm(pl1)
+```
 
 ### Statistical Analysis
 

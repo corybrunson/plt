@@ -68,7 +68,8 @@ pl_vmoment(pl, p = 1L, center = 0, level = pl_num_levels(pl))
 moment.}
 
 \item{level}{Positive integer; the level of the persistence landscape (up to)
-whose moment to calculate.}
+whose moment to calculate. This value is internally decreased by \code{1L} to
+prevent off-by-one errors when passing to C++ code.}
 
 \item{center}{Double; where to center the moment.}
 }
