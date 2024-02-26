@@ -437,15 +437,9 @@ pl_integrate(pl1 * 2 - pl2)
 
 The distance between two landscapes is defined in terms of the integral
 of their absolute difference for finite norms and the maximum pointwise
-distance for the infinite norm: $$
-\lVert L - L' \rVert_p =
-\begin{cases}
-\displaystyle \left( \sum_{k}{ \int{ {\lVert L_k - L'_k \rVert_p}^p } } \right)^\frac{1}{p} & 1 \leq p < \infty \\
-\displaystyle \max_k{ \lvert L_k - L'_k \rvert} & p = \infty
-\end{cases}
-$$ Note that, because `pl_integrate()` defaults to the 1-norm and
-`pl_distance()` defaults to the 2-norm, we must be careful when
-comparing their results:
+distance for the infinite norm. Note that, because `pl_integrate()`
+defaults to the 1-norm and `pl_distance()` defaults to the 2-norm, we
+must be careful when comparing their results:
 
 ``` r
 # using the 1-norm
