@@ -18,7 +18,7 @@ library(plt)
 Persistence landscapes are a vectorization of persistence data/diagrams that have useful statistical properties including linearity and an inner product.[^pl]
 This is an R package interface to a C++ library to efficienctly compute and calculate with persistence landscapes.[^plt]
 
-[^pl]: Bubenik P (2015) "Statistical Topological Data Analysis using Persistence Landscapes". _JMLR_ **16**(3):77--102. <https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html>
+[^pl]: Bubenik P (2015) "Statistical Topological Data Analysis using Persistence Landscapes". _Journal of Machine Learning Research_ **16**(3):77--102. <https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html>
 [^plt]: Bubenik P & Dłotko P (2017) "A persistence landscapes toolbox for topological statistics". _Journal of Symbolic Computation_ **78**(1):91--114. <https://www.sciencedirect.com/science/article/pii/S0747717116300104>
 
 ## Installation
@@ -153,6 +153,7 @@ To illustrate these features, we first generate a companion data set:
 
 ```{r}
 # a new landscape and its discretization
+set.seed(772888L)
 pc2 <- tdaunif::sample_circle(60, sd = .1) / 2
 pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
 pl2 <- landscape(pd2, degree = 1, exact = TRUE)
