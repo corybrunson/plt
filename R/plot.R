@@ -85,12 +85,17 @@ setMethod(
       )
     }
     
-    # plot last level
+    # range across all levels
     xyran <- apply(
-      accessLevel(internal, 1L),
+      # accessLevel(internal, 1L),
+      do.call(
+        rbind,
+        lapply(seq(n_env), accessLevel, internal = internal)
+      ),
       2L,
       function(v) range(v[! is.infinite(v)])
     )
+    # plot last level
     def_dots <- list(
       type = "l",
       xlim = xyran[, 1L],
@@ -123,8 +128,7 @@ accessLevel <- function(internal, level) {
   # From: https://stackoverflow.com/a/19501276/4556798
   if (is.atomic(internal)) {
     return(internal[level, , ])
-  }
-  else {
+  } else {
     return(internal[[level]])
   }
 }

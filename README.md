@@ -415,6 +415,7 @@ The norm of a persistence landscape is then defined as its distance from
 the null landscape that is constant at zero.
 
 ``` r
+# null landscape
 pd0 <- data.frame(start = double(0L), end = double(0L))
 pl0 <- landscape(pd0, degree = 1, exact = TRUE)
 pl_distance(pl1, pl0)
