@@ -73,9 +73,9 @@ landscape <- function(
   xmin <- xmin %||% 0
   xmax <- xmax %||% if (nrow(pd) == 0L) 1 else max(pd)
   # grid of between 100 and 1000 intervals of length a power of 10
-  # TODO: Make this a non-default option.
+  # TODO: Make this a non-default global option.
   xby <- xby %||% (10 ^ (floor(log(xmax - xmin, 10)) - 2L))
-
+  
   # construct persistence landscape
   new(PersistenceLandscape, pd, exact, xmin, xmax, xby)
 }

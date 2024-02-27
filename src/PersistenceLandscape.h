@@ -625,7 +625,7 @@ PersistenceLandscape::PersistenceLandscape(
     
     // WARNING: Fundamental change from original PLT. -JCB
     // size_t numberOfBins = 2 * ((max_x - min_x) / dx) + 1;
-    size_t numberOfBins = (max_x - min_x) / dx + 1;
+    size_t numberOfBins = std::ceil((max_x - min_x) / dx) + 1;
     
     // The first element of a pair `std::pair< double, std::vector<double> >`
     // is an x-value. The second element is a vector of values of landscapes.
@@ -914,15 +914,14 @@ PersistenceLandscape delimitDiscreteLandscape(
   out.dx = pl.dx;
   
   // original number of grid points, less one (number of hops)
-  // int orig_len = std::ceil((pl.max_x - pl.min_x) / pl.dx);
   int orig_len = pl.land[0].size() - 1;
   // number of grid points between old & new minima
   // (as checked above, both must lie on same grid)
   int min_diff = std::round((min_x - pl.min_x) / pl.dx);
   // number of additional grid points needed to reach new `max_x`
-  int max_diff = std::ceil((max_x - pl.min_x) / pl.dx) - orig_len;
-  
-  // CONVENTION: While `min_x` defines the grid, `max_x` can be any greater
+  int max_diff = std::ceil((max_x - pl.min_x - epsi) / pl.dx) - orig_len;
+
+  // NOTE: While `min_x` defines the grid, `max_x` can be any greater
   // value, not necessarily on the grid.
   
   // start at the new `min_x`, but as located on the old grid
