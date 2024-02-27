@@ -340,7 +340,7 @@ public:
       const PersistenceLandscape &pl1,
       const PersistenceLandscape &pl2
   );
-  
+
   // friend PersistenceLandscape operator*(
   //     const PersistenceLandscape &first,
   //     double con) {
@@ -897,7 +897,7 @@ PersistenceLandscape delimitDiscreteLandscape(
     warning("Cannot delimit a discrete PL with a different resolution.");
   // ensure that new limits contain support
   std::pair<double, double> supp = pl.support();
-  if (min_x > supp.first || max_x < supp.second)
+  if (min_x > supp.first + epsi || max_x < supp.second - epsi)
     stop("Cannot delimit to a domain that contains not the support.");
   // ensure that new minimum is almost on the grid
   if (
@@ -1114,13 +1114,9 @@ PersistenceLandscape operateExactLandscapes(
   return pl_op;
 }
 
-// REVIEW: Assume only that the `dx` are equal and that they divide the
-// difference between the `min_x`. -JCB
-// NOTE: Follows the convention of using the first PL's `dx` in the result.
-// TODO: Add paragraph about safety conventions to documentation.
 PersistenceLandscape addDiscreteLandscapes(
-    const PersistenceLandscape &pl1,
-    const PersistenceLandscape &pl2
+  const PersistenceLandscape &pl1,
+  const PersistenceLandscape &pl2
 ) {
   if (pl1.exact || pl2.exact)
     stop("`addDiscreteLandscapes()` requires two discrete PLs.");
@@ -1134,72 +1130,40 @@ PersistenceLandscape addDiscreteLandscapes(
   pl_sum.dx = pl1.dx;
   std::vector<std::vector<std::pair<double, double>>> land_sum;
   
-  // insert sums of shared levels
-  int min_level = std::min(pl1.land.size(), pl2.land.size());
+  // delimit summands
+  PersistenceLandscape summand1 = 
+    delimitDiscreteLandscape(pl1, pl_sum.min_x, pl_sum.max_x, pl_sum.dx);
+  PersistenceLandscape summand2 = 
+    delimitDiscreteLandscape(pl2, pl_sum.min_x, pl_sum.max_x, pl_sum.dx);
+  // this check should apply to all levels of discrete landscapes
+  if (summand1.land[0].size() != summand1.land[0].size())
+    stop("Delimited landscapes lie on different grids.");
+  
+  int min_level = std::min(summand1.land.size(), summand2.land.size());
+  int min_index = summand1.land[0].size();
+  
+  // insert sums of levels
   for (int i = 0; i < min_level; i++) {
     
     std::vector<std::pair<double, double>> level_sum;
-    
-    double lead_x = pl1.land[i][0].first - pl2.land[i][0].first;
-    double lag_x = pl1.land[i][pl1.land[i].size() - 1].first -
-      pl2.land[i][pl2.land[i].size() - 1].first;
-    int lead_index = std::round(lead_x / pl1.dx);
-    int lag_index = std::round(lag_x / pl1.dx);
-    
-    // insert preceding indices from whichever landscape has them
-    if (lead_index < 0) {
-      // `pl1` begins first
-      for (int j = 0; j < -lead_index; j++) {
-        level_sum.push_back(pl1.land[i][j]);
-      }
-    } else if (lead_index > 0) {
-      // `pl2` begins first
-      for (int j = 0; j < lead_index; j++) {
-        level_sum.push_back(std::make_pair(
-            pl1.land[i][0].first - (lead_index - j) * pl1.dx,
-            // pl2.land[i][j].first,
-            pl2.land[i][j].second
-        ));
-      }
-    }
-    
-    // insert sums of shared indices
-    int min_index = std::max(0, lead_index);
-    int max_index = std::min(pl1.land[i].size() + lead_index,
-                             pl2.land[i].size());
-    for (int j = min_index; j < max_index; j++) {
+    for (int j = 0; j < min_index; j++) {
+      
       level_sum.push_back(std::make_pair(
-          pl1.land[i][j - lead_index].first,
-          // pl2.land[i][j].first,
-          pl1.land[i][j - lead_index].second + pl2.land[i][j].second
+          summand1.land[i][j].first,
+          // summand2.land[i][j].first,
+          summand1.land[i][j].second + summand2.land[i][j].second
       ));
-    }
-    
-    // insert succeeding indices from whichever landscape has them
-    if (lag_index < 0) {
-      // `pl1` ends first
-      for (int j = 0; j < pl2.land[i].size() - max_index; j++) {
-        level_sum.push_back(std::make_pair(
-            pl1.land[i][pl1.land[i].size() - 1].first + (1 + j) * pl1.dx,
-            // pl2.land[i][max_index + j].first,
-            pl2.land[i][max_index + j].second
-        ));
-      }
-    } else if (lag_index > 0) {
-      // `pl2` ends first
-      for (int j = max_index - lead_index; j < pl1.land[i].size(); j++) {
-        level_sum.push_back(pl1.land[i][j]);
-      }
+      
     }
     
     land_sum.push_back(level_sum);
   }
   
   // insert succeeding levels from whichever landscape has them
-  for (; min_level < pl1.land.size(); min_level++)
-    land_sum.push_back(pl1.land[min_level]);
-  for (; min_level < pl2.land.size(); min_level++)
-    land_sum.push_back(pl2.land[min_level]);
+  for (; min_level < summand1.land.size(); min_level++)
+    land_sum.push_back(summand1.land[min_level]);
+  for (; min_level < summand2.land.size(); min_level++)
+    land_sum.push_back(summand2.land[min_level]);
   
   pl_sum.land = land_sum;
   return pl_sum;
