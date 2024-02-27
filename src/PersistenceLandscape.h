@@ -625,6 +625,7 @@ PersistenceLandscape::PersistenceLandscape(
     
     // WARNING: Fundamental change from original PLT. -JCB
     // size_t numberOfBins = 2 * ((max_x - min_x) / dx) + 1;
+    // NOTE: grid extends at least rather than at most to `xmax`
     size_t numberOfBins = std::ceil((max_x - min_x) / dx) + 1;
     
     // The first element of a pair `std::pair< double, std::vector<double> >`
@@ -897,7 +898,9 @@ PersistenceLandscape delimitDiscreteLandscape(
     warning("Cannot delimit a discrete PL with a different resolution.");
   // ensure that new limits contain support
   std::pair<double, double> supp = pl.support();
-  if (min_x > supp.first + epsi || max_x < supp.second - epsi)
+  if (min_x- epsi > supp.first ||
+      // NOTE: grid extends at least rather than at most to `xmax`
+      max_x + pl.dx <= supp.second)
     stop("Cannot delimit to a domain that contains not the support.");
   // ensure that new minimum is almost on the grid
   if (

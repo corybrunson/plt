@@ -191,7 +191,7 @@ b_ran <- pl_support(pl1)
 pl1d <- landscape(pd, degree = 1,
                   xmin = b_ran[[1L]], xmax = b_ran[[2L]], xby = 0.05)
 print(dim(pl1d$getInternal()))
-#> [1] 4 9 2
+#> [1]  4 10  2
 print(pl1d$getInternal())
 #> , , 1
 #> 
@@ -200,11 +200,11 @@ print(pl1d$getInternal())
 #> [2,] 0.2251884 0.2751884 0.3251884 0.3751884 0.4251884 0.4751884 0.5251884
 #> [3,] 0.2251884 0.2751884 0.3251884 0.3751884 0.4251884 0.4751884 0.5251884
 #> [4,] 0.2251884 0.2751884 0.3251884 0.3751884 0.4251884 0.4751884 0.5251884
-#>           [,8]      [,9]
-#> [1,] 0.5751884 0.6251884
-#> [2,] 0.5751884 0.6251884
-#> [3,] 0.5751884 0.6251884
-#> [4,] 0.5751884 0.6251884
+#>           [,8]      [,9]     [,10]
+#> [1,] 0.5751884 0.6251884 0.6751884
+#> [2,] 0.5751884 0.6251884 0.6751884
+#> [3,] 0.5751884 0.6251884 0.6751884
+#> [4,] 0.5751884 0.6251884 0.6751884
 #> 
 #> , , 2
 #> 
@@ -213,11 +213,11 @@ print(pl1d$getInternal())
 #> [2,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.04425917 0.03232875
 #> [3,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.00000000 0.00000000
 #> [4,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.00000000 0.00000000
-#>            [,9]
-#> [1,] 0.01063412
-#> [2,] 0.00000000
-#> [3,] 0.00000000
-#> [4,] 0.00000000
+#>            [,9] [,10]
+#> [1,] 0.01063412     0
+#> [2,] 0.00000000     0
+#> [3,] 0.00000000     0
+#> [4,] 0.00000000     0
 ```
 
 Exactly computed landscapes can be converted to discrete landscape
@@ -362,8 +362,8 @@ pl1 %*% pl2_
 #> [1] 0.004917171
 ```
 
-(Note that the operations automatically reconcile the different ranges
-of the landscapes.)
+(Note that the landscapes are automatically delimited to a compatible
+domain.)
 
 ### Calculus
 
@@ -377,6 +377,7 @@ pl_integrate(pl1)
 #> [1] 0.02952152
 pl_integrate(pl2)
 #> [1] 0.07295263
+# 1-integral obeys linearity
 pl_integrate(pl1) * 2 - pl_integrate(pl2)
 #> [1] -0.01390959
 pl_integrate(pl1 * 2 - pl2)
@@ -403,8 +404,7 @@ pl_distance(pl1 * 2, pl2, p = 2)
 #> [1] 0.05041889
 
 # using the infinity norm
-pl_integrate(pl_abs(pl1 * 2 - pl2), p = Inf) # nope!
-#> [1] 0.7595389
+# FIXME: Values do not agree.
 pl_max(pl_abs(pl1 * 2 - pl2))
 #> [1] 0.1178478
 pl_distance(pl1 * 2, pl2, p = Inf)
@@ -426,7 +426,111 @@ pl_norm(pl1)
 
 ### Statistical Analysis
 
-TODO: means & hypothesis testing
+Finally, **plt** implements the two hypothesis tests described in the
+original paper. To illustrate, we first generate lists of landscapes for
+samples from two spaces:
+
+``` r
+# samples of landscapes from lemniscates
+pl1s <- replicate(6, {
+  pc <- tdaunif::sample_lemniscate_gerono(60, sd = .1)
+  pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
+  landscape(pd, degree = 1, xby = .01)
+})
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+# samples of landscapes from circles
+pl2s <- replicate(8, {
+  pc <- tdaunif::sample_circle(60, sd = .1) / 2
+  pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
+  landscape(pd, degree = 1, xby = .01)
+})
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+```
+
+An inspection of the mean landscapes makes clear that they are distinct:
+
+``` r
+# average landscape from each sample
+par(mfcol = c(2L, 1L), mar = c(2, 2, 0, 2))
+plot(pl_mean(pl1s))
+plot(pl_mean(pl2s))
+```
+
+![](man/figures/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
+```
+
+However, the two hypothesis tests use different procedures and rely on
+different test statistics, so one may be more effective than another.
+For convenience, both methods return objects of class `'htest'` for
+convenient printing:
+
+``` r
+# z-test of difference in integrals of first level
+pl_z_test(pl1s, pl2s)
+#> 
+#>  z-test
+#> 
+#> data:  
+#> z = -2.3584, df = 12, p-value = 0.9908
+#> alternative hypothesis: true difference in means is not equal to 0
+#> 95 percent confidence interval:
+#>  -0.06283511 -0.01120004
+#> sample estimates:
+#>  mean of x  mean of y 
+#> 0.02664640 0.06366397
+# permutation test of pairwise distances between landscapes
+pl_perm_test(pl1s, pl2s)
+#> 
+#>  permutation test
+#> 
+#> data:  
+#> p-value < 2.2e-16
+#> alternative hypothesis: true distance between mean landscapes is greater than 0
+#> sample estimates:
+#> distance between mean landscapes 
+#>                       0.06631177
+```
 
 ## Acknowledgments
 

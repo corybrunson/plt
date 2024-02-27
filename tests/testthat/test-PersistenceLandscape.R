@@ -33,17 +33,21 @@ test_that("delimiting a discrete PL yields expected grids", {
     dim(pl$getInternal())[[2L]]
   )
   
-  # delimit to lower max
+  # delimit to lower max (with error)
   expect_equal(
     dim(pl_delimit(pl, xmax = 2)$getInternal())[[2L]],
     dim(pl$getInternal())[[2L]] - 1L
   )
+  expect_equal(
+    dim(pl_delimit(pl, xmax = 1.99)$getInternal())[[2L]],
+    dim(pl$getInternal())[[2L]] - 1L
+  )
   # error: new max excludes some support
   expect_error(
-    dim(pl_delimit(pl, xmax = 1.99)$getInternal())[[2L]],
+    dim(pl_delimit(pl, xmax = 1.9)$getInternal())[[2L]],
     "support"
   )
-
+  
   # delimit to higher max
   expect_equal(
     dim(pl_delimit(pl, xmax = 2.15)$getInternal())[[2L]],

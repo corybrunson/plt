@@ -180,7 +180,7 @@ pl1_ %*% pl2_
 pl1 %*% pl2_
 ```
 
-(Note that the operations automatically reconcile the different ranges of the landscapes.)
+(Note that the landscapes are automatically delimited to a compatible domain.)
 
 ### Calculus
 
@@ -191,6 +191,7 @@ Meanwhile, the integral is the (signed) area under the curve, itself also a line
 ```{r}
 pl_integrate(pl1)
 pl_integrate(pl2)
+# 1-integral obeys linearity
 pl_integrate(pl1) * 2 - pl_integrate(pl2)
 pl_integrate(pl1 * 2 - pl2)
 ```
@@ -208,7 +209,7 @@ pl_integrate(pl_abs(pl1 * 2 - pl2), p = 2) ^ (1/2)
 pl_distance(pl1 * 2, pl2, p = 2)
 
 # using the infinity norm
-pl_integrate(pl_abs(pl1 * 2 - pl2), p = Inf) # nope!
+# FIXME: Values do not agree.
 pl_max(pl_abs(pl1 * 2 - pl2))
 pl_distance(pl1 * 2, pl2, p = Inf)
 ```
@@ -225,7 +226,43 @@ pl_norm(pl1)
 
 ### Statistical Analysis
 
-TODO: means & hypothesis testing
+Finally, **plt** implements the two hypothesis tests described in the original paper.
+To illustrate, we first generate lists of landscapes for samples from two spaces:
+
+```{r}
+# samples of landscapes from lemniscates
+pl1s <- replicate(6, {
+  pc <- tdaunif::sample_lemniscate_gerono(60, sd = .1)
+  pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
+  landscape(pd, degree = 1, xby = .01)
+})
+# samples of landscapes from circles
+pl2s <- replicate(8, {
+  pc <- tdaunif::sample_circle(60, sd = .1) / 2
+  pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
+  landscape(pd, degree = 1, xby = .01)
+})
+```
+
+An inspection of the mean landscapes makes clear that they are distinct:
+
+```{r}
+# average landscape from each sample
+par(mfcol = c(2L, 1L), mar = c(2, 2, 0, 2))
+plot(pl_mean(pl1s))
+plot(pl_mean(pl2s))
+par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
+```
+
+However, the two hypothesis tests use different procedures and rely on different test statistics, so one may be more effective than another.
+For convenience, both methods return objects of class `'htest'` for convenient printing:
+
+```{r}
+# z-test of difference in integrals of first level
+pl_z_test(pl1s, pl2s)
+# permutation test of pairwise distances between landscapes
+pl_perm_test(pl1s, pl2s)
+```
 
 ## Acknowledgments
 
