@@ -208,7 +208,7 @@
 <span><span class="va">pl1d</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                  xmin <span class="op">=</span> <span class="va">b_ran</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span>, xmax <span class="op">=</span> <span class="va">b_ran</span><span class="op">[[</span><span class="fl">2L</span><span class="op">]</span><span class="op">]</span>, xby <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">pl1d</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 4 9 2</span></span>
+<span><span class="co">#&gt; [1]  4 10  2</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">pl1d</span><span class="op">$</span><span class="fu">getInternal</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; , , 1</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -217,11 +217,11 @@
 <span><span class="co">#&gt; [2,] 0.2251884 0.2751884 0.3251884 0.3751884 0.4251884 0.4751884 0.5251884</span></span>
 <span><span class="co">#&gt; [3,] 0.2251884 0.2751884 0.3251884 0.3751884 0.4251884 0.4751884 0.5251884</span></span>
 <span><span class="co">#&gt; [4,] 0.2251884 0.2751884 0.3251884 0.3751884 0.4251884 0.4751884 0.5251884</span></span>
-<span><span class="co">#&gt;           [,8]      [,9]</span></span>
-<span><span class="co">#&gt; [1,] 0.5751884 0.6251884</span></span>
-<span><span class="co">#&gt; [2,] 0.5751884 0.6251884</span></span>
-<span><span class="co">#&gt; [3,] 0.5751884 0.6251884</span></span>
-<span><span class="co">#&gt; [4,] 0.5751884 0.6251884</span></span>
+<span><span class="co">#&gt;           [,8]      [,9]     [,10]</span></span>
+<span><span class="co">#&gt; [1,] 0.5751884 0.6251884 0.6751884</span></span>
+<span><span class="co">#&gt; [2,] 0.5751884 0.6251884 0.6751884</span></span>
+<span><span class="co">#&gt; [3,] 0.5751884 0.6251884 0.6751884</span></span>
+<span><span class="co">#&gt; [4,] 0.5751884 0.6251884 0.6751884</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; , , 2</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -230,11 +230,11 @@
 <span><span class="co">#&gt; [2,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.04425917 0.03232875</span></span>
 <span><span class="co">#&gt; [3,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.00000000 0.00000000</span></span>
 <span><span class="co">#&gt; [4,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.00000000 0.00000000</span></span>
-<span><span class="co">#&gt;            [,9]</span></span>
-<span><span class="co">#&gt; [1,] 0.01063412</span></span>
-<span><span class="co">#&gt; [2,] 0.00000000</span></span>
-<span><span class="co">#&gt; [3,] 0.00000000</span></span>
-<span><span class="co">#&gt; [4,] 0.00000000</span></span></code></pre></div>
+<span><span class="co">#&gt;            [,9] [,10]</span></span>
+<span><span class="co">#&gt; [1,] 0.01063412     0</span></span>
+<span><span class="co">#&gt; [2,] 0.00000000     0</span></span>
+<span><span class="co">#&gt; [3,] 0.00000000     0</span></span>
+<span><span class="co">#&gt; [4,] 0.00000000     0</span></span></code></pre></div>
 <p>Exactly computed landscapes can be converted to discrete landscape objects, but the other direction is not well-defined. Below, we view a portion of the discretized exact landscape, using the default bounds and resolution given to <code>pl1</code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># default conversion to discrete uses `xby = 0.001`</span></span>
@@ -352,7 +352,7 @@
 <span><span class="co">#&gt; [1] 0.004917171</span></span>
 <span><span class="va">pl1</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2_</span></span>
 <span><span class="co">#&gt; [1] 0.004917171</span></span></code></pre></div>
-<p>(Note that the operations automatically reconcile the different ranges of the landscapes.)</p>
+<p>(Note that the landscapes are automatically delimited to a compatible domain.)</p>
 </div>
 <div class="section level3">
 <h3 id="calculus">Calculus<a class="anchor" aria-label="anchor" href="#calculus"></a>
@@ -363,6 +363,7 @@
 <span><span class="co">#&gt; [1] 0.02952152</span></span>
 <span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.07295263</span></span>
+<span><span class="co"># 1-integral obeys linearity</span></span>
 <span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] -0.01390959</span></span>
 <span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span></span>
@@ -382,8 +383,7 @@
 <span><span class="co">#&gt; [1] 0.05041889</span></span>
 <span></span>
 <span><span class="co"># using the infinity norm</span></span>
-<span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span>, p <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span> <span class="co"># nope!</span></span>
-<span><span class="co">#&gt; [1] 0.7595389</span></span>
+<span><span class="co"># FIXME: Values do not agree.</span></span>
 <span><span class="fu"><a href="reference/arithmetic.html">pl_max</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.1178478</span></span>
 <span><span class="fu"><a href="reference/analysis.html">pl_distance</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span>, <span class="va">pl2</span>, p <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
@@ -401,7 +401,95 @@
 <div class="section level3">
 <h3 id="statistical-analysis">Statistical Analysis<a class="anchor" aria-label="anchor" href="#statistical-analysis"></a>
 </h3>
-<p>TODO: means &amp; hypothesis testing</p>
+<p>Finally, <strong>plt</strong> implements the two hypothesis tests described in the original paper. To illustrate, we first generate lists of landscapes for samples from two spaces:</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># samples of landscapes from lemniscates</span></span>
+<span><span class="va">pl1s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">6</span>, <span class="op">{</span></span>
+<span>  <span class="va">pc</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/lemniscates.html" class="external-link">sample_lemniscate_gerono</a></span><span class="op">(</span><span class="fl">60</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span>  <span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pc</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, xby <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span><span class="co"># samples of landscapes from circles</span></span>
+<span><span class="va">pl2s</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span><span class="fl">8</span>, <span class="op">{</span></span>
+<span>  <span class="va">pc</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/circles.html" class="external-link">sample_circle</a></span><span class="op">(</span><span class="fl">60</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span>
+<span>  <span class="va">pd</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pc</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1</span>, xby <span class="op">=</span> <span class="fl">.01</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
+<span></span>
+<span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`</span></span>
+<span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span></code></pre></div>
+<p>An inspection of the mean landscapes makes clear that they are distinct:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># average landscape from each sample</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_mean</a></span><span class="op">(</span><span class="va">pl1s</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_mean</a></span><span class="op">(</span><span class="va">pl2s</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-19-1.png"><!-- --></p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>However, the two hypothesis tests use different procedures and rely on different test statistics, so one may be more effective than another. For convenience, both methods return objects of class <code>'htest'</code> for convenient printing:</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># z-test of difference in integrals of first level</span></span>
+<span><span class="fu"><a href="reference/inference.html">pl_z_test</a></span><span class="op">(</span><span class="va">pl1s</span>, <span class="va">pl2s</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  z-test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  </span></span>
+<span><span class="co">#&gt; z = -2.3584, df = 12, p-value = 0.9908</span></span>
+<span><span class="co">#&gt; alternative hypothesis: true difference in means is not equal to 0</span></span>
+<span><span class="co">#&gt; 95 percent confidence interval:</span></span>
+<span><span class="co">#&gt;  -0.06283511 -0.01120004</span></span>
+<span><span class="co">#&gt; sample estimates:</span></span>
+<span><span class="co">#&gt;  mean of x  mean of y </span></span>
+<span><span class="co">#&gt; 0.02664640 0.06366397</span></span>
+<span><span class="co"># permutation test of pairwise distances between landscapes</span></span>
+<span><span class="fu"><a href="reference/inference.html">pl_perm_test</a></span><span class="op">(</span><span class="va">pl1s</span>, <span class="va">pl2s</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  permutation test</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data:  </span></span>
+<span><span class="co">#&gt; p-value &lt; 2.2e-16</span></span>
+<span><span class="co">#&gt; alternative hypothesis: true distance between mean landscapes is greater than 0</span></span>
+<span><span class="co">#&gt; sample estimates:</span></span>
+<span><span class="co">#&gt; distance between mean landscapes </span></span>
+<span><span class="co">#&gt;                       0.06631177</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
