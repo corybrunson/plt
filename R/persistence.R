@@ -145,7 +145,7 @@ print.persistence <- function(x, ...) {
 #' @export
 format.persistence <- function(x, ...) {
   # empty persistence data
-  if (pd$max_dim == -Inf && length(pd$pairs) == 0L)
+  if (x$max_dim == -Inf && length(x$pairs) == 0L)
     return("empty 'persistence' data")
   
   # parameters
