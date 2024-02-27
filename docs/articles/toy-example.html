@@ -159,21 +159,21 @@
 <span><span class="co"># print matrix</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">toy_pl_norms</span><span class="op">)</span></span>
 <span><span class="co">#&gt;              p = 1    p = 2  p = Inf</span></span>
-<span><span class="co">#&gt; 1-circle  809.0967 121.1728 25.66453</span></span>
-<span><span class="co">#&gt; 2-circle 1693.1665 179.6070 30.11857</span></span>
-<span><span class="co">#&gt; 3-circle 2576.6363 222.7177 29.89533</span></span>
-<span><span class="co">#&gt; 4-circle 3418.9442 255.3686 31.41684</span></span>
-<span><span class="co">#&gt; 5-circle 4424.4528 295.9540 31.49031</span></span></code></pre></div>
+<span><span class="co">#&gt; 1-circle  731.3425 110.8815 23.93548</span></span>
+<span><span class="co">#&gt; 2-circle 1562.5805 168.3009 27.84839</span></span>
+<span><span class="co">#&gt; 3-circle 2519.1004 218.3442 30.20788</span></span>
+<span><span class="co">#&gt; 4-circle 3199.3452 244.0343 30.09999</span></span>
+<span><span class="co">#&gt; 5-circle 4347.5907 291.0221 31.62172</span></span></code></pre></div>
 <p>Below we compute the pairwise <span class="math inline">\(2\)</span>-distances between the mean landscapes (c.f. Section 5.6):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compute distance matrix</span></span>
 <span><span class="fu"><a href="../reference/analysis.html">pl_dist</a></span><span class="op">(</span><span class="va">toy_pl_mean</span><span class="op">)</span></span>
 <span><span class="co">#&gt;          [,1]     [,2]      [,3]      [,4]     [,5]</span></span>
-<span><span class="co">#&gt; [1,]   0.0000 113.2026 171.23741 207.36861 254.4444</span></span>
-<span><span class="co">#&gt; [2,] 113.2026   0.0000 110.79073 155.32977 209.7431</span></span>
-<span><span class="co">#&gt; [3,] 171.2374 110.7907   0.00000  94.13694 160.1500</span></span>
-<span><span class="co">#&gt; [4,] 207.3686 155.3298  94.13694   0.00000 104.2750</span></span>
-<span><span class="co">#&gt; [5,] 254.4444 209.7431 160.14997 104.27502   0.0000</span></span></code></pre></div>
+<span><span class="co">#&gt; [1,]   0.0000 101.1610 164.78739 198.09697 250.9408</span></span>
+<span><span class="co">#&gt; [2,] 101.1610   0.0000 106.60200 148.36049 207.9989</span></span>
+<span><span class="co">#&gt; [3,] 164.7874 106.6020   0.00000  82.87287 156.4498</span></span>
+<span><span class="co">#&gt; [4,] 198.0970 148.3605  82.87287   0.00000 105.8652</span></span>
+<span><span class="co">#&gt; [5,] 250.9408 207.9989 156.44975 105.86519   0.0000</span></span></code></pre></div>
 <p>Section 5.7 reports that permutation tests between the sample landscapes from different numbers <span class="math inline">\(n\)</span> of circles all obtained p-values near zero, successfully detecting the differences between the samples. Below we report two permutation tests, between the samples <span class="math inline">\(n=1\)</span> and <span class="math inline">\(n=2\)</span> and between the samples <span class="math inline">\(n=4\)</span> and <span class="math inline">\(n=5\)</span>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compare 1-circle and 2-circle samples</span></span>
@@ -186,7 +186,7 @@
 <span><span class="co">#&gt; alternative hypothesis: true distance between mean landscapes is greater than 0</span></span>
 <span><span class="co">#&gt; sample estimates:</span></span>
 <span><span class="co">#&gt; distance between mean landscapes </span></span>
-<span><span class="co">#&gt;                         113.2026</span></span>
+<span><span class="co">#&gt;                          101.161</span></span>
 <span><span class="co"># compare 4-circle and 5-circle samples</span></span>
 <span><span class="fu"><a href="../reference/inference.html">pl_perm_test</a></span><span class="op">(</span><span class="va">toy_pl</span><span class="op">[[</span><span class="fl">4L</span><span class="op">]</span><span class="op">]</span>, <span class="va">toy_pl</span><span class="op">[[</span><span class="fl">5L</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -197,7 +197,7 @@
 <span><span class="co">#&gt; alternative hypothesis: true distance between mean landscapes is greater than 0</span></span>
 <span><span class="co">#&gt; sample estimates:</span></span>
 <span><span class="co">#&gt; distance between mean landscapes </span></span>
-<span><span class="co">#&gt;                          104.275</span></span></code></pre></div>
+<span><span class="co">#&gt;                         105.8652</span></span></code></pre></div>
 <p>To test the specificity, rather than the sensitivity, of the permutation test, below we generate additional, smaller samples from the 1- and 5-circle spaces and perform permutation tests between them and their original counterparts from the same spaces:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># draw a new 1-circle sample</span></span>
@@ -218,11 +218,11 @@
 <span><span class="co">#&gt;  permutation test</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; data:  </span></span>
-<span><span class="co">#&gt; p-value = 0.886</span></span>
+<span><span class="co">#&gt; p-value = 0.426</span></span>
 <span><span class="co">#&gt; alternative hypothesis: true distance between mean landscapes is greater than 0</span></span>
 <span><span class="co">#&gt; sample estimates:</span></span>
 <span><span class="co">#&gt; distance between mean landscapes </span></span>
-<span><span class="co">#&gt;                         5.460867</span></span>
+<span><span class="co">#&gt;                         14.81901</span></span>
 <span></span>
 <span><span class="co"># draw a new 5-circle sample</span></span>
 <span><span class="va">new_pl_5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fl">6L</span><span class="op">)</span></span>
@@ -236,17 +236,17 @@
 <span>  <span class="va">pl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd</span>, degree <span class="op">=</span> <span class="fl">1L</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span>  <span class="va">new_pl_5</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">pl</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co"># compare old &amp; new 1-circle samples</span></span>
+<span><span class="co"># compare old &amp; new 5-circle samples</span></span>
 <span><span class="fu"><a href="../reference/inference.html">pl_perm_test</a></span><span class="op">(</span><span class="va">toy_pl</span><span class="op">[[</span><span class="fl">5L</span><span class="op">]</span><span class="op">]</span>, <span class="va">new_pl_5</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  permutation test</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; data:  </span></span>
-<span><span class="co">#&gt; p-value = 0.147</span></span>
+<span><span class="co">#&gt; p-value = 0.123</span></span>
 <span><span class="co">#&gt; alternative hypothesis: true distance between mean landscapes is greater than 0</span></span>
 <span><span class="co">#&gt; sample estimates:</span></span>
 <span><span class="co">#&gt; distance between mean landscapes </span></span>
-<span><span class="co">#&gt;                         28.11598</span></span></code></pre></div>
+<span><span class="co">#&gt;                         32.04797</span></span></code></pre></div>
 <div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>

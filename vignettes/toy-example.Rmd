@@ -161,6 +161,6 @@ for (i in seq(6L)) {
   pl <- landscape(pd, degree = 1L, exact = TRUE)
   new_pl_5[[i]] <- pl
 }
-# compare old & new 1-circle samples
+# compare old & new 5-circle samples
 pl_perm_test(toy_pl[[5L]], new_pl_5)
 ```

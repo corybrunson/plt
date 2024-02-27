@@ -89,7 +89,7 @@
 <p>Until the package is on CRAN, use <strong>pak</strong> to install the package from the GitHub repository as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"pak"</span><span class="op">)</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"corybrunson/plt"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pkg_install.html" class="external-link">pkg_install</a></span><span class="op">(</span><span class="st">"corybrunson/plt"</span><span class="op">)</span></span></code></pre></div>
 <p>Alternatively—and especially if you want to contribute—you can clone or download the code repository and, from within the directory, install the package from source:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/install.html" class="external-link">install</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -166,7 +166,7 @@
 <span><span class="co">#&gt; Internal representation:  exact </span></span>
 <span><span class="co">#&gt; Number of levels:  2 </span></span>
 <span><span class="co">#&gt; Representation limits: ( 0.22519 , 0.6358 ) </span></span>
-<span><span class="co">#&gt; Landscape range: ( 0 , 0.06329 ) </span></span>
+<span><span class="co">#&gt; Landscape range: ( 0 , 0.15295 ) </span></span>
 <span><span class="co">#&gt; Magnitude:  0.0026959 </span></span>
 <span><span class="co">#&gt; Integral:   0.029522</span></span></code></pre></div>
 <p>Some advanced concepts like the magnitude of a landscape will be explained below.</p>
@@ -320,40 +320,83 @@
 <div class="section level3">
 <h3 id="hilbert-space-operations">Hilbert Space Operations<a class="anchor" aria-label="anchor" href="#hilbert-space-operations"></a>
 </h3>
-<p>Several infix operators have been taught to work in the natural way with landscapes, so that users can explore vector space operations and inner products more conveniently:</p>
+<p>To illustrate these features, we first generate a companion data set:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># a new landscape and its discretization</span></span>
-<span><span class="va">pc2</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/circles.html" class="external-link">sample_circle</a></span><span class="op">(</span><span class="fl">60</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">772888L</span><span class="op">)</span></span>
+<span><span class="va">pc2</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/circles.html" class="external-link">sample_circle</a></span><span class="op">(</span><span class="fl">60</span>, sd <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span></span>
 <span><span class="va">pd2</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pc2</span>, dim <span class="op">=</span> <span class="fl">1</span>, threshold <span class="op">=</span> <span class="fl">2</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in vietoris_rips.matrix(pc2, dim = 1, threshold = 2, p = 2): `dim`</span></span>
 <span><span class="co">#&gt; parameter has been deprecated; use `max_dim` instead.</span></span>
 <span><span class="va">pl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd2</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="va">pl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_delimit</a></span><span class="op">(</span><span class="va">pl2</span>, xmin <span class="op">=</span> <span class="fl">0</span>, xmax <span class="op">=</span> <span class="fl">2</span>, xby <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
-<span><span class="va">pl2_</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span>
-<span><span class="co"># illustrations</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fl">2L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pl2_</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">pl_discretize</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span></code></pre></div>
+<p>Several infix operators have been taught to work in the natural way with landscapes, so that users can explore vector space operations and inner products more conveniently:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3L</span>, <span class="fl">2L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># vector space operations on exact landscapes</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl2</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">+</span> <span class="va">pl2</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">+</span> <span class="va">pl2</span><span class="op">)</span></span>
 <span><span class="co"># vector space operations on discrete landscapes</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1_</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="op">-</span><span class="va">pl2_</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="va">pl1_</span> <span class="op">-</span> <span class="va">pl2_</span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-13-1.png"><!-- --></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<span><span class="fu"><a href="reference/plot.html">plot</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">pl1_</span> <span class="op">-</span> <span class="va">pl2_</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-14-1.png"><!-- --></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5.1</span>, <span class="fl">4.1</span>, <span class="fl">4.1</span>, <span class="fl">2.1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co"># inner product of exact and discrete landscapes</span></span>
+<span><span class="co"># inner products of exact and discrete landscapes</span></span>
 <span><span class="va">pl1</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2</span></span>
-<span><span class="co">#&gt; [1] 3.137778e-05</span></span>
+<span><span class="co">#&gt; [1] 0.005336876</span></span>
+<span><span class="va">pl1_</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2_</span></span>
+<span><span class="co">#&gt; [1] 0.004917171</span></span>
 <span><span class="va">pl1</span> <span class="op"><a href="https://rdrr.io/r/base/matmult.html" class="external-link">%*%</a></span> <span class="va">pl2_</span></span>
-<span><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.004917171</span></span></code></pre></div>
 <p>(Note that the operations automatically reconcile the different ranges of the landscapes.)</p>
 </div>
 <div class="section level3">
 <h3 id="calculus">Calculus<a class="anchor" aria-label="anchor" href="#calculus"></a>
 </h3>
-<p>TODO: integrals, distances, norms</p>
+<p>The <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> method above reported the magnitude and the integral of the persistence landscape <code>pl1</code>. The magnitude is the inner product of <code>pl1</code> with itself: <code>pl1 %*% pl1 = 0.0026959</code>. Meanwhile, the integral is the (signed) area under the curve, itself also a linear operator:</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.02952152</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.07295263</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] -0.01390959</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] -0.01390959</span></span></code></pre></div>
+<p>The distance between two landscapes is defined in terms of the integral of their absolute difference for finite norms and the maximum pointwise distance for the infinite norm. Note that, because <code><a href="reference/analysis.html">pl_integrate()</a></code> defaults to the 1-norm and <code><a href="reference/analysis.html">pl_distance()</a></code> defaults to the 2-norm, we must be careful when comparing their results:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># using the 1-norm</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.03560593</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_distance</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span>, <span class="va">pl2</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.03560593</span></span>
+<span></span>
+<span><span class="co"># using the 2-norm</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">^</span> <span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.05041889</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_distance</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span>, <span class="va">pl2</span>, p <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.05041889</span></span>
+<span></span>
+<span><span class="co"># using the infinity norm</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_integrate</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span>, p <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span> <span class="co"># nope!</span></span>
+<span><span class="co">#&gt; [1] 0.7595389</span></span>
+<span><span class="fu"><a href="reference/arithmetic.html">pl_max</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.1178478</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_distance</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span>, <span class="va">pl2</span>, p <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.1265879</span></span></code></pre></div>
+<p>The norm of a persistence landscape is then defined as its distance from the null landscape that is constant at zero.</p>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># null landscape</span></span>
+<span><span class="va">pd0</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>start <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="fl">0L</span><span class="op">)</span>, end <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/double.html" class="external-link">double</a></span><span class="op">(</span><span class="fl">0L</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">pl0</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/landscape.html">landscape</a></span><span class="op">(</span><span class="va">pd0</span>, degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_distance</a></span><span class="op">(</span><span class="va">pl1</span>, <span class="va">pl0</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.05192161</span></span>
+<span><span class="fu"><a href="reference/analysis.html">pl_norm</a></span><span class="op">(</span><span class="va">pl1</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.05192161</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="statistical-analysis">Statistical Analysis<a class="anchor" aria-label="anchor" href="#statistical-analysis"></a>
@@ -389,7 +432,7 @@
 <div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
-<li id="fn1"><p>Bubenik P (2015) “Statistical Topological Data Analysis using Persistence Landscapes”. <em>JMLR</em> <strong>16</strong>(3):77–102. <a href="https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html" class="external-link uri">https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Bubenik P (2015) “Statistical Topological Data Analysis using Persistence Landscapes”. <em>Journal of Machine Learning Research</em> <strong>16</strong>(3):77–102. <a href="https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html" class="external-link uri">https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 <li id="fn2"><p>Bubenik P &amp; Dłotko P (2017) “A persistence landscapes toolbox for topological statistics”. <em>Journal of Symbolic Computation</em> <strong>78</strong>(1):91–114. <a href="https://www.sciencedirect.com/science/article/pii/S0747717116300104" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0747717116300104</a><a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>

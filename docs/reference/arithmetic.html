@@ -120,7 +120,8 @@ moment.</p></dd>
 
 <dt>level</dt>
 <dd><p>Positive integer; the level of the persistence landscape (up to)
-whose moment to calculate.</p></dd>
+whose moment to calculate. This value is internally decreased by <code>1L</code> to
+prevent off-by-one errors when passing to C++ code.</p></dd>
 
 
 <dt>center</dt>
