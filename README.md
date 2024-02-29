@@ -541,7 +541,7 @@ pl_perm_test(pl1s, pl2s)
 
 The C++ library is adapted from [Paweł Dłotko’s Persistence Landscape
 Toolbox](https://www2.math.upenn.edu/~dlotko/persistenceLandscape.html).
-It was originally ported to R in [Jose Bouza’s **tda-tools**
+It was originally adapted and ported to R in [Jose Bouza’s **tda-tools**
 package](https://github.com/jjbouza/tda-tools).
 
 ### Resources
