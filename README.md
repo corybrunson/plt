@@ -38,10 +38,13 @@ The **plt** package supports various operations involving persistence
 landscapes:
 
 - Compute persistence landscapes from persistence data
+- Plot persistence landscapes
 - Perform Hilbert space operations (scaling, addition, inner product)
   plus some additional queries and transformations (extremal values,
   absolute value, integration) on persistence landscapes
-- Plot persistence landscapes
+- Conduct hypothesis tests on samples of persistence landscapes
+- Vectorize persistence landscapes for other purposes including machine
+  learning
 
 Examples and tests in **plt** rely on other packages to simulate data
 and to compute persistence diagrams from data:
@@ -61,7 +64,7 @@ a list, of a 2-column matrix of persistence pairs for each homological
 degree from 0 (`$pairs[[1]]`) to the maximum degree calculated. The
 generic converter `as_persistence()` includes methods for outputs from
 `ripserr::vietoris_rips()` and from `TDA::*Diag()`; it operates under
-the hood of \`landscape(), but we invoke it explicitly here for
+the hood of `landscape()`, but we invoke it explicitly here for
 illustration.
 
 ### Calculation
@@ -404,7 +407,7 @@ pl_distance(pl1 * 2, pl2, p = 2)
 #> [1] 0.05041889
 
 # using the infinity norm
-# FIXME: Values do not agree.
+# FIXME: Values do not always agree.
 pl_max(pl_abs(pl1 * 2 - pl2))
 #> [1] 0.1178478
 pl_distance(pl1 * 2, pl2, p = Inf)
@@ -538,7 +541,7 @@ pl_perm_test(pl1s, pl2s)
 
 The C++ library is adapted from [Paweł Dłotko’s Persistence Landscape
 Toolbox](https://www2.math.upenn.edu/~dlotko/persistenceLandscape.html).
-It was originally adapted and ported to R in [Jose Bouza’s **tda-tools**
+It was originally ported to R in [Jose Bouza’s **tda-tools**
 package](https://github.com/jjbouza/tda-tools).
 
 ### Resources
@@ -546,7 +549,9 @@ package](https://github.com/jjbouza/tda-tools).
 Development of this package benefitted from the use of equipment and the
 support of colleagues at the [University of
 Florida](https://www.ufl.edu/), especially [Peter Bubenik’s research
-group](https://people.clas.ufl.edu/peterbubenik/researchgroup/).
+group](https://people.clas.ufl.edu/peterbubenik/researchgroup/) and the
+[Laboratory for Systems
+Medicine](https://systemsmedicine.pulmonary.medicine.ufl.edu/).
 
 ### Contribute
 
