@@ -103,8 +103,10 @@
 <p>The <strong>plt</strong> package supports various operations involving persistence landscapes:</p>
 <ul>
 <li>Compute persistence landscapes from persistence data</li>
-<li>Perform Hilbert space operations (scaling, addition, inner product) plus some additional queries and transformations (extremal values, absolute value, integration) on persistence landscapes</li>
 <li>Plot persistence landscapes</li>
+<li>Perform Hilbert space operations (scaling, addition, inner product) plus some additional queries and transformations (extremal values, absolute value, integration) on persistence landscapes</li>
+<li>Conduct hypothesis tests on samples of persistence landscapes</li>
+<li>Vectorize persistence landscapes for other purposes including machine learning</li>
 </ul>
 <p>Examples and tests in <strong>plt</strong> rely on other packages to simulate data and to compute persistence diagrams from data:</p>
 <ul>
@@ -113,7 +115,7 @@
 <li>
 <strong>ripserr</strong> and <strong>TDA</strong> provide functions to compute persistence data from point clouds and distance matrices.</li>
 </ul>
-<p><strong>plt</strong> introduces the ‘Rcpp_PersistenceLandscape’ S4 class, which is exposed using <strong>Rcpp</strong> from the underlying ‘PersistenceLandscape’ C++ class. Instances of this class can be created using <code>new()</code> but the recommended way is to use <code><a href="reference/landscape.html">landscape()</a></code>. This function accepts either a single matrix of persistence data or a specially formatted list with the class <code>'persistence_diagram"</code>. The <code>$pairs</code> entry of the list is itself a list, of a 2-column matrix of persistence pairs for each homological degree from 0 (<code>$pairs[[1]]</code>) to the maximum degree calculated. The generic converter <code><a href="reference/as_persistence.html">as_persistence()</a></code> includes methods for outputs from <code><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">ripserr::vietoris_rips()</a></code> and from <code>TDA::*Diag()</code>; it operates under the hood of `landscape(), but we invoke it explicitly here for illustration.</p>
+<p><strong>plt</strong> introduces the ‘Rcpp_PersistenceLandscape’ S4 class, which is exposed using <strong>Rcpp</strong> from the underlying ‘PersistenceLandscape’ C++ class. Instances of this class can be created using <code>new()</code> but the recommended way is to use <code><a href="reference/landscape.html">landscape()</a></code>. This function accepts either a single matrix of persistence data or a specially formatted list with the class <code>'persistence_diagram"</code>. The <code>$pairs</code> entry of the list is itself a list, of a 2-column matrix of persistence pairs for each homological degree from 0 (<code>$pairs[[1]]</code>) to the maximum degree calculated. The generic converter <code><a href="reference/as_persistence.html">as_persistence()</a></code> includes methods for outputs from <code><a href="https://rrrlw.github.io/ripserr/reference/vietoris_rips.html" class="external-link">ripserr::vietoris_rips()</a></code> and from <code>TDA::*Diag()</code>; it operates under the hood of <code><a href="reference/landscape.html">landscape()</a></code>, but we invoke it explicitly here for illustration.</p>
 <div class="section level3">
 <h3 id="calculation">Calculation<a class="anchor" aria-label="anchor" href="#calculation"></a>
 </h3>
@@ -383,9 +385,8 @@
 <span><span class="co">#&gt; [1] 0.05041889</span></span>
 <span></span>
 <span><span class="co"># using the infinity norm</span></span>
-<span><span class="co"># FIXME: Values do not agree.</span></span>
-<span><span class="fu"><a href="reference/arithmetic.html">pl_max</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.1178478</span></span>
+<span><span class="fu"><a href="reference/arithmetic.html">pl_vmax</a></span><span class="op">(</span><span class="fu"><a href="reference/arithmetic.html">pl_abs</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span> <span class="op">-</span> <span class="va">pl2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] 0.1178478 0.1265879</span></span>
 <span><span class="fu"><a href="reference/analysis.html">pl_distance</a></span><span class="op">(</span><span class="va">pl1</span> <span class="op">*</span> <span class="fl">2</span>, <span class="va">pl2</span>, p <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.1265879</span></span></code></pre></div>
 <p>The norm of a persistence landscape is then defined as its distance from the null landscape that is constant at zero.</p>
@@ -503,7 +504,7 @@
 <div class="section level3">
 <h3 id="resources">Resources<a class="anchor" aria-label="anchor" href="#resources"></a>
 </h3>
-<p>Development of this package benefitted from the use of equipment and the support of colleagues at the <a href="https://www.ufl.edu/" class="external-link">University of Florida</a>, especially <a href="https://people.clas.ufl.edu/peterbubenik/researchgroup/" class="external-link">Peter Bubenik’s research group</a>.</p>
+<p>Development of this package benefitted from the use of equipment and the support of colleagues at the <a href="https://www.ufl.edu/" class="external-link">University of Florida</a>, especially <a href="https://people.clas.ufl.edu/peterbubenik/researchgroup/" class="external-link">Peter Bubenik’s research group</a> and the <a href="https://systemsmedicine.pulmonary.medicine.ufl.edu/" class="external-link">Laboratory for Systems Medicine</a>.</p>
 </div>
 <div class="section level3">
 <h3 id="contribute">Contribute<a class="anchor" aria-label="anchor" href="#contribute"></a>
