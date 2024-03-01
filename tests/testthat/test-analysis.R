@@ -26,3 +26,5 @@ test_that("distance agrees with integral of difference", {
   expect_equal(pl_integrate(pl - pl2, p = 3)^(1/3), pl_distance(pl, pl2, p = 3))
   # inf-norm?
 })
+
+# TODO: example with non-nested levels

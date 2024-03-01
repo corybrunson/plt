@@ -121,7 +121,7 @@ pl_vmin <- function(pl, level = pl_num_levels(pl)) {
   if (level < 1L) return(numeric(0L))
   # prevent off-by-one error
   level <- level - 1L
-  vapply(seq(level), function(l) pl$minimum(l), 0.)
+  vapply(seq(0L, level), function(l) pl$minimum(l), 0.)
 }
 
 #' @rdname arithmetic
@@ -130,7 +130,7 @@ pl_vmax <- function(pl, level = pl_num_levels(pl)) {
   if (level < 1L) return(numeric(0L))
   # prevent off-by-one error
   level <- level - 1L
-  vapply(seq(level), function(l) pl$maximum(l), 0.)
+  vapply(seq(0L, level), function(l) pl$maximum(l), 0.)
 }
 
 #' @rdname arithmetic
@@ -140,8 +140,8 @@ pl_vrange <- function(pl, level = pl_num_levels(pl)) {
   # prevent off-by-one error
   level <- level - 1L
   cbind(
-    vapply(seq(level), function(l) pl$minimum(l), 0.),
-    vapply(seq(level), function(l) pl$maximum(l), 0.)
+    vapply(seq(0L, level), function(l) pl$minimum(l), 0.),
+    vapply(seq(0L, level), function(l) pl$maximum(l), 0.)
   )
 }
 

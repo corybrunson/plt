@@ -211,8 +211,7 @@ pl_integrate(pl_abs(pl1 * 2 - pl2), p = 2) ^ (1/2)
 pl_distance(pl1 * 2, pl2, p = 2)
 
 # using the infinity norm
-# FIXME: Values do not always agree.
-pl_max(pl_abs(pl1 * 2 - pl2))
+pl_vmax(pl_abs(pl1 * 2 - pl2))
 pl_distance(pl1 * 2, pl2, p = Inf)
 ```
 

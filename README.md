@@ -407,9 +407,8 @@ pl_distance(pl1 * 2, pl2, p = 2)
 #> [1] 0.05041889
 
 # using the infinity norm
-# FIXME: Values do not always agree.
-pl_max(pl_abs(pl1 * 2 - pl2))
-#> [1] 0.1178478
+pl_vmax(pl_abs(pl1 * 2 - pl2))
+#> [1] 0.1178478 0.1265879
 pl_distance(pl1 * 2, pl2, p = Inf)
 #> [1] 0.1265879
 ```
