@@ -5,6 +5,7 @@ using namespace Rcpp;
 
 // Section: Helpers
 
+double machine_epsi = std::numeric_limits<float>::denorm_min();
 // TODO: Make this a user-settable option through {Rcpp}.
 double epsi = 0.0000005;
 inline bool almostEqual(double a, double b) {
@@ -530,6 +531,11 @@ PersistenceLandscape::PersistenceLandscape(
   
   // check limits
   if (! (min_x < max_x)) stop("PL limits must satisfy `min_x < max_x`.");
+  // fix limits, if necessary
+  if (*std::min_element(x(_,0).begin(), x(_,0).end()) < min_x)
+    min_x = min_x - machine_epsi;
+  if (*std::max_element(x(_,1).begin(), x(_,1).end()) > max_x)
+    max_x = max_x + machine_epsi;
   if (*std::min_element(x(_,0).begin(), x(_,0).end()) < min_x ||
       *std::max_element(x(_,1).begin(), x(_,1).end()) > max_x)
     stop("PL limits `xmin, xmax` must contain PL support.");
@@ -815,8 +821,8 @@ PersistenceLandscape discretizeExactLandscape(
   std::pair<double, double> currentPoint;
   
   // assuming `pl` is exact, warn if not `min_x < pl.land[0] < max_x`
-  if (pl.land[0][1].first < min_x - epsi ||
-      pl.land[0][pl.land[0].size() - 2].first > max_x + epsi)
+  if (pl.land[0][1].first < min_x - machine_epsi ||
+      pl.land[0][pl.land[0].size() - 2].first > max_x + machine_epsi)
     warning("This landscape extends beyond [ `min_x`, `max_x` ].");
   
   for (unsigned int i = 0; i < pl.land.size(); i++) {
@@ -871,7 +877,8 @@ PersistenceLandscape discretizeExactLandscape(
     
     // If `max_x` has not been reached, then increment along zero y values.
     if (x_buff + dx < max_x + epsi) {
-      int n_incr = std::floor((max_x + epsi - x_buff) / dx);
+      int n_incr = std::floor(
+        (max_x + epsi - x_buff) / dx);
       y_buff = 0;
       for (int k = 0; k < n_incr; k++) {
         x_buff += dx;
@@ -898,7 +905,7 @@ PersistenceLandscape delimitDiscreteLandscape(
     warning("Cannot delimit a discrete PL with a different resolution.");
   // ensure that new limits contain support
   std::pair<double, double> supp = pl.support();
-  if (min_x- epsi > supp.first ||
+  if (min_x - machine_epsi > supp.first ||
       // NOTE: grid extends at least rather than at most to `xmax`
       max_x + pl.dx <= supp.second)
     stop("Cannot delimit to a domain that contains not the support.");
@@ -922,7 +929,8 @@ PersistenceLandscape delimitDiscreteLandscape(
   // (as checked above, both must lie on same grid)
   int min_diff = std::round((min_x - pl.min_x) / pl.dx);
   // number of additional grid points needed to reach new `max_x`
-  int max_diff = std::ceil((max_x - pl.min_x - epsi) / pl.dx) - orig_len;
+  int max_diff = 
+    std::ceil((max_x - pl.min_x - machine_epsi) / pl.dx) - orig_len;
 
   // NOTE: While `min_x` defines the grid, `max_x` can be any greater
   // value, not necessarily on the grid.

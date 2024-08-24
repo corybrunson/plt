@@ -24,6 +24,7 @@ Authors:
 
 Other contributors:
 \itemize{
+  \item Ryan Elkind \email{ryanelkind@gmail.com} [contributor]
   \item Peter Bubenik [contributor, laboratory director]
 }
 
