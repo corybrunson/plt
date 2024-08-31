@@ -36,7 +36,7 @@ pl_to_vector <- function(pl, num_levels = pl_num_levels(pl)) {
   # get matrix of levels from discrete representation
   # x <- pl$getInternal()[, , 2L, drop = 3L]
   x <- pl$getInternal()[, , 2L, drop = FALSE]
-  x <- array(x, dim = dim(pl$getInternal()[seq(2L)]))
+  x <- array(x, dim = dim(x)[seq(2L)])
   # remove any superfluous levels
   if (num_levels < nrow(x)) x <- x[seq(num_levels), , drop = FALSE]
   # augment any additional empty levels
