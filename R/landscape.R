@@ -54,10 +54,12 @@ landscape <- function(
       stop("There is no `as_persistence()` method for object `pd`.")
     if (is.null(degree))
       stop("`landscape()` requires a homological degree (`degree = <int>`).")
-    pd <- if (length(pd$pairs) == 0L) {
-      matrix(NA_real_, nrow = 0L, ncol = 2L)
+    pd <- if (length(pd$pairs) < degree + 1L) {
+      # TODO: fix this on the C++ side
+      # matrix(NA_real_, nrow = 0L, ncol = 2L)
+      matrix(0, nrow = 1L, ncol = 2L)
     } else {
-      pd <- pd$pairs[[degree + 1L]]
+      pd$pairs[[degree + 1L]]
     }
   }
   
