@@ -529,6 +529,8 @@ PersistenceLandscape::PersistenceLandscape(
   double min_x, double max_x, double dx
 ) : exact(exact), min_x(min_x), max_x(max_x), dx(dx) {
   
+  // TODO: if matrix has zero rows, return empty PL
+  
   // check limits
   if (! (min_x < max_x)) stop("PL limits must satisfy `min_x < max_x`.");
   // fix limits, if necessary
