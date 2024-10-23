@@ -4,7 +4,7 @@
 #'
 #' @name analysis
 #' @include arithmetic.R
-#' @inheritParams landscape
+#' @inheritParams pl_new
 #' @inheritParams arithmetic
 #' @param supports List of support intervals for landscape levels.
 #' @param r Non-negative number; the power of the coefficient \eqn{1/k} in the

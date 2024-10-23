@@ -113,13 +113,13 @@ circlescapes <- replicate(
   6,
   tdaunif::sample_circle(n = rpois(n = 1, lambda = 24)) |>
     ripserr::vietoris_rips(dim = 2L, threshold = 2) |>
-    landscape(degree = 1, exact = TRUE)
+    pl_new(degree = 1, exact = TRUE)
 )
 toruscapes <- replicate(
   6,
   tdaunif::sample_torus_tube(n = rpois(n = 1, lambda = 24)) |>
     ripserr::vietoris_rips(dim = 2L, threshold = 2) |>
-    landscape(degree = 1, exact = TRUE)
+    pl_new(degree = 1, exact = TRUE)
 )
 
 # null hypothesis tests

@@ -5,7 +5,7 @@
 #'
 #' @name inference
 #' @include PersistenceLandscape.R
-#' @inheritParams landscape
+#' @inheritParams pl_new
 #' @inheritParams analysis
 #' @param x,y Lists of persistence landscapes.
 #' @param complete Logical; whether to compute averages between all combinations

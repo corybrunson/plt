@@ -4,8 +4,8 @@ par(mfrow = c(2L, 2L), mar = rep(.5, 4))
 # example PLs
 x <- tdaunif::sample_klein_flat(60, ar = 2)
 pd <- ripserr::vietoris_rips(x, dim = 1L, threshold = 2)
-pl_e <- landscape(pd, degree = 1L, exact = TRUE)
-pl_d <- landscape(pd, degree = 1L, exact = FALSE, xmax = 2, xby = 0.05)
+pl_e <- pl_new(pd, degree = 1L, exact = TRUE)
+pl_d <- pl_new(pd, degree = 1L, exact = FALSE, xmax = 2, xby = 0.05)
 plot(pl_e, xaxt = "n", yaxt = "n")
 plot(pl_d, xaxt = "n", yaxt = "n")
 

@@ -67,7 +67,7 @@ for (n in seq_along(toy_pl)) {
     # format as persistence data
     pd <- as_persistence(ph)
     # construct degree-1 persistence landscape
-    pl <- landscape(pd, degree = 1L, exact = TRUE)
+    pl <- pl_new(pd, degree = 1L, exact = TRUE)
     # store the landscape
     toy_n[[i]] <- pl
   }
@@ -143,7 +143,7 @@ for (i in seq(6L)) {
     ripserr::vietoris_rips(toy_data, dim = 1, threshold = 1 * 2 * sf)
   )
   pd <- as_persistence(ph)
-  pl <- landscape(pd, degree = 1L, exact = TRUE)
+  pl <- pl_new(pd, degree = 1L, exact = TRUE)
   new_pl_1[[i]] <- pl
 }
 # compare old & new 1-circle samples
@@ -158,7 +158,7 @@ for (i in seq(6L)) {
     ripserr::vietoris_rips(toy_data, dim = 1, threshold = 5 * 2 * sf)
   )
   pd <- as_persistence(ph)
-  pl <- landscape(pd, degree = 1L, exact = TRUE)
+  pl <- pl_new(pd, degree = 1L, exact = TRUE)
   new_pl_5[[i]] <- pl
 }
 # compare old & new 5-circle samples

@@ -77,5 +77,5 @@ pl3$xBy()
 }
 \seealso{
 \linkS4class{Rcpp_PersistenceLandscape} for the exported C++ class and
-\code{\link[=landscape]{landscape()}} for the R wrapper.
+\code{\link[=pl_new]{pl_new()}} for the R wrapper.
 }

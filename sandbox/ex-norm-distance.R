@@ -89,8 +89,8 @@ pd1 <- as_persistence(ripserr::vietoris_rips(x1, dim = 1, threshold = 2))
 pd2 <- as_persistence(ripserr::vietoris_rips(x2, dim = 1, threshold = 2))
 
 # two exact persistence landscapes
-ple1 <- landscape(pd1, degree = 1, exact = TRUE)
-ple2 <- landscape(pd2, degree = 1, exact = TRUE)
+ple1 <- pl_new(pd1, degree = 1, exact = TRUE)
+ple2 <- pl_new(pd2, degree = 1, exact = TRUE)
 
 # inf norm
 pl_norm_exact(ple1, p = Inf)
@@ -108,8 +108,8 @@ pl_norm(ple1, p = 2)
 pl_norm(ple1, p = 1)
 
 # two discrete persistence landscapes
-pl1 <- landscape(pd1, degree = 1, xmin = 0, xmax = 1.5, xby = 0.01)
-pl2 <- landscape(pd2, degree = 1, xmin = 0, xmax = 1.5, xby = 0.01)
+pl1 <- pl_new(pd1, degree = 1, xmin = 0, xmax = 1.5, xby = 0.01)
+pl2 <- pl_new(pd2, degree = 1, xmin = 0, xmax = 1.5, xby = 0.01)
 
 # inf norm
 pl_norm_discrete(pl1, p = Inf)

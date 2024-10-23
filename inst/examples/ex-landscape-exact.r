@@ -6,7 +6,7 @@ points <- tdaunif::sample_torus_tube(100, 5)
 (pd <- ripserr::vietoris_rips(points, dim = 2L, threshold = 1))
 
 # compute persistence landscapes for 0-cycles
-(pl <- landscape(pd, degree = 1, exact = TRUE))
+(pl <- pl_new(pd, degree = 1, exact = TRUE))
 
 # first landscape layer
 print(pl$getInternal()[[1L]])

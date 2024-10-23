@@ -7,7 +7,7 @@ pd <- TDA::ripsDiag(points, maxdimension = 2L, maxscale = 3)
 head(pd$diagram)
 
 # compute persistence landscape for 1-dimensional cycles
-pl <- landscape(pd, degree = 1L)
+pl <- pl_new(pd, degree = 1L)
 print(pl)
 
 # landscape dimensions
@@ -18,6 +18,6 @@ print(head(pl$getInternal()))
 plot(pl)
 
 # custom parameters
-pl <- landscape(pd, degree = 1L, xby = 0.1, xmax = 2)
+pl <- pl_new(pd, degree = 1L, xby = 0.1, xmax = 2)
 print(pl)
 plot(pl)

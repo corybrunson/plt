@@ -1,7 +1,7 @@
 
 # tiny example
 pd <- cbind(start = 0, end = 2)
-pl <- landscape(pd, exact = TRUE)
+pl <- pl_new(pd, exact = TRUE)
 
 test_that("norm agrees with integral", {
   # 1-norm
@@ -15,7 +15,7 @@ test_that("norm agrees with integral", {
 
 # tinier example
 pd2 <- cbind(start = 1, end = 2)
-pl2 <- landscape(pd2, exact = TRUE)
+pl2 <- pl_new(pd2, exact = TRUE)
 
 test_that("distance agrees with integral of difference", {
   # 1-norm

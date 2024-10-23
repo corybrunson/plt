@@ -60,7 +60,7 @@ The C++ class 'PersistenceLandscape' is exposed as the S4 class
 \strong{\link[Rcpp:Rcpp-package]{Rcpp}}. See
 \url{https://github.com/coatless-r-n-d/rcpp-modules-student} for an
 introduction. New objects should be created from persistence data
-(diagrams) using \code{\link[=landscape]{landscape()}}.
+(diagrams) using \code{\link[=pl_new]{pl_new()}}.
 }
 \section{Fields}{
 
@@ -138,5 +138,5 @@ pl3$getInternal()
 pl3$xBy()
 }
 \seealso{
-\code{\link[=landscape]{landscape()}} for the R wrapper.
+\code{\link[=pl_new]{pl_new()}} for the R wrapper.
 }

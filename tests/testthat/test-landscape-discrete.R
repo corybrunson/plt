@@ -2,14 +2,14 @@
 test_that("limits that don't contain support generate a warning/error", {
   sq <- rbind(c(0, 0), c(0, 1), c(1, 1), c(1, 0))
   ph <- TDA::ripsDiag(sq, maxdimension = 2L, maxscale = 1.5)
-  expect_error(landscape(ph, degree = 1, xmax = .4))
-  expect_error(landscape(ph, degree = 1, xmin = .3, xmax = 1))
+  expect_error(pl_new(ph, degree = 1, xmax = .4))
+  expect_error(pl_new(ph, degree = 1, xmin = .3, xmax = 1))
 })
 
 test_that("PL is correct for one persistence pair.", {
   p1 <- matrix(c(0, 2), nrow = 1L, ncol = 2L)
   pd <- p1
-  pl <- landscape(pd, exact = FALSE, xmin = 0, xmax = 5, xby = 0.1)
+  pl <- pl_new(pd, exact = FALSE, xmin = 0, xmax = 5, xby = 0.1)
   
   x_val <- seq(0, 5, 0.1)
   y_val_0 <- seq(0, 1, 0.1)
@@ -74,8 +74,8 @@ innerPL <- function(pl1,pl2){
 }
 
 test_that("PL sum is correct.", {
-  pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
-  pl2 <- landscape(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl2 <- pl_new(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
   
   pl_d = pl$getInternal()
   pl2_d = pl2$getInternal()
@@ -85,8 +85,8 @@ test_that("PL sum is correct.", {
 
 
 test_that("add PL is correct.", {
-  pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
-  pl2 <- landscape(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl2 <- pl_new(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
   
   pl_d = pl$getInternal()
   pl2_d = pl2$getInternal()
@@ -96,22 +96,22 @@ test_that("add PL is correct.", {
 
 
 # test_that("PL scale is correct.", {
-#   pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+#   pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
 #   pl_d = pl$getInternal()
 #   
 #   expect_equal(PLscale(0.5, pl)$getInternal(), scalePL(0.5, pl_d))
 # })
 
 test_that("scale PL is correct.", {
-  pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
   pl_d = pl$getInternal()
   
   expect_equal(pl$scale(0.5)$getInternal(), scalePL(0.5, pl_d))
 })
 
 test_that("average PL is correct.", {
-  pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
-  pl2 <- landscape(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl2 <- pl_new(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
   
   pl_d = pl$getInternal()
   pl2_d = pl2$getInternal()
@@ -121,8 +121,8 @@ test_that("average PL is correct.", {
 })
 
 # test_that("PL inner is correct.", {
-#   pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
-#   pl2 <- landscape(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+#   pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+#   pl2 <- pl_new(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
 #   
 #   pl_d = pl$getInternal()
 #   pl2_d = pl2$getInternal()
@@ -131,8 +131,8 @@ test_that("average PL is correct.", {
 # })
 
 test_that("inner PL is correct.", {
-  pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
-  pl2 <- landscape(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl2 <- pl_new(pd2$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
   
   pl_d = pl$getInternal()
   pl2_d = pl2$getInternal()
@@ -141,13 +141,13 @@ test_that("inner PL is correct.", {
 })
 
 test_that("toExact from discrete is correct", {
-  pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
   
   expect_error(pl$toExact())
 })
 
 test_that("`discretize` from discrete is correct", {
-  pl <- landscape(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
+  pl <- pl_new(pd$pairs[[1]], exact=FALSE, xmax=2.5, xby=0.1)
   
   expect_warning(pl$discretize(), "discrete")
 })
@@ -155,12 +155,12 @@ test_that("`discretize` from discrete is correct", {
 test_that("getInternal from discrete is correct from diagram", {
   pd <- suppressWarnings(
     as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2)))
-  pl <- landscape(pd, degree = 1, exact = FALSE,
+  pl <- pl_new(pd, degree = 1, exact = FALSE,
                   xmax = 2.5, xby = 0.1)
   
   pdref <- suppressWarnings(
     as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2)))
-  plref <- landscape(pdref, degree = 1, exact = FALSE,
+  plref <- pl_new(pdref, degree = 1, exact = FALSE,
                      xmax = 2.5, xby = 0.1)
   
   expect_equal(pl$getInternal(), plref$getInternal())

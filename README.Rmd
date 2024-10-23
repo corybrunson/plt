@@ -58,10 +58,10 @@ Examples and tests in **plt** rely on other packages to simulate data and to com
 * **ripserr** and **TDA** provide functions to compute persistence data from point clouds and distance matrices.
 
 **plt** introduces the 'Rcpp_PersistenceLandscape' S4 class, which is exposed using **Rcpp** from the underlying 'PersistenceLandscape' C++ class.
-Instances of this class can be created using `new()` but the recommended way is to use `landscape()`.
+Instances of this class can be created using `new()` but the recommended way is to use `pl_new()`.
 This function accepts either a single matrix of persistence data or a specially formatted list with the class `'persistence_diagram"`.
 The `$pairs` entry of the list is itself a list, of a 2-column matrix of persistence pairs for each homological degree from 0 (`$pairs[[1]]`) to the maximum degree calculated.
-The generic converter `as_persistence()` includes methods for outputs from `ripserr::vietoris_rips()` and from `TDA::*Diag()`; it operates under the hood of `landscape()`, but we invoke it explicitly here for illustration.
+The generic converter `as_persistence()` includes methods for outputs from `ripserr::vietoris_rips()` and from `TDA::*Diag()`; it operates under the hood of `pl_new()`, but we invoke it explicitly here for illustration.
 
 ### Calculation
 
@@ -88,7 +88,7 @@ This allows us to compute a persistence landscape---in this case, for the 1-dime
 Here we compute the landscape exactly, which can be cost-prohibitive for larger persistence data, and print its summary:
 
 ```{r}
-pl1 <- landscape(pd, degree = 1, exact = TRUE)
+pl1 <- pl_new(pd, degree = 1, exact = TRUE)
 print(pl1)
 summary(pl1)
 ```
@@ -111,8 +111,8 @@ A landscape constructed using a discrete approximation is stored as a 3-dimensio
 
 ```{r}
 b_ran <- pl_support(pl1)
-pl1d <- landscape(pd, degree = 1,
-                  xmin = b_ran[[1L]], xmax = b_ran[[2L]], xby = 0.05)
+pl1d <- pl_new(pd, degree = 1,
+               xmin = b_ran[[1L]], xmax = b_ran[[2L]], xby = 0.05)
 print(dim(pl1d$getInternal()))
 print(pl1d$getInternal())
 ```
@@ -158,7 +158,7 @@ To illustrate these features, we first generate a companion data set:
 set.seed(772888L)
 pc2 <- tdaunif::sample_circle(60, sd = .1) / 2
 pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
-pl2 <- landscape(pd2, degree = 1, exact = TRUE)
+pl2 <- pl_new(pd2, degree = 1, exact = TRUE)
 pl2 <- pl_delimit(pl2, xmin = 0, xmax = 2, xby = 0.1)
 pl2_ <- pl_discretize(pl2)
 ```
@@ -220,7 +220,7 @@ The norm of a persistence landscape is then defined as its distance from the nul
 ```{r}
 # null landscape
 pd0 <- data.frame(start = double(0L), end = double(0L))
-pl0 <- landscape(pd0, degree = 1, exact = TRUE)
+pl0 <- pl_new(pd0, degree = 1, exact = TRUE)
 pl_distance(pl1, pl0)
 pl_norm(pl1)
 ```
@@ -235,13 +235,13 @@ To illustrate, we first generate lists of landscapes for samples from two spaces
 pl1s <- replicate(6, {
   pc <- tdaunif::sample_lemniscate_gerono(60, sd = .1)
   pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
-  landscape(pd, degree = 1, xby = .01)
+  pl_new(pd, degree = 1, xby = .01)
 })
 # samples of landscapes from circles
 pl2s <- replicate(8, {
   pc <- tdaunif::sample_circle(60, sd = .1) / 2
   pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
-  landscape(pd, degree = 1, xby = .01)
+  pl_new(pd, degree = 1, xby = .01)
 })
 ```
 

@@ -11,13 +11,13 @@
 #'   **[Rcpp][Rcpp::Rcpp-package]**. See
 #'   <https://github.com/coatless-r-n-d/rcpp-modules-student> for an
 #'   introduction. New objects should be created from persistence data
-#'   (diagrams) using [landscape()].
+#'   (diagrams) using [pl_new()].
 #' @field new Constructor.
 #' @field exact Representation of the underlying PL.
 #' @field min_x Infimum (left endpoint) of the support of a discrete PL.
 #' @field max_x Supremum (right endpoint) of the support of a discrete PL.
 #' @field dx Resolution of the representation of a discrete PL.
-#' @seealso [landscape()] for the R wrapper.
+#' @seealso [pl_new()] for the R wrapper.
 #' @example inst/examples/ex-PersistenceLandscape.R
 #' @export
 NULL

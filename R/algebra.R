@@ -4,7 +4,7 @@
 #'
 #' @name algebra
 #' @include arithmetic.R
-#' @inheritParams landscape
+#' @inheritParams pl_new
 #' @inheritParams arithmetic
 #' @param ... Persistence landscapes or lists of persistence landscapes.
 #' @param x A numeric vector, optionally with an attribute `"t_vals"` whose

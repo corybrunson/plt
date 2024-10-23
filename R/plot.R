@@ -22,7 +22,7 @@
 #'   `type` or `col` will be ignored with a message.
 #' @param silent Logical; whether to silence messages.
 #' @seealso [Rcpp_PersistenceLandscape-class] for the exported C++ class and
-#'   [landscape()] for the R wrapper.
+#'   [pl_new()] for the R wrapper.
 #' @example inst/examples/ex-plot.R
 #' @export
 setMethod(

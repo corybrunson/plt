@@ -1,22 +1,22 @@
 #' @title Persistence Landscapes
 #' @description Compute persistence landscapes from persistence data.
 #'
-#' @details `landscape()` is a wrapper around the S4 class constructor
+#' @details `pl_new()` is a wrapper around the S4 class constructor
 #'   `[methods:new()]`. The `pl_*()` helper functions query a persistence
-#'   landscape as returned by `landscape()` for specific information or
-#'   manipulate its internal representation.
+#'   landscape as returned by `pl_new()` for specific information or manipulate
+#'   its internal representation.
 #'
 #'   Use `pl_is_exact()` and `pl_type()` to get a landscape's internal
 #'   representation, `pl_num_levels()` its number of levels, `pl_limits()` the
 #'   endpoints of its internal representation (excluding infinities), and
 #'   `pl_support()` the infimum and supremum of its support (the points at which
 #'   its value is nonzero).
-#'   
+#'
 #'   Use `pl_delimit()` to change the limits of a PL and `pl_discretize()` to
 #'   convert an exact landscape to a discrete one (using its internally-stored
 #'   range and resolution).
-#'
-#' @name landscape
+#' 
+#' @name pl_new
 #' @include plt-package.R
 #' @include PersistenceLandscape.R
 #' @param pd Persistence data (or diagram), stored as a 2-column matrix, as a
@@ -31,15 +31,15 @@
 #'   values of the 'Rcpp_PersistenceLandscape' object.
 #' @param xby Domain grid diameter for discrete PL; if not specified, then set
 #'   to the power of 10 that yields between 100 and 1000 intervals.
-#' @param pl A persistence landscape as returned by `landscape()`.
-#' @return `landscape()` returns a persistence landscape (an object of S4 class
+#' @param pl A persistence landscape as returned by `pl_new()`.
+#' @return `pl_new()` returns a persistence landscape (an object of S4 class
 #'   'Rcpp_PersistenceLandscape'). Other functions return summary information
 #'   about such an object.
 #' @seealso [Rcpp_PersistenceLandscape-class] for the exported C++ class.
 #' @example inst/examples/ex-landscape-exact.R
 #' @example inst/examples/ex-landscape-discrete.R
 #' @export
-landscape <- function(
+pl_new <- function(
     pd, degree = NULL,
     exact = FALSE,
     xmin = NULL, xmax = NULL, xby = NULL
@@ -53,7 +53,7 @@ landscape <- function(
     if (inherits(pd, "try-error"))
       stop("There is no `as_persistence()` method for object `pd`.")
     if (is.null(degree))
-      stop("`landscape()` requires a homological degree (`degree = <int>`).")
+      stop("`pl_new()` requires a homological degree (`degree = <int>`).")
     pd <- if (length(pd$pairs) < degree + 1L) {
       # TODO: fix this on the C++ side
       # matrix(NA_real_, nrow = 0L, ncol = 2L)
@@ -68,7 +68,7 @@ landscape <- function(
   
   # content check
   if (is.null(pd) || (nrow(pd) > 0L && all(is.na(pd)))) {
-    stop("`landscape()` requires non-missing finite persistence data.")
+    stop("`pl_new()` requires non-missing finite persistence data.")
   }
   
   # infer any missing parameters
@@ -82,14 +82,14 @@ landscape <- function(
   new(PersistenceLandscape, pd, exact, xmin, xmax, xby)
 }
 
-#' @rdname landscape
+#' @rdname pl_new
 #' @export
 pl_is_exact <- function(pl) {
   stopifnot(inherits(pl, "Rcpp_PersistenceLandscape"))
   pl$isExact()
 }
 
-#' @rdname landscape
+#' @rdname pl_new
 #' @export
 pl_type <- function(pl) {
   stopifnot(inherits(pl, "Rcpp_PersistenceLandscape"))
@@ -97,7 +97,7 @@ pl_type <- function(pl) {
   if (pl$isExact()) "exact" else "discrete"
 }
 
-#' @rdname landscape
+#' @rdname pl_new
 #' @export
 pl_num_levels <- function(pl) {
   stopifnot(inherits(pl, "Rcpp_PersistenceLandscape"))
@@ -108,7 +108,7 @@ pl_num_levels <- function(pl) {
   )
 }
 
-#' @rdname landscape
+#' @rdname pl_new
 #' @export
 pl_limits <- function(pl) {
   stopifnot(inherits(pl, "Rcpp_PersistenceLandscape"))
@@ -124,7 +124,7 @@ pl_limits <- function(pl) {
   )
 }
 
-#' @rdname landscape
+#' @rdname pl_new
 #' @export
 pl_support <- function(pl) {
   stopifnot(inherits(pl, "Rcpp_PersistenceLandscape"))
@@ -145,7 +145,7 @@ pl_support <- function(pl) {
   )
 }
 
-#' @rdname landscape
+#' @rdname pl_new
 #' @export
 pl_delimit <- function(pl, xmin = NULL, xmax = NULL, xby = NULL) {
   if (is.null(xmin)) xmin <- pl$xMin()
@@ -154,6 +154,6 @@ pl_delimit <- function(pl, xmin = NULL, xmax = NULL, xby = NULL) {
   pl$delimit(xmin, xmax, xby)
 }
 
-#' @rdname landscape
+#' @rdname pl_new
 #' @export
 pl_discretize <- function(pl) pl$discretize()
