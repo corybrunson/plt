@@ -17,7 +17,8 @@
 #' @include PersistenceLandscape.R
 #' @param pl Persistence landscapes.
 #' @param pl1,pl2 Persistence landscapes.
-#' @param pl_list A list of persistence landscapes.
+#' @param pl_list A list of persistence landscapes. A non-list object will first
+#'   be wrapped in a list.
 #' @param mult Double; a real-valued scale factor.
 #' @param level Positive integer; the level of the persistence landscape (up to)
 #'   whose moment to calculate. This value is internally decreased by `1L` to
@@ -42,6 +43,7 @@ pl_add <- function(pl1, pl2) {
 #' @rdname arithmetic
 #' @export
 pl_sum <- function(pl_list) {
+  if (! is.list(pl_list)) return(pl_sum(list(pl_list)))
   PLsum(pl_list)
 }
 
@@ -60,18 +62,21 @@ pl_abs <- function(pl) {
 #' @rdname arithmetic
 #' @export
 pl_diff <- function(pl_list) {
+  if (! is.list(pl_list)) return(pl_diff(list(pl_list)))
   PLdiff(pl_list)
 }
 
 #' @rdname arithmetic
 #' @export
 pl_mean <- function(pl_list) {
+  if (! is.list(pl_list)) return(pl_mean(list(pl_list)))
   PLmean(pl_list)
 }
 
 #' @rdname arithmetic
 #' @export
 pl_var <- function(pl_list, p = 2) {
+  if (! is.list(pl_list)) return(pl_var(list(pl_list)))
   if (length(pl_list) <= 1L) return(NA_real_)
   p <- ensure_p(p)
   if (p == Inf) p <- 0
@@ -81,6 +86,7 @@ pl_var <- function(pl_list, p = 2) {
 #' @rdname arithmetic
 #' @export
 pl_sd <- function(pl_list, p = 2) {
+  if (! is.list(pl_list)) return(pl_sd(list(pl_list)))
   if (length(pl_list) <= 1L) return(NA_real_)
   p <- ensure_p(p)
   if (p == Inf) p <- 0

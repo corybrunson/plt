@@ -34,6 +34,7 @@ pl_distance <- function(pl1, pl2, p = 2) {
 #' @rdname analysis
 #' @export
 pl_dist <- function(pl_list, p = 2) {
+  if (! is.list(pl_list)) return(pl_dist(list(pl_list)))
   p <- ensure_p(p)
   PLdist(pl_list, p)
 }

@@ -58,7 +58,8 @@ pl_vmoment(pl, p = 1L, center = 0, level = pl_num_levels(pl))
 \arguments{
 \item{pl1, pl2}{Persistence landscapes.}
 
-\item{pl_list}{A list of persistence landscapes.}
+\item{pl_list}{A list of persistence landscapes. A non-list object will first
+be wrapped in a list.}
 
 \item{pl}{Persistence landscapes.}
 

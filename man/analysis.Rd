@@ -29,7 +29,8 @@ pl_indicator_form(pl, supports, r = 0, p = 1)
 
 \item{pl1, pl2}{Persistence landscapes.}
 
-\item{pl_list}{A list of persistence landscapes.}
+\item{pl_list}{A list of persistence landscapes. A non-list object will first
+be wrapped in a list.}
 
 \item{supports}{List of support intervals for landscape levels.}
 

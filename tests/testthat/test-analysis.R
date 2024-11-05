@@ -3,6 +3,11 @@
 pd <- cbind(start = 0, end = 2)
 pl <- pl_new(pd, exact = TRUE)
 
+test_that("singletons are handled as lists", {
+  # dist
+  expect_no_error(pl_dist(pl))
+})
+
 test_that("norm agrees with integral", {
   # 1-norm
   expect_equal(pl_integrate(pl), pl_norm(pl, p = 1))
