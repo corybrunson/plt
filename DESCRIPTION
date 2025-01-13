@@ -46,6 +46,7 @@ Suggests:
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
+VignetteBuilder: knitr
 Collate: 
     'PersistenceLandscape.R'
     'Ops.R'
@@ -60,4 +61,3 @@ Collate:
     'plot.R'
     'show.R'
     'utils.R'
-VignetteBuilder: knitr
