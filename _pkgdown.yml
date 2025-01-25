@@ -11,7 +11,7 @@ reference:
   desc: An S4 class for persistence landscapes exposed from C++
   contents:
   - '`PersistenceLandscape`'
-  - '`landscape`'
+  - '`pl_new`'
   - '`show`'
   - '`plot`'
 - title: Operations on landscapes

@@ -106,7 +106,6 @@ persistence data using persistence landscapes. See Section 3 of Bubenik
 (2015).
 }
 \examples{
-
 # two sets of landscapes from similar but distinctive point clouds
 set.seed(711018L)
 circlescapes <- replicate(

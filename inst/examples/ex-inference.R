@@ -1,4 +1,3 @@
-
 # two sets of landscapes from similar but distinctive point clouds
 set.seed(711018L)
 circlescapes <- replicate(
