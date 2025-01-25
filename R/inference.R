@@ -56,37 +56,43 @@ pl_z_test <- function(
     xstat <- vapply(x, pl_integrate, 0, p = p)
     ystat <- vapply(y, pl_integrate, 0, p = p)
   } else {
-    xstat <- lapply(x, pl_indicator_form, supports = supports, r = r, p = p)
-    ystat <- lapply(y, pl_indicator_form, supports = supports, r = r, p = p)
+    xstat <- vapply(x, pl_indicator_form, 0, supports = supports, r = r, p = p)
+    ystat <- vapply(y, pl_indicator_form, 0, supports = supports, r = r, p = p)
   }
   # calculate z-statistic
   xbar <- mean(xstat)
   ybar <- mean(ystat)
   xvar <- stats::var(xstat)
   yvar <- stats::var(ystat)
-  z <- (xbar - ybar) / sqrt(xvar + yvar)
+  est <- xbar - ybar
+  stderr <- sqrt(xvar + yvar)
+  zstat <- est / stderr
+  # calculate p-value and confidence interval
   # REVIEW: Ensure consistency across test parameters.
-  # compute p-value
   alternative <- match.arg(alternative, c("two.sided", "less", "greater"))
-  if (alternative == "two-sided") {
-    pval <- stats::pnorm(abs(z), lower.tail = FALSE) * 2
+  if (alternative == "two.sided") {
+    pval <- 2 * stats::pnorm(abs(zstat), lower.tail = FALSE)
+    cint <- zstat + c(-1, 1) * stats::qnorm(1 - (1 - conf.level) / 2)
+  } else if (alternative == "less") {
+    pval <- stats::pnorm(zstat, lower.tail = TRUE)
+    cint <- c(-Inf, zstat + stats::qnorm(conf.level))
   } else {
-    pval <- stats::pnorm(z, lower.tail = alternative == "less")
+    pval <- stats::pnorm(zstat, lower.tail = FALSE)
+    cint <- c(zstat - stats::qnorm(conf.level), Inf)
   }
-  # compute confidence interval
-  conf <- xbar - ybar + c(-1, 1) * stats::qnorm(conf.level) * sqrt(xvar + yvar)
-  attr(conf, "conf.level") <- conf.level
+  cint <- cint * stderr
+  attr(cint, "conf.level") <- conf.level
   # format output
   res <- list(
-    statistic = c(z = z),
+    statistic = c(z = zstat),
     parameter = c(df = length(x) + length(y) - 2L),
     p.value = pval,
-    estimate = c(`mean of x` = xbar, `mean of y` = ybar),
+    estimate = c(`mean integral of x` = xbar, `mean integral of y` = ybar),
     null.value = c(`difference in means` = 0),
     # stderr = c(),
     alternative = alternative,
     method = "z-test",
-    conf.int = conf
+    conf.int = cint
   )
   class(res) <- "htest"
   return(res)
@@ -145,7 +151,7 @@ pl_perm_test <- function(x, y, p = 1, complete = FALSE, max_iter = 1000L) {
     # statistic = c(),
     # parameter = c(df = df),
     p.value = pval,
-    # conf.int = conf,
+    # conf.int = cint,
     estimate = c(`distance between mean landscapes` = xydist),
     null.value = c(`distance between mean landscapes` = 0),
     # stderr = c(),
