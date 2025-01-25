@@ -216,10 +216,12 @@ pl_distance(pl1 * 2, pl2, p = Inf)
 ```
 
 The norm of a persistence landscape is then defined as its distance from the null landscape that is constant at zero.
+(The following code chunk is not evaluated, pending a debug of `pl_new()` when fed an empty matrix.)
 
-```{r}
+```{r, eval=FALSE}
 # null landscape
 pd0 <- data.frame(start = double(0L), end = double(0L))
+# FIXME: Enable landscape construction from empty persistence data.
 pl0 <- pl_new(pd0, degree = 1, exact = TRUE)
 pl_distance(pl1, pl0)
 pl_norm(pl1)

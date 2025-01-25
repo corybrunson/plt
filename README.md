@@ -57,14 +57,14 @@ and to compute persistence diagrams from data:
 **plt** introduces the ‘Rcpp_PersistenceLandscape’ S4 class, which is
 exposed using **Rcpp** from the underlying ‘PersistenceLandscape’ C++
 class. Instances of this class can be created using `new()` but the
-recommended way is to use `landscape()`. This function accepts either a
+recommended way is to use `pl_new()`. This function accepts either a
 single matrix of persistence data or a specially formatted list with the
 class `'persistence_diagram"`. The `$pairs` entry of the list is itself
 a list, of a 2-column matrix of persistence pairs for each homological
 degree from 0 (`$pairs[[1]]`) to the maximum degree calculated. The
 generic converter `as_persistence()` includes methods for outputs from
 `ripserr::vietoris_rips()` and from `TDA::*Diag()`; it operates under
-the hood of `landscape()`, but we invoke it explicitly here for
+the hood of `pl_new()`, but we invoke it explicitly here for
 illustration.
 
 ### Calculation
@@ -82,8 +82,6 @@ plot(pc, asp = 1, pch = 16L)
 
 ``` r
 pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
 print(pd)
 #> PHom object containing persistence data for 63 features.
 #> 
@@ -125,7 +123,7 @@ This allows us to compute a persistence landscape—in this case, for the
 be cost-prohibitive for larger persistence data, and print its summary:
 
 ``` r
-pl1 <- landscape(pd, degree = 1, exact = TRUE)
+pl1 <- pl_new(pd, degree = 1, exact = TRUE)
 print(pl1)
 #> Persistence landscape (exact format) of 2 levels over (0,0.636)
 summary(pl1)
@@ -191,8 +189,8 @@ pairs along the third dimension.
 
 ``` r
 b_ran <- pl_support(pl1)
-pl1d <- landscape(pd, degree = 1,
-                  xmin = b_ran[[1L]], xmax = b_ran[[2L]], xby = 0.05)
+pl1d <- pl_new(pd, degree = 1,
+               xmin = b_ran[[1L]], xmax = b_ran[[2L]], xby = 0.05)
 print(dim(pl1d$getInternal()))
 #> [1]  4 10  2
 print(pl1d$getInternal())
@@ -329,9 +327,7 @@ To illustrate these features, we first generate a companion data set:
 set.seed(772888L)
 pc2 <- tdaunif::sample_circle(60, sd = .1) / 2
 pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
-#> Warning in vietoris_rips.matrix(pc2, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-pl2 <- landscape(pd2, degree = 1, exact = TRUE)
+pl2 <- pl_new(pd2, degree = 1, exact = TRUE)
 pl2 <- pl_delimit(pl2, xmin = 0, xmax = 2, xby = 0.1)
 pl2_ <- pl_discretize(pl2)
 ```
@@ -414,16 +410,17 @@ pl_distance(pl1 * 2, pl2, p = Inf)
 ```
 
 The norm of a persistence landscape is then defined as its distance from
-the null landscape that is constant at zero.
+the null landscape that is constant at zero. (The following code chunk
+is not evaluated, pending a debug of `pl_new()` when fed an empty
+matrix.)
 
 ``` r
 # null landscape
 pd0 <- data.frame(start = double(0L), end = double(0L))
-pl0 <- landscape(pd0, degree = 1, exact = TRUE)
+# FIXME: Enable landscape construction from empty persistence data.
+pl0 <- pl_new(pd0, degree = 1, exact = TRUE)
 pl_distance(pl1, pl0)
-#> [1] 0.05192161
 pl_norm(pl1)
-#> [1] 0.05192161
 ```
 
 ### Statistical Analysis
@@ -437,54 +434,14 @@ samples from two spaces:
 pl1s <- replicate(6, {
   pc <- tdaunif::sample_lemniscate_gerono(60, sd = .1)
   pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
-  landscape(pd, degree = 1, xby = .01)
+  pl_new(pd, degree = 1, xby = .01)
 })
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
 # samples of landscapes from circles
 pl2s <- replicate(8, {
   pc <- tdaunif::sample_circle(60, sd = .1) / 2
   pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
-  landscape(pd, degree = 1, xby = .01)
+  pl_new(pd, degree = 1, xby = .01)
 })
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
-
-#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
-#> parameter has been deprecated; use `max_dim` instead.
 ```
 
 An inspection of the mean landscapes makes clear that they are distinct:
@@ -514,13 +471,13 @@ pl_z_test(pl1s, pl2s)
 #>  z-test
 #> 
 #> data:  
-#> z = -2.3584, df = 12, p-value = 0.9908
+#> z = -2.3584, df = 12, p-value = 0.01835
 #> alternative hypothesis: true difference in means is not equal to 0
 #> 95 percent confidence interval:
-#>  -0.06283511 -0.01120004
+#>  -0.067781063 -0.006254089
 #> sample estimates:
-#>  mean of x  mean of y 
-#> 0.02664640 0.06366397
+#> mean integral of x mean integral of y 
+#>         0.02664640         0.06366397
 # permutation test of pairwise distances between landscapes
 pl_perm_test(pl1s, pl2s)
 #> 
