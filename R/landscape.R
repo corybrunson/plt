@@ -19,7 +19,7 @@
 #' @name pl_new
 #' @include plt-package.R
 #' @include PersistenceLandscape.R
-#' @param pd Persistence data (or diagram), stored as a 2-column matrix, as a
+#' @param x Persistence data (or diagram), stored as a 2-column matrix, as a
 #'   '[persistence]' object, or in a format coercible to 'persistence'.
 #' @param degree Non-negative integer; if input is a persistence diagram object,
 #'   then the dimension for which to compute a landscape. (For degree \eqn{d},
@@ -40,46 +40,69 @@
 #' @example inst/examples/ex-landscape-discrete.R
 #' @export
 pl_new <- function(
-    pd, degree = NULL,
-    exact = FALSE,
-    xmin = NULL, xmax = NULL, xby = NULL
+    x, degree = NULL,
+    exact = FALSE, xmin = NULL, xmax = NULL, xby = NULL
+) UseMethod("pl_new")
+
+#' @export
+pl_new.matrix <- function(
+    x, degree = NULL,
+    exact = FALSE, xmin = NULL, xmax = NULL, xby = NULL
 ) {
   
-  # birth-death pairs matrix `diagram`
-  if (is.atomic(pd)) {
-    stopifnot(ncol(pd) >= 2L, is.numeric(pd))
-  } else {
-    pd <- try(as_persistence(pd))
-    if (inherits(pd, "try-error"))
-      stop("There is no `as_persistence()` method for object `pd`.")
-    if (is.null(degree))
-      stop("`pl_new()` requires a homological degree (`degree = <int>`).")
-    pd <- if (length(pd$pairs) < degree + 1L) {
-      # TODO: fix this on the C++ side
-      # matrix(NA_real_, nrow = 0L, ncol = 2L)
-      matrix(0, nrow = 1L, ncol = 2L)
-    } else {
-      pd$pairs[[degree + 1L]]
-    }
+  # check format
+  if (! is.numeric(x) || ncol(x) < 2L || ncol(x) > 3L)
+    stop("`x` must be a 2- or 3-column numeric matrix.")
+  if (ncol(x) == 2L && ! is.null(degree)) {
+    warning("`x` has only 2 columns; `degree` will be ignored.")
   }
+  if (ncol(x) == 3L && is.null(degree))
+    stop("Please specify a homological degree.")
   
   # remove infinities
-  pd <- pd[! apply(pd, 1L, \(f) any(is.infinite(f))), , drop = FALSE]
+  x <- x[! apply(x, 1L, \(f) any(is.infinite(f))), , drop = FALSE]
   
-  # content check
-  if (is.null(pd) || (nrow(pd) > 0L && all(is.na(pd)))) {
+  # check content
+  if (is.null(x) || (nrow(x) > 0L && all(is.na(x))))
     stop("`pl_new()` requires non-missing finite persistence data.")
-  }
   
   # infer any missing parameters
   xmin <- xmin %||% 0
-  xmax <- xmax %||% if (nrow(pd) == 0L) 1 else max(pd)
+  xmax <- xmax %||% if (nrow(x) == 0L) 1 else max(x)
   # grid of between 100 and 1000 intervals of length a power of 10
   # TODO: Make this a non-default global option.
   xby <- xby %||% (10 ^ (floor(log(xmax - xmin, 10)) - 2L))
   
   # construct persistence landscape
-  new(PersistenceLandscape, pd, exact, xmin, xmax, xby)
+  new(PersistenceLandscape, x, exact, xmin, xmax, xby)
+}
+
+#' @export
+pl_new.persistence <- function(x, degree = NULL, ...) {
+  
+  if (is.null(degree))
+    stop("Please specify a homological degree.")
+  
+  x <- if (length(x$pairs) < degree + 1L) {
+    # TODO: fix this on the C++ side
+    # matrix(NA_real_, nrow = 0L, ncol = 2L)
+    matrix(0, nrow = 1L, ncol = 2L)
+  } else {
+    x$pairs[[degree + 1L]]
+  }
+  
+  pl_new.matrix(x, degree = NULL, ...)
+}
+
+#' @export
+pl_new.default <- function(x, ...) {
+  
+  x <- try(as_persistence(x))
+  if (inherits(x, "try-error")) {
+    stop("No `as_persistence()` method for class '", class(x)[[1L]], "'.")
+  }
+  
+  pl_new.persistence(x, ...)
 }
 
 #' @rdname pl_new

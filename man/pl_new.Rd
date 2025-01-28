@@ -11,7 +11,7 @@
 \alias{pl_discretize}
 \title{Persistence Landscapes}
 \usage{
-pl_new(pd, degree = NULL, exact = FALSE, xmin = NULL, xmax = NULL, xby = NULL)
+pl_new(x, degree = NULL, exact = FALSE, xmin = NULL, xmax = NULL, xby = NULL)
 
 pl_is_exact(pl)
 
@@ -28,7 +28,7 @@ pl_delimit(pl, xmin = NULL, xmax = NULL, xby = NULL)
 pl_discretize(pl)
 }
 \arguments{
-\item{pd}{Persistence data (or diagram), stored as a 2-column matrix, as a
+\item{x}{Persistence data (or diagram), stored as a 2-column matrix, as a
 '\link{persistence}' object, or in a format coercible to 'persistence'.}
 
 \item{degree}{Non-negative integer; if input is a persistence diagram object,
