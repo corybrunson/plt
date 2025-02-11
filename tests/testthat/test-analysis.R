@@ -15,7 +15,8 @@ test_that("norm agrees with integral", {
   expect_equal(pl_integrate(pl, p = 2) ^ (1/2), pl_norm(pl, p = 2))
   # 3-norm
   expect_equal(pl_integrate(pl, p = 3) ^ (1/3), pl_norm(pl, p = 3))
-  # inf-norm?
+  # inf-norm
+  expect_equal(pl_vmax(pl_abs(pl)), pl_norm(pl, p = Inf))
 })
 
 # tinier example
@@ -29,7 +30,8 @@ test_that("distance agrees with integral of difference", {
   expect_equal(pl_integrate(pl - pl2, p = 2)^(1/2), pl_distance(pl, pl2, p = 2))
   # 3-norm
   expect_equal(pl_integrate(pl - pl2, p = 3)^(1/3), pl_distance(pl, pl2, p = 3))
-  # inf-norm?
+  # inf-norm
+  expect_equal(pl_vmax(pl_abs(pl - pl2)), pl_distance(pl, pl2, p = Inf))
 })
 
 # TODO: example with non-nested levels
