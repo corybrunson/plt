@@ -63,6 +63,8 @@ print(pl)
 
 dim(pl$discretize()$getInternal())
 length(as.vector(pl))
+dim(as.matrix(pl))
+dim(as.matrix(pl, by_level = TRUE))
 as.data.frame(pl)
 
 pl2 <- pl$scale(2)

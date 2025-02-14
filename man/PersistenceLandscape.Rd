@@ -4,6 +4,7 @@
 \alias{summary.Rcpp_PersistenceLandscape}
 \alias{print.summary.Rcpp_PersistenceLandscape}
 \alias{as.vector.Rcpp_PersistenceLandscape}
+\alias{as.matrix.Rcpp_PersistenceLandscape}
 \alias{as.data.frame.Rcpp_PersistenceLandscape}
 \alias{PersistenceLandscape}
 \alias{Rcpp_PersistenceLandscape-class}
@@ -14,6 +15,8 @@
 \method{print}{summary.Rcpp_PersistenceLandscape}(x, digits = max(1L, getOption("digits") - 3L), ...)
 
 \method{as.vector}{Rcpp_PersistenceLandscape}(x, mode = "any")
+
+\method{as.matrix}{Rcpp_PersistenceLandscape}(x, by_level = FALSE, ...)
 
 \method{as.data.frame}{Rcpp_PersistenceLandscape}(x, row.names = NULL, optional = FALSE, ...)
 }
@@ -38,6 +41,9 @@
     \code{\link[base]{typeof}}) for \code{mode}, and when mode is not
     \code{"any"}, \code{is.vector(x, mode)} is almost the same as
     \code{typeof(x) == mode}.}
+
+\item{by_level}{Logical; whether the levels are encoded as rows (the default)
+or columns.}
 
 \item{row.names}{\code{NULL} or a character vector giving the row
     names for the data frame.  Missing values are not allowed.}
@@ -125,6 +131,8 @@ print(pl)
 
 dim(pl$discretize()$getInternal())
 length(as.vector(pl))
+dim(as.matrix(pl))
+dim(as.matrix(pl, by_level = TRUE))
 as.data.frame(pl)
 
 pl2 <- pl$scale(2)

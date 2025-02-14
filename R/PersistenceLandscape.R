@@ -55,6 +55,21 @@ as.vector.Rcpp_PersistenceLandscape <- function(x, mode = "any") {
 }
 
 #' @rdname PersistenceLandscape
+#' @inheritParams base::as.vector
+#' @param by_level Logical; whether the levels are encoded as rows (the default)
+#'   or columns.
+#' @export
+as.matrix.Rcpp_PersistenceLandscape <- function(x, by_level = FALSE, ...) {
+  # get discrete representation for consistent abscissa values
+  internal <- pl_discretize(x)$getInternal()
+  
+  # format and return matrix
+  res <- array(internal[, , 2L, drop = TRUE], dim = dim(internal)[c(1L, 2L)])
+  if (by_level) res <- t(res)
+  res
+}
+
+#' @rdname PersistenceLandscape
 #' @inheritParams base::as.data.frame
 #' @export
 as.data.frame.Rcpp_PersistenceLandscape <- function(

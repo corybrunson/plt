@@ -43,18 +43,22 @@ pl_to_vector <- function(pl, num_levels = pl_num_levels(pl)) {
   if (num_levels > nrow(x))
     x <- rbind(x, matrix(0, nrow = num_levels - nrow(x), ncol = ncol(x)))
   # concatenate levels
-  as.vector(t(x), mode = "any")
+  pl_vec <- as.vector(t(x), mode = "any")
+  # assign grid as attribute
+  attr(pl_vec, "t_vals") <- pl_t(pl)
+  
+  return(pl_vec)
 }
 
 #' @rdname algebra
 #' @export
-pl_vectorize <- function(...) {
+pl_to_matrix <- function(...) {
   
   # aggregate arguments into a single list of PLs
   args <- list(...)
   args <- unlist(args, recursive = TRUE)
   if (! all(vapply(args, inherits, FALSE, what = "Rcpp_PersistenceLandscape")))
-    stop("`pl_vectorize()` accepts only PLs and lists of PLs.", call. = FALSE)
+    stop("`pl_to_matrix()` accepts only PLs and lists of PLs.", call. = FALSE)
   
   # unique resolution of discrete PLs or else first resolution of exact PLs
   xbys <- vapply(args, \(x) x$xBy(), 0)
@@ -83,7 +87,7 @@ pl_vectorize <- function(...) {
 
 #' @rdname algebra
 #' @export
-pl_devectorize <- function(x, t_vals = NULL, drop_levels = FALSE) {
+pl_from_vector <- function(x, t_vals = NULL, drop_levels = FALSE) {
   
   # run checks
   if (is.null(t_vals) && is.null(attr(x, "t_vals")))
@@ -92,13 +96,6 @@ pl_devectorize <- function(x, t_vals = NULL, drop_levels = FALSE) {
     warning("`t_vals` was provided, so the `x` attribute will be ignored.")
   t_vals <- t_vals %||% attr(x, "t_vals")
   attr(x, "t_vals") <- NULL
-  
-  # recurse a matrix to vectors
-  if (is.matrix(x) && nrow(x) > 1L) {
-    vs <- lapply(seq(nrow(x)), \(i) x[i, , drop = TRUE])
-    return(lapply(vs, pl_devectorize,
-                  t_vals = t_vals, drop_levels = drop_levels))
-  }
   
   # check regularity of `t_vals` up to `epsi`
   stopifnot(almostUnique(diff(t_vals)))
@@ -115,4 +112,24 @@ pl_devectorize <- function(x, t_vals = NULL, drop_levels = FALSE) {
   
   # construct persistence landscape
   new(PersistenceLandscape, t_vals, x)
+}
+
+#' @rdname algebra
+#' @export
+pl_from_matrix <- function(x, t_vals = NULL, drop_levels = FALSE) {
+  
+  # run checks
+  if (! is.matrix(x)) x <- t(as.matrix(x))
+  if (is.null(t_vals) && is.null(attr(x, "t_vals")))
+    stop("'t_vals' must be an attribute of `x` or provided separately.")
+  if (! is.null(t_vals) && ! is.null(attr(x, "t_vals")))
+    warning("`t_vals` was provided, so the `x` attribute will be ignored.")
+  t_vals <- t_vals %||% attr(x, "t_vals")
+  attr(x, "t_vals") <- NULL
+  
+  # apply `pl_from_vector()` rowwise
+  vs <- lapply(seq(nrow(x)), \(i) x[i, , drop = TRUE])
+  res <- lapply(vs, pl_from_vector, t_vals = t_vals, drop_levels = drop_levels)
+  if (nrow(x) == 1L) res <- res[[1L]]
+  res
 }
