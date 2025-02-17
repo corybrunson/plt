@@ -1,0 +1,421 @@
+---
+title: "Exploratory and Predictive Analysis"
+author: "Aidan Bryant, James Golabek, Jason Cory Brunson, Peter Bubenik, Johnathan Bush, Iryna Hartsock"
+date: "`r Sys.Date()`"
+output: html_document
+runtime: shiny
+
+---
+
+```{r setup, include=FALSE,warning=FALSE,message=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(alphahull)
+library(shiny)
+```
+
+In this vignette we will show how {plt} supports computation of persistence landscapes[^1] and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing as we will see. 
+
+# Basic use of TDA in Machine Learning
+
+**Topological data analysis** (TDA)[^2] involves the use of algebraic topology to analyze data. The goal is to measure global topological features. A typical procedure is to: 
+
+1. Represent a sample of data as a point cloud.
+2. Construct a filtered simplicial complex on the point cloud.
+3. Obtain the persistence module by taking the simplicial homology of the filtration.
+4. Visualize/vectorize the persistence module
+5. Apply hypothesis tests, machine learning tools
+
+This vignette will include dimension reduction and supervised classification as part of the applications of TDA.
+
+## Interoperability
+
+{plt} is designed to be used with other TDA packages such as those loaded below. 
+
+The [{tdaunif}](https://github.com/tdaverse/tdaunif) package provides tools to take uniform random samples from simple manifolds and is commonly used for testing TDA tools.
+The [{TDA}](https://cran.r-project.org/package=TDA) package contains various tools for TDA, including functions to compute persistence data from point clouds and distance matrices. We use the `alphaComplexDiag()` function to obtain the birth and death values of the alpha complex persistence module.
+
+```{r,warning=FALSE,message=FALSE}
+library(tdaunif)
+library(TDA)
+library(plt)
+library(e1071)
+```
+
+# Gather a point set
+
+To begin, we will create a toy point cloud on which we will illustrate how to use {plt}. 
+
+Below we sample $60$ points from a toy point cloud sampler for a figure eight (lemniscate) in $\mathbb{R}^2$ with noise. Let us call them $X = \{x_1,...,x_{60} \}$, and observe that the dominant features of the figure eight, the $1$-dimensional holes, are visible when we plot the points. 
+
+```{r,fig.align = 'center'}
+set.seed(120246L)
+X <-  sample_lemniscate_gerono(60, sd = 0.05)
+plot(X, asp = 1, pch = 16L)
+```
+
+# Adapting Point Data to Persistence Data
+
+Now, from our point set we would like to generate more topologically informative data. To do so, we construct a **simplicial complex** (a set of **simplices**), $K$, using our points. Recall that a *0-simplex* is a single point, a *1-simplex* is an edge or line segment, a *2-simplex* is a triangle, and a *3-simplex* is a tetrahedron. We will utilize the **alpha complex**, however there exists others that have their own advantages and disadvantages. We use the alpha complex here as it captures the underlying structure of the data accurately and is more computationally efficient then other methods. By applying the alpha complex with various radii (scale) we create a **filtered simplicial complex** or **filtration**, a nested sequence of simplicial complexes:
+$$
+K_0 \subset K_1 \subset K_2 \subset \cdots\subset K_n,
+$$
+where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. In the below interactive tool, we visualize the alpha complex filtration built upon $X$. 
+
+## Generate a Simplicial Complex
+
+Use the *arrows* (< or >) or the *slider* to change the filtration parameter (radius of the balls) of $\alpha$. 
+
+```{r,echo = FALSE,eval = TRUE}
+ui <- fluidPage(
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput("alpha", "Alpha value:", min = 0, max = .5, value = 0.025, step = 0.025),
+      actionButton("left", "<"),
+      actionButton("right", ">")
+    ),
+    mainPanel(
+      plotOutput("alphaPlot")
+    )
+  )
+)
+server <- function(input, output, session) {
+  observeEvent(input$left, {
+    new_alpha <- max(input$alpha - 0.025, 0)
+    updateSliderInput(session, "alpha", value = new_alpha)
+  })
+  observeEvent(input$right, {
+    new_alpha <- min(input$alpha + 0.025, .5)
+    updateSliderInput(session, "alpha", value = new_alpha)
+  })
+  output$alphaPlot <- renderPlot({
+    alpha_shape <- ashape(X, alpha = input$alpha)
+    plot(alpha_shape, col = c(1, 4), lty = c(1, 1), main = paste("Alpha Complex for alpha =", input$alpha))
+    points(X, col = "red", pch = 16)
+  })
+}
+shinyApp(ui = ui, server = server)
+```
+
+
+The filtration provides a mathematical structure for analyzing the global topological features of our point cloud $X$. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
+$$
+H_k(K_0) \rightarrow H_k(K_1) \rightarrow H_k(K_2) \rightarrow \cdots  \rightarrow H_k(K_n).
+$$
+
+The persistence module tracks the *lifetime* of features throughout the *time span* of the filtration. The birth value $b$ of a feature is when it first appears in the persistence module. The death value $d$ of a feature is when it disappears. A topological feature with a long lifetime $d-b$ is called a *persistent* feature.
+
+```{r}
+pd <- alphaComplexDiag(X, maxdimension = 1)$diagram
+
+# birth and death values have been squared, so take the square root
+pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
+```
+
+The `pd` object stores the birth and death values for the 0 and 1 dimension features across the alpha filtration.
+
+```{r}
+head(pd)
+```
+
+## Persistence Data Visulization
+
+<!--
+### Persistence Barcode
+A persistence barcode is a topological summary that visualizes the lifetimes of topological features. The x-axis represents the time span of the filtration. The below barcode shows that two features in homology dimension-one persist longer than the other features in dimension one. These two persistent features correspond to the two holes in $X$.
+
+```{r}
+plot(pd, diagLim = c(0, 0.5), barcode = TRUE)
+legend(0.3, 25, c('Homology in degree 0','Homology in degree 1'),
+col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2)
+```
+-->
+
+### Persistence Diagram
+
+
+The persistence diagram is topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. Note that for any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $b=d$ line. Points close to or on this line are non-persistent features because they die shortly or immediately after being born. In the persistence diagram below, we have three features that stand out. Two of these being $1$-dimensional features distinguished by their distance from the line $b = d$. These persistence features represent the two circles of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
+
+
+```{r,fig.align = 'center'}
+plot(pd, asp = 1, diagLim = c(0,.75))
+legend(0.6, 0.4, c('Homology in degree 0','Homology in degree 1'),
+col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2, bty = "n")
+```
+
+##  Landscape Transformation
+
+Now that we have persistence data, we can construct persistence landscapes, which are useful for analyzing topological features in a form suited for statistical methods. Persistence landscapes are built by transforming persistence diagrams into a sequence of tent functions that capture the lifetime of topological features.
+
+### Tent Functions
+Each point in the persistence diagram corresponds to a topological feature with a birth and death time. We can represent these features using tent functions:
+
+ - The base of the tent spans from the feature's birth to its death.
+- The peak of the tent is located at the midpoint between birth and death, representing the time when the feature is most prominent (or *persistent*).
+- The height of the tent at any point reflects how long the feature persists around that time.
+
+These tent functions are given by:
+$$
+f_{(b_i, d_i)}(x) = 
+\begin{cases} 
+x - b_i & \text{if } b_i < x \leq \frac{b_i + d_i}{2} \\ 
+-x + d_i & \text{if } \frac{b_i + d_i}{2} < x < d_i \\ 
+0 & \text{otherwise} 
+\end{cases}
+$$
+
+### Levels
+To create the persistence landscape, we superimpose these tent functions. At each point on the timeline, the height of the landscape is given by the level of these tents—the largest height at that point. The level provides a layered structure:
+
+- $\lambda_1(t)$ is the level that takes the value of the tallest tent at $t$
+- $\lambda_2(t)$ is the level that takes the value of the second tallest tent at $t$, and so on for the remaining less prominent features.
+- Generically, $\lambda_k(t)$ = k-th largest value of $\{f_{(b_i, d_i)}(t) | (b_i, d_i) \in PD\}$ at each $t$ where $PD$ is the persistence diagram.
+This superimposition of tents, creating an level of functions, allows us to visualize and analyze the relative significance of topological features. The collection of our levels makes our landscape.
+
+
+
+These levels help develop a geometric understanding of persistence landscapes and should be helpful for when we think about the analysis being done. 
+
+
+To begin working with the persistence landscape framework, {plt} methods demands that our data is in a particular format, `as_persistence()` ensures this, if your data is in one of the recognized formats/classes (see [help file](https://corybrunson.github.io/plt/reference/as_persistence.html)).
+
+This function in {plt} has multiple methods to convert persistence data to a format required for other {plt} functions. It can be applied to a 3 column matrix (or an object coercible to one) with columns dimension/degree, start/birth, and end/death or it can convert outputs from persistence data producing functions like `alphaComplexDiag()`.
+
+Note that `as_persistence()` is called in `pl_new()`.
+
+```{r}
+pd <- as_persistence(pd)
+print(pd)
+```
+
+The `pl_new()` function takes in a single matrix of persistence data or a formatted list with the class `persistence_diagram`, and computes the persistence landscape. Below, we compute the landscape for the $1$-dimensional topological features.
+
+Often users will find it useful to only look at one dimension of the data whether for simplification or if it's a particular dimension of interest.
+Below, we filter for only degree-one topological features and the entire domain of the landscape by setting `xmin` and `xmax` to the infimum and supremum, respectively. You can select what window of filtration you want the landscape to be of by changing these parameters. The window must contain the support (set of points for which the persistence landscape is non-zero) of the landscape.
+
+```{r}
+pl1d <- pl_new(pd, degree = 1, xby = 0.025)
+summary(pl1d)
+```
+
+The function for the "tents" we gave earlier performs a transformation that puts each feature in terms of "midlife" $\frac{b+d}{2}$ and "halflife" $\frac{d-b}{2}$, making the graphical representation easier to visually understand. 
+Note that this is a discrete persistence landscape so it is generated by sampling a number of points and interpolating to create a continuous function.
+
+```{r,fig.align = 'center'}
+n_levs <- max(pl_num_levels(pl1d))
+plot(pl1d, main = "Persistence Landscape", n_levels = n_levs, asp = 1)
+```
+
+# Statistical Inference with Persistence Landscapes
+
+### Mean Persistence Landscape
+
+A convenient way of thinking about the mean persistence landscape lies in considering our levels. To define a mean on landscapes, we take the pointwise mean of each level. Hence, the mean $i$th level is given by
+$$\bar \lambda_i(x) = \frac{1}{n}\sum_{j=1}^{z}\lambda_i ^j(x)$$
+where $j$ is the index of the landscape and $z$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise 6 times from the lemniscate above, compute the persistence landscape for each sample, and then compute the mean persistence landscape.
+
+```{r,fig.align = 'center'}
+pl_list_1 <- c()
+for (i in seq(6)) {
+  pc <- sample_lemniscate_gerono(60, sd = 0.05)
+  pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
+  pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
+  pd <- as_persistence(pd)
+  pl <- pl_new(pd, degree = 1, xby = .01)
+  pl_list_1 <- c(pl_list_1, pl)
+}
+plot(pl_mean(pl_list_1))
+```
+
+### Hypothesis Testing
+
+We will now discuss how to perform hypothesis tests on persistence landscapes. In statistics, we use hypothesis tests to weigh the evidence to determine whether two samples came from the same distribution. A hypothesis test requires a calculated test statistic from sample and an understanding of the distribution of the test statistic. In TDA, we use persistence landscapes to derive our test statistics. Our hypothesis testing methods provide the result as a list of class `htest` which contains useful information like the estimated distance between the mean landscapes, the test statistic, the p-value, and more.
+
+For our next example we show how to make such a distinction. First, we create a counterfeit lemniscate sampler which may be similar enough to deceive quality control. The distinction in this counterfeit lemniscate is that it has different-sized lobes, while the original lemniscate has same-sized lobes. In the code below, the non-symmetric lemniscate is sampled with noise using two uniform circles (of different radii) that are 
+
+```{r,fig.align = 'center'}
+set.seed(123)
+sample_nonsym_lemniscate <- function() {
+  circle1 <- circleUnif(n = 25, r = .50)
+  circle2 <- circleUnif(n = 35, r = .75)
+  
+  circle1 <- cbind(circle1[, 1] + 1, circle1[, 2] + 1)
+  circle2 <- cbind(circle2[, 1] + 2.25, circle2[, 2] + 1)
+  
+  circle1 <- add_noise(circle1, sd = 0.05)
+  circle2 <- add_noise(circle2, sd = 0.05)
+  Y <- rbind(circle1, circle2)
+}
+plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y")
+```
+
+Now, we sample with noise 6 times from the lemniscate above, compute the persistence landscape for each sample, and then compute the mean persistence landscape.
+
+```{r,fig.align = 'center'}
+pl_list_2 <- c()
+for (i in seq(6)) {
+  pc <- sample_nonsym_lemniscate()
+  pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
+  pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
+  pd <- as_persistence(pd)
+  pl <- pl_new(pd, degree = 1, xby = .01)
+  plot(pl)
+  pl_list_2 <- c(pl_list_2, pl)
+}
+```
+
+We will refer to the samping distributions `pl_list_1` and `pl_list_2` as $P_1$ and $P_2$, respectively. Below, we plot the mean persistence landscape of $P_1$ (lemniscates) and the mean persistence landscape of $P_2$ (non-symmetric lemniscates).
+
+```{r,fig.align = 'center'}
+par(mfrow = c(1, 2))
+plot(pl_mean(pl_list_1), main = "Mean PL of P1")
+plot(pl_mean(pl_list_2), main = "Mean PL of P2")
+```
+
+### Z-Test
+
+The first hypothesis test we will address is the **two sample Z-test**. The purpose of the z test is to test for the difference between two samples from the two distributions. The z-test is a parametric test that requires the two samples to be normally distributed (a sample of persistence landscapes is a Gaussian random variable) and perform well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate. For more information, please reference section 3 of Bubenik (2015).
+
+To conduct this test on persistent landscapes, our test statistic is the integral of the mean landscape. What interval this integration is taken over is dependent on the `support` provided. Users can enter intervals for the `support` parameter to focus on regions where important topological features lie, this also would increase efficiency as there would be less calculations to be made. Then, the Z-score is computed from which we get our p-value. Recall that the p-value is the probability of observing data as extreme as or more extreme than the observed data, assuming the null hypothesis is true. If the p-value is less than $\alpha$, then we reject our null hypothesis, otherwise we fail to reject it. We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level.
+
+If the true difference in means were zero, then this would imply that $P_1$ and $P_2$ could have come from the same distribution.
+
+```{r}
+pl_z_test(pl_list_1,pl_list_2)
+```
+
+With a p-value of $0.96$ at a significance level of $\alpha=0.05$, we fail to reject the null hypothesis. This result suggests that, according to the Z-test, the samples appear to come from the same distribution. This highlights the Z-test's conservative nature when testing for differences between two samples of persistence landscapes.
+
+### Permutation Test
+
+We now perform a permutation test, which is a non-parametric hypothesis test. This test is useful for smaller sample sizes and does not require an assumption of distribution of the data. That is, rather than making an assumption of the sampling distribution, we build the sampling distribution by rearranging the our $12$ samples ($6$ from $P_1$ and $6$ from $P_2$) and computing the test statistic for each permutation. We then compare the observed/initial test statistic to the distribution of test statistics we obtained by randomly permuting the data. This helps to determine whether the observed effect is statistically significant. 
+
+The null hypothesis is that $P_1$ and $P_2$ come from the same distribution and the alternative hypothesis being that they do not come from the same distribution. 
+
+```{r}
+pl_perm_test(pl_list_1,pl_list_2)
+```
+
+With the extremely small p-value, we have sufficient evidence to reject the null hypothesis. This result suggests that the two mean persistence landscapes do not come from the same distribution.
+
+Note that we failed to reject the null hypothesis when conducting the parametric Z-test, but rejected the null hypothesis when conducting the non-parametric permutation test. It is important to recongize that these two hypothesis tests are looking at the data in different ways. So one test may detect the difference between the samples and the other one may not.
+
+# Exploratory Dimension Reduction
+
+In this section, we conduct exploratory analysis using variance decomposition. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called principal components. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes. This is done to reduce the dimensions of our data while retaining as much variance as possible.
+
+We continue using the lists from our toy example. We utilize the `pl_vectorize()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them.`prcomp()` performs PCA on our vectorized persistence landscapes.
+```{r,fig.align = 'center'}
+pl_list <- c(pl_list_1,pl_list_2)
+pl_vectors <- pl_vectorize(pl_list)
+pca <- prcomp(pl_vectors)
+plot(pca, type = "l", main = "Scree Plot")
+summary(pca)
+```
+
+In the summary above, we see that about $83.8\%$ of the variance in the original data is captured in the first principal component, and about $8.64\%$ of the variance is captured in the second principal component. So the first and second principal component are sufficient in explaining the variance of the data. To evaluate whether the dimension reduction was successful, we assign labels to our data based on the distribution they were generated from and plot each sample with their corresponding first principal component and second principal component values to see if any clustering or patterns occurred.
+
+```{r,fig.align = 'center'}
+data.labels <- c(rep(1,length(pl_list_1)), rep(2,length(pl_list_2)))
+plot(pca$x[,1:2], col = data.labels, pch = 17 + (2 * data.labels), asp = 1)
+```
+
+As we can see, clustering of samples from the same sample did occur. We observe that the between-group variance is mainly contained in the first principal component, and the within-group variance is captured in the second principal component. 
+
+# Classification
+
+We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A support vector machine (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes (in our case the classes are the sample) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
+
+Below we train our model using `svm()` and perform 4-fold cross validation. We set `scale = FALSE` so that more persistent features have more weight.
+
+```{r}
+svm_model <- svm(pl_vectors,data.labels,scale = FALSE,
+                 type = "C-classification", kernel = "linear", cost = 10, cross = 4)
+summary(svm_model)
+```
+
+The model successfully distinguishes between the different topological structures present in the two persistence landscapes.
+
+# Appendix
+
+A **$k$-simplex** is a $k$-dimensional polytope which is the convex hull of $k+1$ points in Euclidean space in general position (the points $x_1,...,x_{k+1}$ are *affinely independent*, which means that the vectors $x_2-x_1,...,x_{k+1}-x_1$ are linearly independent). The convex hull of a non-empty subset of these points is called the *face* of the simplex 
+
+A **simplicial complex** is a set $K$ of simplices such that
+
+- the face of any simplex in $K$ is also in $K$; and
+
+- any non-empty intersection of two simplices is a face of both of them.
+
+An **abstract simplicial complex** is a set $K$ of non-empty subsets of a fixed set such that 
+
+- if $A \in K$ then all nonempty subsets of $A$ are also in $K$.
+
+For a finite set of points $X \subset \mathbb{R}^d$, the **Alpha complex** $Alpha(X,s)$ is a simplicial subcomplex of the Delaunay complex of $X$ consisting of simplices of circumradius less than or equal to $\sqrt{s}$. 
+
+For each $u \in X$, let $V_u$ be its **Voronoi cell**, i.e. 
+$$ 
+V_u = \{ x \in \mathbb{R}^d : d(x, u) \leq d(x, v) \text{ for all } v \in X \}, 
+$$
+and $B_u(r)$ be the closed ball with center $u$ and radius $r$. Let $R_u(r)$ be the intersection of each ball of radius $r$ with the Voronoi cell of $u$, i.e. 
+$$ 
+R_u(r) = B_u(r) \cap V_u. 
+$$
+
+Then **Alpha(\( X, s \))** is defined as 
+$$ 
+\text{Alpha}(X, r) = \left\{ \sigma \subset X : \bigcap_{u \in \sigma} R_u(\sqrt{s}) \neq \emptyset \right\}.
+$$
+
+A **filtered simplicial complex** consists of a nested sequence of simplicial complexes:
+$$
+K_0 \subset K_1 \subset K_2 \subset \;...\subset K_n
+$$
+
+Applying homology, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
+$$
+H_k(K_0) \rightarrow H_k(K_1) \rightarrow H_k(K_2) \rightarrow \;...\rightarrow H_k(K_n)
+$$
+The images of these maps and compositions of these maps are called **persistence homology** vector spaces.
+
+A **persistence module** $M$ consists of a vector space $M_a$ for all $a \in \mathbb{R}$ and linear maps $M(a\leq b):M_a \to M_b$ for all $a \leq b$ such that $M(a \leq a)$ is the identity map and for all $a \leq b \leq c, \; M(b \leq c) \circ M(a \leq b) = M (a \leq c)$.
+
+Let $M$ be a persistence module and $b_i \leq d_i$ where $b_i$ is some birth value and $d_i$ is some death value. The **betti number** of M is 
+$$
+\beta^{b_i, d_i} = \dim(\text{im}(M(b_i \leq d_i)))
+$$
+
+The **$k$-th Betti number**, $\beta_k$, counts the number of $k$-dimensional features of a simplicial complex. For example, $\beta_0$ counts the number of connected components and  $\beta_1$ counts the number of holes. 
+
+The **rank function**, $\lambda: \mathbb{R}^2 \rightarrow \mathbb{R}$ defined as:
+$$
+\mathbb{\lambda}(b, d) = 
+\begin{cases}
+    \mathbb{\beta}^{(b,d)} & \text{if } d \geq b \\
+    0 & \text{otherwise}
+\end{cases}
+$$
+
+Now, we change the coordinate system from (birth, death) scale to the (midlife, halflife) scale for ease of interpretability and analysis. 
+We have: 
+$$
+m = \frac{(b + d)}{ 2} \;  \text{and} \;h = \frac{(d-b)}{2}.
+$$
+Hence our **rescaled rank function**, $\mathbb{lambda}: \mathbb{R}^2 \rightarrow \mathbb{R}$, defined as:  
+$$
+\mathbb{\lambda}(m, h) = 
+\begin{cases}
+    \mathbb{\beta}^{(m-h,m+h)} & \text{if } h \geq 0 \\
+    0 & \text{otherwise}
+\end{cases}
+$$.
+
+Finally, the **persistence landscape** is a function, $\lambda: \mathbb{N} \times \mathbb{R} \rightarrow \mathbb{R}$. Or it could be thought of as a sequence of functions $\lambda_k: \mathbb{R} \to \mathbb{R}$, where $\lambda_k(t) = \lambda(k,t)$. $\lambda_k(t)$ is defined as: 
+$$
+\lambda_k(t) = \sup(m \geq 0 | \beta^{t-m, t+m} \geq k)
+$$
+Essentially, $\lambda_k(t)$ finds the largest interval around t where there at least $k$ persistent features.
+ 
+# References
+
+[^1]: Bubenik, Peter. "Statistical Topological Data Analysis Using Persistence Landscapes." *Journal of Machine Learning Research*, vol. 16, 2015, pp. 77-102.
+
+[^2]: https://people.clas.ufl.edu/peterbubenik/intro-to-tda/ 
