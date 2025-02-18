@@ -3,7 +3,7 @@ title: "Exploratory and Predictive Analysis"
 author: "Aidan Bryant, James Golabek, Jason Cory Brunson, Peter Bubenik, Johnathan Bush, Iryna Hartsock"
 output: rmarkdown::html_document
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Exploratory and Predictive Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 runtime: shiny
