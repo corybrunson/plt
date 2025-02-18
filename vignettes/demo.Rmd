@@ -315,7 +315,7 @@ In this section, we conduct exploratory analysis using variance decomposition. W
 We continue using the lists from our toy example. We utilize the `pl_vectorize()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them.`prcomp()` performs PCA on our vectorized persistence landscapes.
 ```{r,fig.align = 'center'}
 pl_list <- c(pl_list_1,pl_list_2)
-pl_vectors <- pl_vectorize(pl_list)
+pl_vectors <- pl_to_matrix(pl_list)
 pca <- prcomp(pl_vectors)
 plot(pca, type = "l", main = "Scree Plot")
 summary(pca)
