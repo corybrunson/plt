@@ -6,7 +6,6 @@ vignette: >
   %\VignetteIndexEntry{Exploratory and Predictive Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-runtime: shiny
 ---
 
 ```{r, include = FALSE}
@@ -72,39 +71,17 @@ where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration
 
 ## Generate a Simplicial Complex
 
-Use the *arrows* (< or >) or the *slider* to change the filtration parameter (radius of the balls) of $\alpha$. 
+The plots below show the alpha complex at six different levels of the filtration parameter $\alpha$, which controls the radius of the balls.
 
-```{r,echo = FALSE,eval = TRUE}
-ui <- fluidPage(
-  sidebarLayout(
-    sidebarPanel(
-      sliderInput("alpha", "Alpha value:", min = 0, max = .5, value = 0.025, step = 0.025),
-      actionButton("left", "<"),
-      actionButton("right", ">")
-    ),
-    mainPanel(
-      plotOutput("alphaPlot")
-    )
-  )
-)
-server <- function(input, output, session) {
-  observeEvent(input$left, {
-    new_alpha <- max(input$alpha - 0.025, 0)
-    updateSliderInput(session, "alpha", value = new_alpha)
-  })
-  observeEvent(input$right, {
-    new_alpha <- min(input$alpha + 0.025, .5)
-    updateSliderInput(session, "alpha", value = new_alpha)
-  })
-  output$alphaPlot <- renderPlot({
-    alpha_shape <- ashape(X, alpha = input$alpha)
-    plot(alpha_shape, col = c(1, 4), lty = c(1, 1), main = paste("Alpha Complex for alpha =", input$alpha))
-    points(X, col = "red", pch = 16)
-  })
+```{r,echo = FALSE,fig.align = 'center'}
+alpha_values <- c(0,0.05,0.1,0.175,0.35,0.4)
+
+for (alpha in alpha_values) {
+   alpha_shape <- ashape(X, alpha = alpha)
+   plot(alpha_shape, col = c(1, 4), lty = c(1, 1), main = paste("Alpha Complex for alpha =", alpha)) 
+   points(X, col = "red", pch = 16)
 }
-shinyApp(ui = ui, server = server)
 ```
-
 
 The filtration provides a mathematical structure for analyzing the global topological features of our point cloud $X$. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
 $$
