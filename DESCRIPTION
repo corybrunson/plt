@@ -42,7 +42,9 @@ Suggests:
     ripserr,
     testthat (>= 3.0.0),
     knitr,
-    rmarkdown
+    rmarkdown,
+    alphahull,
+    e1071
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
