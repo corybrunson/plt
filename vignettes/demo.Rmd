@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(alphahull)
-library(shiny)
 ```
 
 In this vignette we will show how {plt} supports computation of persistence landscapes[^1] and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing as we will see. 
