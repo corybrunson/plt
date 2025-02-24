@@ -1,6 +1,5 @@
 ---
 title: "Exploratory and Predictive Analysis"
-author: "Aidan Bryant, James Golabek, Jason Cory Brunson, Peter Bubenik, Johnathan Bush, Iryna Hartsock"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{Exploratory and Predictive Analysis}
@@ -81,6 +80,8 @@ for (alpha in alpha_values) {
    points(X, col = "red", pch = 16)
 }
 ```
+
+As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some topological features, such as the two lobes of the figure-8, remain or persist throughout many $\alpha$'s.
 
 The filtration provides a mathematical structure for analyzing the global topological features of our point cloud $X$. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
 $$
