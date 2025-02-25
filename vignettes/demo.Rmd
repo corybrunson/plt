@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(alphahull)
 ```
 
-In this vignette we will show how {plt} supports computation of persistence landscapes[^1] and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing as we will see. 
+In this vignette, we will show how {plt} supports computation of persistence landscapes[^1], and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing as we will see. 
 
 # Basic use of TDA in Machine Learning
 
@@ -69,19 +69,23 @@ where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration
 
 ## Generate a Simplicial Complex
 
-The plots below show the alpha complex at six different levels of the filtration parameter $\alpha$, which controls the radius of the balls.
+The plots below show the alpha complex at six different levels of the filtration parameter, specifically for $\alpha = (0,0.05,0.1,0.175,0.35,0.4)$, which controls the radius of the balls.
 
 ```{r,echo = FALSE,fig.align = 'center'}
+par(mfrow = c(2, 3), mar = c(0,2,0,0.5))
+
 alpha_values <- c(0,0.05,0.1,0.175,0.35,0.4)
+#alpha_values <- c(0,0.05,0.1,0.15,0.175,0.2, 0.25,0.35,0.4)
 
 for (alpha in alpha_values) {
    alpha_shape <- ashape(X, alpha = alpha)
-   plot(alpha_shape, col = c(1, 4), lty = c(1, 1), main = paste("Alpha Complex for alpha =", alpha)) 
+   plot(alpha_shape, col = c(1, 4), lty = c(1, 1)) 
    points(X, col = "red", pch = 16)
 }
 ```
 
-As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some topological features, such as the two lobes of the figure-8, remain or persist throughout many $\alpha$'s.
+
+As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some of these topological features, such as the two lobes (loops) of the figure-8, remain or persist throughout many $\alpha$'s. We go in more detail on this below.
 
 The filtration provides a mathematical structure for analyzing the global topological features of our point cloud $X$. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
 $$
@@ -97,13 +101,13 @@ pd <- alphaComplexDiag(X, maxdimension = 1)$diagram
 pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
 ```
 
-The `pd` object stores the birth and death values for the 0 and 1 dimension features across the alpha filtration.
+The `pd` object stores the birth and death values for the $0$ and $1$ dimension features across the alpha filtration.
 
 ```{r}
 head(pd)
 ```
 
-## Persistence Data Visulization
+## Persistence Data Visualization
 
 <!--
 ### Persistence Barcode
@@ -119,7 +123,7 @@ col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2)
 ### Persistence Diagram
 
 
-The persistence diagram is topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. Note that for any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $b=d$ line. Points close to or on this line are non-persistent features because they die shortly or immediately after being born. In the persistence diagram below, we have three features that stand out. Two of these being $1$-dimensional features distinguished by their distance from the line $b = d$. These persistence features represent the two circles of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
+The persistence diagram is topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. Note that for any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are non-persistent features because they die shortly or immediately after being born. In the persistence diagram below, we have three features that stand out. Two of these being $1$-dimensional features distinguished by their distance from the line $d = b$. These persistence features represent the two circles of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
 
 
 ```{r,fig.align = 'center'}
