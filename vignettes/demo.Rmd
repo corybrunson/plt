@@ -197,7 +197,7 @@ plot(pl1d, main = "Persistence Landscape", n_levels = n_levs, asp = 1)
 
 A convenient way of thinking about the mean persistence landscape lies in considering our levels. To define a mean on landscapes, we take the pointwise mean of each level. Hence, the mean $i$th level is given by
 $$\bar \lambda_i(x) = \frac{1}{n}\sum_{j=1}^{z}\lambda_i ^j(x)$$
-where $j$ is the index of the landscape and $z$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise 6 times from the lemniscate above, compute the persistence landscape for each sample, and then compute the mean persistence landscape.
+where $j$ is the index of the landscape and $z$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise $6$ times from the lemniscate above, compute the persistence landscape for each sample, and then compute the mean persistence landscape.
 
 ```{r,fig.align = 'center'}
 pl_list_1 <- c()
@@ -237,6 +237,7 @@ plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y")
 Now, we sample with noise $6$ times from the lemniscate above, compute the persistence landscape for each sample, and then compute the mean persistence landscape.
 
 ```{r,fig.align = 'center'}
+par(mfrow = c(2, 3))
 pl_list_2 <- c()
 for (i in seq(6)) {
   pc <- sample_nonsym_lemniscate()
