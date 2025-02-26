@@ -1,6 +1,7 @@
 ---
 title: "Exploratory and Predictive Analysis"
-date: "Submitted on February 25th, 2025"
+author: "James Golabek, Aidan Bryant, Jason Cory Brunson, Peter Bubenik, Johnathan Bush, Iryna Hartsock"
+date: "Submitted on Month Day, 2025"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{Exploratory and Predictive Analysis}
@@ -227,7 +228,7 @@ plot(pl_mean(pl_list_1))
 
 We will now discuss how to perform hypothesis tests on persistence landscapes. In statistics, we use hypothesis tests to weigh the evidence to determine whether two samples came from the same distribution. A hypothesis test requires a calculated test statistic from sample and an understanding of the distribution of the test statistic. In TDA, we use persistence landscapes to derive our test statistics. Our hypothesis testing methods provide the result as a list of class `htest` which contains useful information like the estimated distance between the mean landscapes, the test statistic, the p-value, and more.
 
-For our next example we show how to make such a distinction. First, we create a counterfeit lemniscate sampler which may be similar enough to deceive quality control. The distinction in this counterfeit lemniscate is that it has different-sized lobes, while the original lemniscate has same-sized lobes. In the code below, the non-symmetric lemniscate is sampled with noise using two uniform circles (of different radii) that are each sampled with noise and interlinked.
+For our next example, we show how to make such a distinction. First, we create a counterfeit lemniscate sampler which may be similar enough to deceive quality control. The distinction in this counterfeit lemniscate is that it has different-sized lobes, while the original lemniscate has same-sized lobes. In the code below, the non-symmetric lemniscate is sampled  using two uniform circles (of different radii) that are each sampled with noise and interlinked.
 
 ```{r,fig.align = 'center'}
 set.seed(123)
