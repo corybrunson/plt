@@ -205,7 +205,7 @@ $$\bar \lambda_i(x) = \frac{1}{n}\sum_{j=1}^{z}\lambda_i ^j(x)$$
 where $j$ is the index of the landscape and $z$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise $6$ times from a lemniscate and we compute the persistence landscape for each sampled point cloud.
 
 ```{r,fig.align = 'center'}
-par(mfrow = c(2, 3))
+par(mfrow = c(2, 3), mar = c(1,2,1,2))
 pl_list_1 <- c()
 for (i in seq(6)) {
   pc <- sample_lemniscate_gerono(60, sd = 0.05)
@@ -249,7 +249,7 @@ plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y")
 Now, we sample with noise $6$ times from the lemniscate above, compute the persistence landscape for each sample, and then compute the mean persistence landscape.
 
 ```{r,fig.align = 'center'}
-par(mfrow = c(2, 3))
+par(mfrow = c(2, 3), mar = c(1,2,1,2))
 pl_list_2 <- c()
 for (i in seq(6)) {
   pc <- sample_nonsym_lemniscate()
@@ -265,14 +265,14 @@ for (i in seq(6)) {
 We will refer to the sampling distributions `pl_list_1` and `pl_list_2` as $P_1$ and $P_2$, respectively. Below, we plot the mean persistence landscape of $P_1$ (lemniscates) and the mean persistence landscape of $P_2$ (non-symmetric lemniscates).
 
 ```{r,fig.align = 'center'}
-par(mfrow = c(1, 2))
+par(mfrow = c(1, 2), mar = c(1,2,1,2))
 plot(pl_mean(pl_list_1), main = "Mean PL of P1")
 plot(pl_mean(pl_list_2), main = "Mean PL of P2")
 ```
 
 ### Z-Test
 
-The first hypothesis test we will address is the **two sample Z-test**. The purpose of the z test is to test for the difference between two samples from the two distributions. The z-test is a parametric test that requires the two samples to be normally distributed (a sample of persistence landscapes is a Gaussian random variable) and perform well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate. For more information, please reference section 3 of Bubenik (2015).
+The purpose of the two sample Z-test is to test for the difference between two samples from the two distributions. The z-test is a parametric test that requires the two samples to be normally distributed (a sample of persistence landscapes is a Gaussian random variable) and performs well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate. For more information, please reference section 3 of Bubenik (2015).
 
 To conduct this test on persistent landscapes, our test statistic is the integral of the mean landscape. What interval this integration is taken over is dependent on the `support` provided. Users can enter intervals for the `support` parameter to focus on regions where important topological features lie, this also would increase efficiency as there would be less calculations to be made. Then, the Z-score is computed from which we get our p-value. Recall that the p-value is the probability of observing data as extreme as or more extreme than the observed data, assuming the null hypothesis is true. If the p-value is less than $\alpha$, then we reject our null hypothesis, otherwise we fail to reject it. We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level.
 
@@ -302,7 +302,7 @@ Note that we failed to reject the null hypothesis when conducting the parametric
 
 In this section, we conduct exploratory analysis using variance decomposition. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called principal components. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes. This is done to reduce the dimensions of our data while retaining as much variance as possible.
 
-We continue using the lists from our toy example. We utilize the `pl_vectorize()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them.`prcomp()` performs PCA on our vectorized persistence landscapes.
+We continue using the lists from our toy example. We utilize the `pl_to_matrix()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them.`prcomp()` performs PCA on our vectorized persistence landscapes.
 ```{r,fig.align = 'center'}
 pl_list <- c(pl_list_1,pl_list_2)
 pl_vectors <- pl_to_matrix(pl_list)
@@ -336,7 +336,7 @@ The model successfully distinguishes between the different topological structure
 
 # Appendix
 
-A **$k$-simplex** is a $k$-dimensional polytope which is the convex hull of $k+1$ points in Euclidean space in general position (the points $x_1,...,x_{k+1}$ are *affinely independent*, which means that the vectors $x_2-x_1,...,x_{k+1}-x_1$ are linearly independent). The convex hull of a non-empty subset of these points is called the *face* of the simplex 
+A **$k$-simplex** is a $k$-dimensional polytope which is the convex hull of $k+1$ points in Euclidean space in general position (the points $x_1,...,x_{k+1}$ are *affinely independent*, which means that the vectors $x_2-x_1,...,x_{k+1}-x_1$ are linearly independent). The convex hull of a non-empty subset of these points is called the *face* of the simplex. 
 
 A **simplicial complex** is a set $K$ of simplices such that
 
@@ -344,24 +344,11 @@ A **simplicial complex** is a set $K$ of simplices such that
 
 - any non-empty intersection of two simplices is a face of both of them.
 
-An **abstract simplicial complex** is a set $K$ of non-empty subsets of a fixed set such that 
+An **abstract simplicial complex** is a set $K$ of non-empty subsets of a fixed set such that if $A \in K$, then all nonempty subsets of $A$ are also in $K$.
 
-- if $A \in K$ then all nonempty subsets of $A$ are also in $K$.
-
-For a finite set of points $X \subset \mathbb{R}^d$, the **Alpha complex** $Alpha(X,s)$ is a simplicial subcomplex of the Delaunay complex of $X$ consisting of simplices of circumradius less than or equal to $\sqrt{s}$. 
-
-For each $u \in X$, let $V_u$ be its **Voronoi cell**, i.e. 
+For a finite set of points $X \subset \mathbb{R}^d$, the **Alpha complex** Alpha$(X,s)$ is a simplicial subcomplex of the Delaunay complex of $X$ consisting of simplices of circumradius less than or equal to $\sqrt{s}$. The Alpha complex is defined as:
 $$ 
-V_u = \{ x \in \mathbb{R}^d : d(x, u) \leq d(x, v) \text{ for all } v \in X \}, 
-$$
-and $B_u(r)$ be the closed ball with center $u$ and radius $r$. Let $R_u(r)$ be the intersection of each ball of radius $r$ with the Voronoi cell of $u$, i.e. 
-$$ 
-R_u(r) = B_u(r) \cap V_u. 
-$$
-
-Then **Alpha(\( X, s \))** is defined as 
-$$ 
-\text{Alpha}(X, r) = \left\{ \sigma \subset X : \bigcap_{u \in \sigma} R_u(\sqrt{s}) \neq \emptyset \right\}.
+\text{Alpha}(X, r) = \{ \sigma \subset X : \bigcap_{u \in \sigma} R_u(\sqrt{s}) \neq \emptyset \}.
 $$
 
 A **filtered simplicial complex** consists of a nested sequence of simplicial complexes:
@@ -377,7 +364,7 @@ The images of these maps and compositions of these maps are called **persistence
 
 A **persistence module** $M$ consists of a vector space $M_a$ for all $a \in \mathbb{R}$ and linear maps $M(a\leq b):M_a \to M_b$ for all $a \leq b$ such that $M(a \leq a)$ is the identity map and for all $a \leq b \leq c, \; M(b \leq c) \circ M(a \leq b) = M (a \leq c)$.
 
-Let $M$ be a persistence module and $b_i \leq d_i$ where $b_i$ is some birth value and $d_i$ is some death value. The **betti number** of M is 
+Let $M$ be a persistence module and $b_i \leq d_i$ where $b_i$ is some birth value and $d_i$ is some death value. The **betti number** of $M$ is 
 $$
 \beta^{b_i, d_i} = \dim(\text{im}(M(b_i \leq d_i)))
 $$
@@ -398,7 +385,7 @@ We have:
 $$
 m = \frac{(b + d)}{ 2} \;  \text{and} \;h = \frac{(d-b)}{2}.
 $$
-Hence our **rescaled rank function**, $\mathbb{lambda}: \mathbb{R}^2 \rightarrow \mathbb{R}$, defined as:  
+Hence our **rescaled rank function**, $\mathbb{\lambda}: \mathbb{R}^2 \rightarrow \mathbb{R}$, defined as:  
 $$
 \mathbb{\lambda}(m, h) = 
 \begin{cases}
