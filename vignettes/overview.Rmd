@@ -53,7 +53,7 @@ library(e1071)
 
 To begin, we will create a toy point cloud on which we will illustrate how to use {plt}. 
 
-Below we sample $60$ points from a toy point cloud sampler for a figure eight (lemniscate) in $\mathbb{R}^2$ with noise. Let us call them $X = \{x_1,...,x_{60} \}$, and observe that the dominant features of the figure eight, the $1$-dimensional holes, are visible when we plot the points. 
+Below we sample $60$ points from a toy point cloud sampler for a figure eight (lemniscate) in $\mathbb{R}^2$ with noise. Observe that the dominant features of the figure eight, the $1$-dimensional holes, are visible when we plot the points. 
 
 ```{r,fig.align = 'center'}
 set.seed(120246L)
@@ -63,11 +63,11 @@ plot(X, asp = 1, pch = 16L)
 
 # Adapting Point Data to Persistence Data
 
-Now, from our point set we would like to generate more topologically informative data. To do so, we construct a **simplicial complex** (a set of **simplices**), $K$, using our points. Recall that a *0-simplex* is a single point, a *1-simplex* is an edge or line segment, a *2-simplex* is a triangle, and a *3-simplex* is a tetrahedron. We will utilize the **alpha complex**, however there exists others that have their own advantages and disadvantages. We use the alpha complex here as it captures the underlying structure of the data accurately and is more computationally efficient then other methods. By applying the alpha complex with various radii (scale), we create a **filtered simplicial complex** or **filtration**, a nested sequence of simplicial complexes:
+Now, from our point set we would like to generate more topologically informative data. To do so, we construct a **simplicial complex** (a set of **simplices**), $K$, using our points. Recall that a *$0$-simplex* is a single point, a *$1$-simplex* is an edge or line segment, a *$2$-simplex* is a triangle, and a *$3$-simplex* is a tetrahedron. We will utilize the **alpha complex**, however there exists others that have their own advantages and disadvantages. We use the alpha complex here as it captures the underlying structure of the data accurately and is more computationally efficient then other methods. By applying the alpha complex with various radii (scale), we create a **filtered simplicial complex** or **filtration**, a nested sequence of simplicial complexes:
 $$
 K_0 \subset K_1 \subset K_2 \subset \cdots\subset K_n,
 $$
-where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. In the below section, we visualize the alpha complex filtration built upon $X$. 
+where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. In the below section, we visualize the alpha complex filtration built upon the point cloud. 
 
 ## Generate a Simplicial Complex
 
@@ -86,9 +86,9 @@ for (alpha in alpha_values) {
 }
 ```
 
-As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some of these topological features, such as the two lobes (loops) of the figure-8, remain or persist throughout many $\alpha$'s. We go into more detail on this below.
+As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some of these topological features, such as the two lobes (loops) of the figure eight, remain or persist throughout many $\alpha$'s. We go into more detail on this below.
 
-The filtration provides a mathematical structure for analyzing the global topological features of our point cloud $X$. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
+The filtration provides a mathematical structure for analyzing the global topological features of our point cloud. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
 $$
 H_k(K_0) \rightarrow H_k(K_1) \rightarrow H_k(K_2) \rightarrow \cdots  \rightarrow H_k(K_n).
 $$
@@ -159,7 +159,7 @@ To create the persistence landscape, we superimpose these tent functions. At eac
 
 - $\lambda_1(t)$ is the level that takes the value of the tallest tent at $t$
 - $\lambda_2(t)$ is the level that takes the value of the second tallest tent at $t$, and so on for the remaining less prominent features.
-- Generically, $\lambda_k(t)$ = k-th largest value of $\{f_{(b_i, d_i)}(t) | (b_i, d_i) \in PD\}$ at each $t$ where $PD$ is the persistence diagram.
+- Generically, $\lambda_k(t)$ = $\text{k}$-th largest value of $\{f_{(b_i, d_i)}(t) | (b_i, d_i) \in PD\}$ at each $t$ where $PD$ is the persistence diagram.
 This superimposition of tents, creating an level of functions, allows us to visualize and analyze the relative significance of topological features. The collection of our levels makes our landscape.
 
 
@@ -169,7 +169,7 @@ These levels help develop a geometric understanding of persistence landscapes an
 
 To begin working with the persistence landscape framework, {plt} methods demands that our data is in a particular format, `as_persistence()` ensures this, if your data is in one of the recognized formats/classes (see [help file](https://corybrunson.github.io/plt/reference/as_persistence.html)).
 
-This function in {plt} has multiple methods to convert persistence data to a format required for other {plt} functions. It can be applied to a 3 column matrix (or an object coercible to one) with columns dimension/degree, start/birth, and end/death or it can convert outputs from persistence data producing functions like `alphaComplexDiag()`.
+This function in {plt} has multiple methods to convert persistence data to a format required for other {plt} functions. It can be applied to a $3$ column matrix (or an object coercible to one) with columns dimension/degree, start/birth, and end/death or it can convert outputs from persistence data producing functions like `alphaComplexDiag()`.
 
 Note that `as_persistence()` is called in `pl_new()`.
 
@@ -188,7 +188,7 @@ pl1d <- pl_new(pd, degree = 1, xby = 0.025)
 summary(pl1d)
 ```
 
-The function for the "tents" we gave earlier performs a transformation that puts each feature in terms of "midlife" $\frac{b+d}{2}$ and "halflife" $\frac{d-b}{2}$, making the graphical representation easier to visually understand. 
+The above function for the "tents" performs a transformation that puts each feature in terms of *midlife* $\frac{b+d}{2}$ and *halflife* $\frac{d-b}{2}$, making the graphical representation easier to visually understand. 
 Note that this is a discrete persistence landscape so it is generated by sampling a number of points and interpolating to create a continuous function.
 
 ```{r,fig.align = 'center'}
@@ -211,7 +211,6 @@ for (i in seq(6)) {
   pc <- sample_lemniscate_gerono(60, sd = 0.05)
   pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
   pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
-  pd <- as_persistence(pd)
   pl <- pl_new(pd, degree = 1, xby = .01)
   plot(pl)
   pl_list_1 <- c(pl_list_1, pl)
@@ -255,7 +254,6 @@ for (i in seq(6)) {
   pc <- sample_nonsym_lemniscate()
   pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
   pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
-  pd <- as_persistence(pd)
   pl <- pl_new(pd, degree = 1, xby = .01)
   plot(pl)
   pl_list_2 <- c(pl_list_2, pl)
@@ -322,9 +320,9 @@ As we can see, clustering of samples from the same sample did occur. We observe 
 
 # Classification
 
-We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A support vector machine (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes (in our case the classes are the sample) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
+We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes (in our case the classes are the sample) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
 
-Below we train our model using `svm()` and perform 4-fold cross validation. We set `scale = FALSE` so that more persistent features have more weight.
+Below we train our model using `svm()` and perform $4$-fold cross validation. We set `scale = FALSE` so that more persistent features have more weight.
 
 ```{r}
 svm_model <- svm(pl_vectors,data.labels,scale = FALSE,
