@@ -1,7 +1,6 @@
 ---
 title: "Exploratory and Predictive Analysis"
 author: "James Golabek, Aidan Bryant, Jason Cory Brunson, Peter Bubenik, Johnathan Bush, Iryna Hartsock"
-date: "Submitted on Month Day, 2025"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{Exploratory and Predictive Analysis}
@@ -56,9 +55,10 @@ To begin, we will create a toy point cloud on which we will illustrate how to us
 Below we sample $60$ points from a toy point cloud sampler for a figure eight (lemniscate) in $\mathbb{R}^2$ with noise. Observe that the dominant features of the figure eight, the $1$-dimensional holes, are visible when we plot the points. 
 
 ```{r,fig.align = 'center'}
+par(mar = c(2,2,2,1))
 set.seed(120246L)
-X <-  sample_lemniscate_gerono(60, sd = 0.05)
-plot(X, asp = 1, pch = 16L)
+pc <- sample_lemniscate_gerono(60, sd = 0.05)
+plot(pc, asp = 1, pch = 16L, main = "Figure Eight Point Cloud")
 ```
 
 # Adapting Point Data to Persistence Data
@@ -71,22 +71,17 @@ where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration
 
 ## Generate a Simplicial Complex
 
-The plots below show the alpha complex at six different levels of the filtration distance parameter, specifically for $\alpha = (0,0.05,0.1,0.175,0.35,0.4)$.
+The plots below show the alpha complex at six different levels of the filtration distance parameter. As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some of these topological features, such as the two lobes (loops) of the figure eight, remain or persist throughout many $\alpha$'s. We go into more detail on this below.
 
 ```{r,echo = FALSE,fig.align = 'center'}
-par(mfrow = c(2, 3), mar = c(1,2,1,2))
+par(mfrow = c(3, 2), mar = c(2,2,1,1))
 
 alpha_values <- c(0,0.05,0.1,0.175,0.35,0.4)
-#alpha_values <- c(0,0.05,0.1,0.15,0.175,0.2, 0.25,0.35,0.4)
 
 for (alpha in alpha_values) {
-   alpha_shape <- ashape(X, alpha = alpha)
-   plot(alpha_shape, col = c(1, 4), lty = c(1, 1)) 
-   points(X, col = "red", pch = 16)
+   plot(ashape(pc,alpha=alpha),col=c(4,1),xlab="",ylab="")
 }
 ```
-
-As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some of these topological features, such as the two lobes (loops) of the figure eight, remain or persist throughout many $\alpha$'s. We go into more detail on this below.
 
 The filtration provides a mathematical structure for analyzing the global topological features of our point cloud. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
 $$
@@ -96,7 +91,7 @@ $$
 The persistence module tracks the *lifetime* of features throughout the *time span* of the filtration. The birth value $b$ of a feature is when it first appears in the persistence module. The death value $d$ of a feature is when it disappears. A topological feature with a long lifetime $d-b$ is called a *persistent* feature.
 
 ```{r}
-pd <- alphaComplexDiag(X, maxdimension = 1)$diagram
+pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
 
 # birth and death values have been squared, so take the square root
 pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
@@ -128,6 +123,7 @@ col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2)
 The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. Note that for any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are non-persistent features because they die shortly or immediately after being born. In the persistence diagram below, we have three features that stand out. Two of these being $1$-dimensional features distinguished by their distance from the line $d = b$. These persistence features represent the two circles of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
 
 ```{r,fig.align = 'center'}
+par(mar = c(2,2,2,2))
 plot(pd, asp = 1, diagLim = c(0,.75))
 legend(0.6, 0.4, c('Homology in degree 0','Homology in degree 1'),
 col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2, bty = "n")
@@ -192,6 +188,7 @@ The above function for the "tents" performs a transformation that puts each feat
 Note that this is a discrete persistence landscape so it is generated by sampling a number of points and interpolating to create a continuous function.
 
 ```{r,fig.align = 'center'}
+par(mar = c(2,2,2,1))
 n_levs <- max(pl_num_levels(pl1d))
 plot(pl1d, main = "Persistence Landscape", n_levels = n_levs, asp = 1)
 ```
@@ -205,7 +202,7 @@ $$\bar \lambda_i(x) = \frac{1}{n}\sum_{j=1}^{z}\lambda_i ^j(x)$$
 where $j$ is the index of the landscape and $z$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise $6$ times from a lemniscate and we compute the persistence landscape for each sampled point cloud.
 
 ```{r,fig.align = 'center'}
-par(mfrow = c(2, 3), mar = c(1,2,1,2))
+par(mfrow = c(3, 2), mar = c(2,2,1,1))
 pl_list_1 <- c()
 for (i in seq(6)) {
   pc <- sample_lemniscate_gerono(60, sd = 0.05)
@@ -220,7 +217,8 @@ for (i in seq(6)) {
 We then compute the mean persistence landscape of these $6$ persistence landscapes.
 
 ```{r,fig.align = 'center'}
-plot(pl_mean(pl_list_1))
+par(mar = c(2,2,2,1))
+plot(pl_mean(pl_list_1), main = "Mean Persistence Landscape")
 ```
 
 ### Hypothesis Testing
@@ -242,13 +240,14 @@ sample_nonsym_lemniscate <- function() {
   circle2 <- add_noise(circle2, sd = 0.05)
   Y <- rbind(circle1, circle2)
 }
-plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y")
+par(mar = c(2,2,2,1))
+plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y", main = "Non-sym. Figure Eight")
 ```
 
 Now, we sample with noise $6$ times from the lemniscate above, compute the persistence landscape for each sample, and then compute the mean persistence landscape.
 
 ```{r,fig.align = 'center'}
-par(mfrow = c(2, 3), mar = c(1,2,1,2))
+par(mfrow = c(3, 2), mar = c(2,2,1,1))
 pl_list_2 <- c()
 for (i in seq(6)) {
   pc <- sample_nonsym_lemniscate()
@@ -260,12 +259,14 @@ for (i in seq(6)) {
 }
 ```
 
-We will refer to the sampling distributions `pl_list_1` and `pl_list_2` as $P_1$ and $P_2$, respectively. Below, we plot the mean persistence landscape of $P_1$ (lemniscates) and the mean persistence landscape of $P_2$ (non-symmetric lemniscates).
+We will refer to the sampling distributions `pl_list_1` and `pl_list_2` as $P_1$ and $P_2$, respectively. Below, we replot the mean persistence landscape of $P_1$ (lemniscates) and plot the mean persistence landscape of $P_2$ (non-symmetric lemniscates).
 
 ```{r,fig.align = 'center'}
-par(mfrow = c(1, 2), mar = c(1,2,1,2))
-plot(pl_mean(pl_list_1), main = "Mean PL of P1")
-plot(pl_mean(pl_list_2), main = "Mean PL of P2")
+par(mfrow = c(2,1), mar = c(2,2,0.25,2))
+plot(pl_mean(pl_list_1))
+title("Mean PL of P1", adj = 0.1, line = -1)
+plot(pl_mean(pl_list_2))
+title("Mean PL of P2", adj = 0.1, line = -1)
 ```
 
 ### Z-Test
@@ -302,6 +303,7 @@ In this section, we conduct exploratory analysis using variance decomposition. W
 
 We continue using the lists from our toy example. We utilize the `pl_to_matrix()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them.`prcomp()` performs PCA on our vectorized persistence landscapes.
 ```{r,fig.align = 'center'}
+par(mar = c(4,4,2,2))
 pl_list <- c(pl_list_1,pl_list_2)
 pl_vectors <- pl_to_matrix(pl_list)
 pca <- prcomp(pl_vectors)
@@ -312,6 +314,7 @@ summary(pca)
 In the summary above, we see that about $83.8\%$ of the variance in the original data is captured in the first principal component, and about $8.64\%$ of the variance is captured in the second principal component. So the first and second principal component are sufficient in explaining the variance of the data. To evaluate whether the dimension reduction was successful, we assign labels to our data based on the distribution they were generated from and plot each sample with their corresponding first principal component and second principal component values to see if any clustering or patterns occurred.
 
 ```{r,fig.align = 'center'}
+par(mar = c(4,4,2,2))
 data.labels <- c(rep(1,length(pl_list_1)), rep(2,length(pl_list_2)))
 plot(pca$x[,1:2], col = data.labels, pch = 17 + (2 * data.labels), asp = 1)
 ```
