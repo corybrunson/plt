@@ -29,8 +29,8 @@ In this vignette, we will show how {plt} supports computation of persistence lan
 1. Represent a sample of data as a point cloud.
 2. Construct a filtered simplicial complex on the point cloud.
 3. Obtain the persistence module by taking the simplicial homology of the filtration.
-4. Visualize/vectorize the persistence module
-5. Apply hypothesis tests, machine learning tools
+4. Visualize/vectorize the persistence module.
+5. Apply hypothesis tests and machine learning tools.
 
 This vignette will include dimension reduction and supervised classification as part of the applications of TDA.
 
@@ -50,9 +50,7 @@ library(e1071)
 
 # Gather a point set
 
-To begin, we will create a toy point cloud on which we will illustrate how to use {plt}. 
-
-Below we sample $60$ points from a toy point cloud sampler for a figure eight (lemniscate) in $\mathbb{R}^2$ with noise. Observe that the dominant features of the figure eight, the $1$-dimensional holes, are visible when we plot the points. 
+To begin, we create a toy point cloud on which we will illustrate how to use {plt}. We noisily sample $60$ points in $\mathbb{R}^2$ from a figure eight (lemniscate) sampler.
 
 ```{r,fig.align = 'center'}
 set.seed(120246L)
@@ -62,15 +60,19 @@ plot(pc, asp = 1, pch = 16L, main = "Figure Eight Point Cloud")
 
 # Adapting Point Data to Persistence Data
 
-Now, from our point set we would like to generate more topologically informative data. To do so, we construct a **simplicial complex** (a set of **simplices**), $K$, using our points. Recall that a *$0$-simplex* is a single point, a *$1$-simplex* is an edge or line segment, a *$2$-simplex* is a triangle, and a *$3$-simplex* is a tetrahedron. We will utilize the **alpha complex**, however there exists others that have their own advantages and disadvantages. We use the alpha complex here as it captures the underlying structure of the data accurately and is more computationally efficient then other methods. By applying the alpha complex with various radii (scale), we create a **filtered simplicial complex** or **filtration**, a nested sequence of simplicial complexes:
+From our point set, we would like to generate more topologically informative data. We construct a **simplicial complex** $K$, which is a set of **simplices**. Recall that a *$0$-simplex* is a single point, a *$1$-simplex* is an edge or line segment, a *$2$-simplex* is a triangle, and a *$3$-simplex* is a tetrahedron. 
+
+There are different formulations for constructing simplicial complexes that have their own advantages and disadvantages. We will utilize the **alpha complex** as it captures the underlying structure of the data accurately and is more computationally efficient than other methods. 
+
+By applying the alpha complex with various radii (scale), we create a **filtered simplicial complex** or **filtration**, which is a nested sequence of simplicial complexes:
 $$
 K_0 \subset K_1 \subset K_2 \subset \cdots\subset K_n,
 $$
-where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. In the below section, we visualize the alpha complex filtration built upon the point cloud. 
+where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. Next, we visualize the alpha complex filtration. 
 
 ## Generate a Simplicial Complex
 
-The plots below show the alpha complex at six different levels of the filtration distance parameter. As $\alpha$ increases throughout these six plots, we observe that the number of connected components and loops changes. In addition, we also observe that some of these topological features, such as the two lobes (loops) of the figure eight, remain or persist throughout many $\alpha$'s. We go into more detail on this below.
+The plots below show the alpha complex at six different levels of its distance parameter $\alpha$.  As $\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, remain or persist throughout many $\alpha$'s.
 
 ```{r,echo = FALSE,fig.align = 'center'}
 par(mfrow = c(3, 2), mar = c(2,2,1,1))
@@ -82,11 +84,14 @@ for (alpha in alpha_values) {
 }
 ```
 
-The filtration provides a mathematical structure for analyzing the global topological features of our point cloud. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex: **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. By applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
+## Compute Persistence Data
+
+The filtration provides a mathematical structure for analyzing the global topological features of our point cloud. For each simplicial complex within the filtration, we apply **simplicial homology** to classify these structures using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex. **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. 
+
+Applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
 $$
 H_k(K_0) \rightarrow H_k(K_1) \rightarrow H_k(K_2) \rightarrow \cdots  \rightarrow H_k(K_n).
 $$
-
 The persistence module tracks the *lifetime* of features throughout the *time span* of the filtration. The birth value $b$ of a feature is when it first appears in the persistence module. The death value $d$ of a feature is when it disappears. A topological feature with a long lifetime $d-b$ is called a *persistent* feature.
 
 ```{r}
@@ -96,7 +101,7 @@ pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
 pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
 ```
 
-Note that the need to `sqrt()` the computed values obtained from `alphaComplexDiag()` is due to a phenomenon of its package, where the function is mistakenly squaring its persistence data.
+Note: The need to apply `sqrt()` to the values from `alphaComplexDiag()` arises because the function outputs squared persistence data.
 
 The `pd` object stores the birth and death values for the $0$ and $1$ dimension features across the alpha filtration.
 
@@ -119,7 +124,9 @@ col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2)
 
 ### Persistence Diagram
 
-The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. Note that for any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are *non-persistent* features because they die shortly or immediately after being born. In the persistence diagram below, we have three features that stand out. Two of these being $1$-dimensional features distinguished by their distance from the line $d = b$. These persistence features represent the two circles of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
+The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. Note that for any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are *non-persistent* features because they die shortly or immediately after being born. 
+
+In the persistence diagram below, three features stand out. Two of these being $1$-dimensional features distinguished by their distance from the line $d = b$. These persistence features represent the two circles of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
 
 ```{r,fig.align = 'center'}
 plot(pd, asp = 1, diagLim = c(0,.75))
@@ -175,7 +182,7 @@ print(pd)
 The `pl_new()` function takes in a single matrix of persistence data or a formatted list with the class `persistence_diagram`, and computes the persistence landscape. Below, we compute the landscape for the $1$-dimensional topological features.
 
 Often users will find it useful to only look at one dimension of the data, whether for simplification or if it's a particular dimension of interest.
-Below, we filter for only degree-one topological features and the entire domain of the landscape by setting `xmin` and `xmax` to the infimum and supremum, respectively. You can select what window of filtration you want the landscape to be of by changing these parameters. The window must contain the support of the landscape, which is the set of points for which the persistence landscape is non-zero.
+Below, we filter for only degree-one topological features and the entire domain of the landscape by setting `xmin` and `xmax` to the infimum and supremum, respectively. You can select what window of filtration you want the landscape to be of by changing these parameters. The window must contain the *support* of the landscape, which is the set of points for which the persistence landscape is non-zero.
 
 ```{r}
 pl1d <- pl_new(pd, degree = 1, xby = 0.025)
@@ -194,7 +201,7 @@ plot(pl1d, main = "Persistence Landscape", n_levels = n_levs, asp = 1)
 
 ### Mean Persistence Landscape
 
-A convenient way of thinking about the mean persistence landscape lies in considering our levels. To define a mean on landscapes, we take the pointwise mean of each level. Hence, the mean $i$th level is given by
+A convenient way of thinking about the mean persistence landscape lies in considering our levels. To define a mean on landscapes, we take the pointwise mean of each level. Hence, the mean $i^{\mathbb{th}}$ level is given by
 $$\bar \lambda_i(x) = \frac{1}{n}\sum_{j=1}^{z}\lambda_i ^j(x)$$
 where $j$ is the index of the landscape and $z$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise $6$ times from a lemniscate and we compute the persistence landscape for each sampled point cloud.
 
@@ -319,7 +326,7 @@ As we can see, clustering of samples from the same sample did occur. We observe 
 
 We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes (in our case the classes are the sample) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
 
-Below we train our model using `svm()` and perform $4$-fold cross validation. We set `scale = FALSE` so that more persistent features have more weight.
+Below we train our model using `svm()` and perform $4$-fold cross validation. That is, the algorithm splits the data into $4$ groups and as it iterates to using each group as the testing group, it uses the other $3$ groups as the training data. We set `scale = FALSE` so that more persistent features have more weight.
 
 ```{r}
 svm_model <- svm(pl_vectors,data.labels,scale = FALSE,
