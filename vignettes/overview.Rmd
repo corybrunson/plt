@@ -68,11 +68,11 @@ By applying the alpha complex with various radii (scale), we create a **filtered
 $$
 K_0 \subset K_1 \subset K_2 \subset \cdots\subset K_n,
 $$
-where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. Next, we visualize the alpha complex filtration. 
+where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. 
 
 ## Generate a Simplicial Complex
 
-The plots below show the alpha complex at six different levels of its distance parameter $\alpha$.  As $\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, remain or persist throughout many $\alpha$'s.
+The plots below show the alpha complex at six different levels of its distance threshold $\alpha$.  As $\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, remain or persist throughout many $\alpha$'s.
 
 ```{r,echo = FALSE,fig.align = 'center'}
 par(mfrow = c(3, 2), mar = c(2,2,1,1))
@@ -92,7 +92,7 @@ Applying simplicial homology to the filtration, we obtain a sequence of vector s
 $$
 H_k(K_0) \rightarrow H_k(K_1) \rightarrow H_k(K_2) \rightarrow \cdots  \rightarrow H_k(K_n).
 $$
-The persistence module tracks the *lifetime* of features throughout the *time span* of the filtration. The birth value $b$ of a feature is when it first appears in the persistence module. The death value $d$ of a feature is when it disappears. A topological feature with a long lifetime $d-b$ is called a *persistent* feature.
+The persistence module tracks the *lifetime* of features throughout the *time span* of the filtration. The *birth* value $b$ of a feature is when it first appears in the persistence module. The *death* value $d$ of a feature is when it disappears. A topological feature with a long lifetime $d-b$ is called a *persistent* feature.
 
 ```{r}
 pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
@@ -100,8 +100,6 @@ pd <- alphaComplexDiag(pc, maxdimension = 1)$diagram
 # birth and death values have been squared, so take the square root
 pd[,c(2,3)] <- sqrt(pd[,c(2,3)])
 ```
-
-Note: The need to apply `sqrt()` to the values from `alphaComplexDiag()` arises because the function outputs squared persistence data.
 
 The `pd` object stores the birth and death values for the $0$ and $1$ dimension features across the alpha filtration.
 
@@ -124,9 +122,9 @@ col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2)
 
 ### Persistence Diagram
 
-The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. Note that for any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are *non-persistent* features because they die shortly or immediately after being born. 
+The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. For any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are *non-persistent* features because they die shortly or immediately after being born. 
 
-In the persistence diagram below, three features stand out. Two of these being $1$-dimensional features distinguished by their distance from the line $d = b$. These persistence features represent the two circles of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
+In the persistence diagram below, three features stand out. Two are $1$-dimensional features distinguished by their distance from the line $d = b$. These persistence features represent the two lobes of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with.
 
 ```{r,fig.align = 'center'}
 plot(pd, asp = 1, diagLim = c(0,.75))
@@ -202,8 +200,8 @@ plot(pl1d, main = "Persistence Landscape", n_levels = n_levs, asp = 1)
 ### Mean Persistence Landscape
 
 A convenient way of thinking about the mean persistence landscape lies in considering our levels. To define a mean on landscapes, we take the pointwise mean of each level. Hence, the mean $i^{\mathbb{th}}$ level is given by
-$$\bar \lambda_i(x) = \frac{1}{n}\sum_{j=1}^{z}\lambda_i ^j(x)$$
-where $j$ is the index of the landscape and $z$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise $6$ times from a lemniscate and we compute the persistence landscape for each sampled point cloud.
+$$\bar \lambda_i(x) = \frac{1}{N}\sum_{j=1}^{N}\lambda_i ^j(x)$$
+where $j$ is the index of the landscape and $N$ is the number of landscapes. We calculate a mean level for each level. Overlaying these levels grants us the mean persistence landscape. Below we sample with noise $6$ times from a lemniscate and we compute the persistence landscape for each sampled point cloud.
 
 ```{r,fig.align = 'center'}
 set.seed(101137L)
@@ -302,7 +300,7 @@ Note that we failed to reject the null hypothesis when conducting the parametric
 
 # Exploratory Dimension Reduction
 
-In this section, we conduct exploratory analysis using variance decomposition. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called principal components. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes. This is done to reduce the dimensions of our data while retaining as much variance as possible.
+In this section, we conduct exploratory analysis using variance decomposition. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called *principal components*. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes. This is done to reduce the dimensions of our data while retaining as much variance as possible.
 
 We continue using the lists from our toy example. We utilize the `pl_to_matrix()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them. `prcomp()` performs PCA on our vectorized persistence landscapes.
 ```{r,fig.align = 'center'}
@@ -326,7 +324,7 @@ As we can see, clustering of samples from the same sample did occur. We observe 
 
 We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes (in our case the classes are the sample) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
 
-Below we train our model using `svm()` and perform $4$-fold cross validation. That is, the algorithm splits the data into $4$ groups and as it iterates to using each group as the testing group, it uses the other $3$ groups as the training data. We set `scale = FALSE` so that more persistent features have more weight.
+Below we train our model using `svm()` and perform $4$-fold *cross validation*. That is, the algorithm splits the data into $4$ groups and as it iterates to using each group as the testing group, it uses the other $3$ groups as the training data. We set `scale = FALSE` so that more persistent features have more weight.
 
 ```{r}
 svm_model <- svm(pl_vectors,data.labels,scale = FALSE,
