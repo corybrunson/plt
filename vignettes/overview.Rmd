@@ -134,7 +134,7 @@ col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2, bty = "n")
 
 ##  Landscape Transformation
 
-Now that we have persistence data, we can construct persistence landscapes, which are useful for analyzing topological features in a form suited for statistical methods. Persistence landscapes are built by transforming persistence diagrams into a sequence of tent functions that capture the lifetime of topological features.
+Now that we have persistence data, we can construct persistence landscapes, which are useful for analyzing topological features in a form suited for statistical methods. Persistence landscapes are built by transforming persistence diagrams into a sequence of "tent" functions that capture the lifetime of topological features.
 
 ### Tent Functions
 Each point in the persistence diagram corresponds to a topological feature with a birth and death time. We can represent these features using tent functions:
@@ -158,7 +158,7 @@ To create the persistence landscape, we superimpose these tent functions. At eac
 
 - $\lambda_1(t)$ is the level that takes the value of the tallest tent at $t$
 - $\lambda_2(t)$ is the level that takes the value of the second tallest tent at $t$, and so on for the remaining less prominent features.
-- Generically, $\lambda_k(t)$ = $\text{k-th}$ largest value of $\{f_{(b_i, d_i)}(t) | (b_i, d_i) \in PD\}$ at each $t$ where $PD$ is the persistence diagram.
+- Generically, $\lambda_k(t)=\text{k}^{\text{th}}$ largest value of $\{f_{(b_i, d_i)}(t) | (b_i, d_i) \in PD\}$ at each $t$ where $PD$ is the persistence diagram.
 This superimposition of tents, creating a level of functions, allows us to visualize and analyze the relative significance of topological features. The collection of our levels makes our landscape.
 
 
@@ -200,8 +200,8 @@ plot(pl1d, main = "Persistence Landscape", n_levels = n_levs, asp = 1)
 ### Mean Persistence Landscape
 
 A convenient way of thinking about the mean persistence landscape is by considering its levels. To define a mean on landscapes, we take the pointwise mean of each level. Hence, the mean $i^{\mathbb{th}}$ level is given by
-$$\bar \lambda_i(x) = \frac{1}{N}\sum_{j=1}^{N}\lambda_i ^j(x)$$
-where $j$ is the index of the landscape and $N$ is the number of landscapes. We calculate a mean level for each level. Overlaying these mean levels grants us the mean persistence landscape.
+$$\bar \lambda_i(x) = \frac{1}{N}\sum_{j=1}^{N}\lambda_i ^j(x),$$
+where $j$ is the index of the landscape, and $N$ is the number of landscapes. We calculate a mean level for each level. Overlaying these mean levels grants us the mean persistence landscape.
 
 Below, we noisily sample $6$ times from a lemniscate, and then compute the persistence landscape for each sampled point cloud.
 
@@ -227,11 +227,13 @@ plot(pl_mean(pl_list_1), main = "Mean Persistence Landscape")
 
 ### Hypothesis Testing
 
-We will now discuss how to perform hypothesis tests on persistence landscapes. In statistics, we can use hypothesis tests to weigh the evidence to determine whether two samples came from the same distribution. A hypothesis test requires a calculated test statistic from sample and an understanding of the distribution of the test statistic. Recall that the p-value is the probability of observing data as extreme as or more extreme than the observed data, assuming the null hypothesis is true. If the p-value is less than $\alpha$, then we reject our null hypothesis, otherwise we fail to reject it.
+We will now discuss how to perform hypothesis tests on persistence landscapes.
 
-In TDA, we use persistence landscapes to derive our test statistics. Our hypothesis testing methods provide the result as a list of class `htest` which contains useful information like the estimated distance between the mean landscapes, the test statistic, the **p-value**, and more.
+In statistics, hypothesis tests are used to weigh the evidence (collected data) to determine whether there is a real effect or phenomenon present in the data, or if its simply a consequence of random sampling or variation. We define a null hypothesis $H_0$ that predicates no effect is present, and an alternative hypothesis $H_A$ that specifies the direction of effect. A hypothesis test requires a calculated *test statistic* from a sample and an understanding of the distribution of the test statistic. The *$p$-value* is the probability of observing data as extreme as or more extreme than the observed data, assuming the null hypothesis is true. And $\alpha$, the *significance level*, is the probability of rejecting the null hypothesis when it is true. This value is set by the investigator ahead of time. If the $p$-value is less than $\alpha$, then we reject our null hypothesis, otherwise we fail to reject it.
 
-For our next example, we show how to make such a distinction. First, we create a counterfeit lemniscate sampler which may be similar enough to deceive quality control. The distinction in this counterfeit lemniscate is that it has different-sized circles, while the original lemniscate has same-sized lobes. Below, the non-symmetric lemniscate sampler is comprised of two uniform circles (of different radii), that are each sampled with noise and interlinked.
+In TDA, we can use persistence landscapes to derive test statistics in order to conduct hypotheses tests. Our hypothesis testing functions in {plt} provide the result as a list of class `htest`, which contains useful information like the estimated distance between the mean landscapes, the test statistic, the $p$-value, and more. In TDA, hypothesis tests can be used to assess whether two samples came from the same distribution.
+
+For our next example, we show how to make such a distinction. First, we create a counterfeit lemniscate sampler which may be similar enough to deceive quality control. The difference in this counterfeit lemniscate is that it has different-sized circles, while the original lemniscate has same-sized lobes. Below, the non-symmetric lemniscate sampler is comprised of two uniform circles of different radii, each sampled with noise and then interlinked.
 
 ```{r,fig.align = 'center'}
 sample_nonsym_lemniscate <- function() {
@@ -245,7 +247,7 @@ sample_nonsym_lemniscate <- function() {
   circle2 <- add_noise(circle2, sd = 0.05)
   Y <- rbind(circle1, circle2)
 }
-plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y", main = "Non-symmetric Figure Eight")
+plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y", main = "Non-symmetric Figure Eight Point Cloud")
 ```
 
 Now, we noisily sample $6$ times from the lemniscate sampler above, compute the persistence landscape for each point cloud, and then plot the persistence landscapes.
@@ -274,11 +276,13 @@ plot(pl_mean(pl_list_2))
 title("Mean PL of P2", adj = 0.1, line = -1)
 ```
 
+We will use hypothesis tests to test if there is a statistically significant difference between these two mean persistence landscapes.
+
 ### Z-Test
 
 The purpose of the **two sample Z-test** is to test for the difference of means between two samples from two distributions. The Z-test is a parametric test that requires the two samples to be normally distributed (a sample of persistence landscapes is a Gaussian random variable) and performs well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate. For more information, please reference section 3 of Bubenik (2015).
 
-To conduct this test on persistent landscapes, our test statistic is the integral of the mean landscape. What interval this integration is taken over is dependent on the `support` provided. Users can enter intervals for the `support` parameter to focus on regions where important topological features lie, this also would increase efficiency as there would be less calculations to be made. Then, the Z-score is computed from which we get our p-value. We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level.
+To conduct this test on persistent landscapes, our test statistic is the integral of the mean landscape. What interval this integration is taken over is dependent on the `support` provided. Users can enter intervals for the `support` parameter to focus on regions where important topological features lie, this also would increase efficiency as there would be less calculations to be made. Then, the Z-score is computed from which we get our $p$-value. We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level.
 
 If the true difference in means were zero, then this would imply that $P_1$ and $P_2$ could have come from the same distribution.
 
@@ -291,11 +295,11 @@ plz <- pl_z_test(pl_list_1,pl_list_2)
 pval1 <- round(plz$p.value, 3)
 ```
 
-Since the p-value is $`r pval1`$ at $\alpha=0.05$, we fail to reject the null hypothesis. This result suggests that, according to the Z-test, the samples appear to come from the same distribution. This highlights the Z-test's conservative nature when testing for differences between two samples of persistence landscapes.
+Since the $p$-value is $`r pval1`$ at $\alpha=0.05$, we fail to reject the null hypothesis. This result suggests that, according to the Z-test, the samples appear to come from the same distribution. This highlights the Z-test's conservative nature when testing for differences between two samples of persistence landscapes.
 
 ### Permutation Test
 
-We now perform a permutation test, which is a non-parametric hypothesis test. This test is useful for smaller sample sizes and does not require an assumption of distribution of the data. That is, rather than making an assumption of the sampling distribution, we build the sampling distribution by rearranging the our $12$ samples ($6$ from $P_1$ and $6$ from $P_2$) and computing the test statistic for each permutation. We then compare the observed/initial test statistic to the distribution of test statistics we obtained by randomly permuting the data. This helps to determine whether the observed effect is statistically significant. 
+We now perform a **permutation test**, which is a non-parametric hypothesis test. This test is useful for smaller sample sizes and does not require an assumption of distribution of the data. Instead, we build the sampling distribution by rearranging the our $12$ samples ($6$ from $P_1$ and $6$ from $P_2$) and computing the test statistic for each permutation. We then compare the observed/initial test statistic to the distribution of test statistics we obtained by randomly permuting the data. This helps to determine whether the observed effect is statistically significant. 
 
 The null hypothesis is that $P_1$ and $P_2$ come from the same distribution and the alternative hypothesis being that they do not come from the same distribution. 
 
@@ -307,7 +311,7 @@ The null hypothesis is that $P_1$ and $P_2$ come from the same distribution and 
 pval2 <- round(perm$p.value, 4)
 ```
 
-Since the p-value is $`r pval2`$ at $\alpha=0.05$, we have sufficient evidence to reject the null hypothesis. This result suggests that the two mean persistence landscapes do not come from the same distribution.
+Since the $p$-value is $`r pval2`$ at $\alpha=0.05$, we have sufficient evidence to reject the null hypothesis. This result suggests that the two mean persistence landscapes do not come from the same distribution.
 
 Note that we failed to reject the null hypothesis when conducting the parametric Z-test, but rejected the null hypothesis when conducting the non-parametric permutation test. It is important to recognize that these two hypothesis tests are looking at the data in different ways. So one test may detect the difference between the samples and the other one may not.
 
