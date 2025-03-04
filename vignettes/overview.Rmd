@@ -72,7 +72,7 @@ where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration
 
 ## Generate a Simplicial Complex
 
-The plots below show the alpha complex at six different levels of its distance threshold $\alpha$.  As $\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, remain or persist throughout many $\alpha$'s.
+The plots below show the alpha complex at six different levels of its distance threshold $\alpha$.  As $\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, persist throughout many $\alpha$'s.
 
 ```{r,echo = FALSE,fig.align = 'center'}
 par(mfrow = c(3, 2), mar = c(2,2,1,1))
@@ -86,7 +86,7 @@ for (alpha in alpha_values) {
 
 ## Compute Persistence Data
 
-The filtration provides a mathematical structure for analyzing the global topological features of our point cloud. For each simplicial complex within the filtration, we apply **simplicial homology** to classify them using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex. **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. 
+The filtration provides a mathematical structure for analyzing the global topological features of a point cloud. For each simplicial complex within the filtration, we apply **simplicial homology** to classify them using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex. **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. 
 
 Applying simplicial homology to the filtration, we obtain a sequence of vector spaces and linear maps called a **persistence module**:
 $$
@@ -140,7 +140,7 @@ Now that we have persistence data, we can construct persistence landscapes, whic
 Each point in the persistence diagram corresponds to a topological feature with a birth and death time. We can represent these features using tent functions:
 
 - The base of the tent spans from the feature's birth to its death.
-- The peak of the tent is located at the midpoint between birth and death, representing the time when the feature is most prominent (or *persistent*).
+- The peak of the tent is located at the midpoint between birth and death.
 - The height of the tent at any point reflects how long the feature persists around that time.
 
 These tent functions are given by:
@@ -264,7 +264,7 @@ for (i in seq(6)) {
 }
 ```
 
-We will refer to the sampling distributions `pl_list_1` and `pl_list_2` as $P_1$ and $P_2$, respectively. Below, we replot the mean persistence landscape of $P_1$ (figure eight) and plot the mean persistence landscape of $P_2$ (non-symmetric figure eight).
+We will refer to the sampling distributions, `pl_list_1` and `pl_list_2`, as $P_1$ and $P_2$. Below, we replot the mean persistence landscape of $P_1$ (figure eight) and plot the mean persistence landscape of $P_2$ (non-symmetric figure eight).
 
 ```{r,fig.align = 'center'}
 par(mfrow = c(2,1), mar = c(2,2,0.25,2))
@@ -276,7 +276,7 @@ title("Mean PL of P2", adj = 0.1, line = -1)
 
 ### Z-Test
 
-The purpose of the two sample Z-test is to test for the difference of means between two samples from the two distributions. The Z-test is a parametric test that requires the two samples to be normally distributed (a sample of persistence landscapes is a Gaussian random variable) and performs well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate. For more information, please reference section 3 of Bubenik (2015).
+The purpose of the **two sample Z-test** is to test for the difference of means between two samples from two distributions. The Z-test is a parametric test that requires the two samples to be normally distributed (a sample of persistence landscapes is a Gaussian random variable) and performs well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate. For more information, please reference section 3 of Bubenik (2015).
 
 To conduct this test on persistent landscapes, our test statistic is the integral of the mean landscape. What interval this integration is taken over is dependent on the `support` provided. Users can enter intervals for the `support` parameter to focus on regions where important topological features lie, this also would increase efficiency as there would be less calculations to be made. Then, the Z-score is computed from which we get our p-value. We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level.
 
@@ -313,7 +313,7 @@ Note that we failed to reject the null hypothesis when conducting the parametric
 
 # Exploratory Dimension Reduction
 
-In this section, we conduct exploratory analysis using variance decomposition. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called *principal components*. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes. This is done to reduce the dimensions of our data while retaining as much variance as possible.
+In this section, we conduct exploratory analysis using variance decomposition.  This is done to reduce the dimensions of our data while retaining as much variance as possible. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called *principal components*. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes.
 
 We continue using the lists from our toy example. We utilize the `pl_to_matrix()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them. `prcomp()` performs PCA on our vectorized persistence landscapes.
 ```{r,fig.align = 'center'}
@@ -324,7 +324,9 @@ plot(pca, type = "l", main = "Scree Plot")
 summary(pca)
 ```
 
-In the summary above, we see that about $77.5\%$ of the variance in the original data is captured in the first principal component, and about $13.9\%$ of the variance is captured in the second principal component. So the first and second principal component are sufficient in explaining the variance of the data. To evaluate whether the dimension reduction was successful, we assign labels to our data based on the distribution they were generated from and plot each sample with their corresponding first principal component and second principal component values to see if any clustering or patterns occurred.
+In the summary above, we see that about $77.5\%$ of the variance in the original data is captured in the first principal component, and about $13.9\%$ of the variance is captured in the second principal component. So the first and second principal component are sufficient in explaining the variance of the data.
+
+To evaluate whether the dimension reduction was successful, we assign labels to our data based on the distribution they were generated from and plot each sample with their corresponding first principal component and second principal component values to see if any clustering or patterns occurred.
 
 ```{r,fig.align = 'center'}
 data.labels <- c(rep(1,length(pl_list_1)), rep(2,length(pl_list_2)))
