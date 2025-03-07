@@ -72,7 +72,7 @@ where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration
 
 ## Generate a Simplicial Complex
 
-The plots below show the alpha complex at six different levels of its distance threshold $\alpha$.  As $\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, persist throughout many $\alpha$'s.
+The plots below show the alpha complex at six levels of its distance threshold $\epsilon_\alpha$.  As $\epsilon_\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, persist throughout many values of $\epsilon_\alpha$.
 
 ```{r,echo = FALSE,fig.align = 'center'}
 par(mfrow = c(3, 2), mar = c(2,2,1,1))
@@ -229,11 +229,11 @@ plot(pl_mean(pl_list_1), main = "Mean Persistence Landscape")
 
 We will now discuss how to perform hypothesis tests on persistence landscapes.
 
-In statistics, hypothesis tests are used to weigh the evidence (collected data) to determine whether there is a real effect or phenomenon present in the data, or if its simply a consequence of random sampling or variation. We define a null hypothesis $H_0$ that predicates no effect is present, and an alternative hypothesis $H_A$ that specifies the direction of a present effect. A hypothesis test requires a calculated *test statistic* from a sample and an understanding of the distribution of the test statistic. The *$p$-value* is the probability of observing data as extreme as or more extreme than the observed data, assuming the null hypothesis is true. And $\alpha$, the *significance level*, is the probability of rejecting the null hypothesis when it is true. This value is set by the investigator ahead of time. If the $p$-value is less than $\alpha$, then we reject our null hypothesis, otherwise we fail to reject it.
+In statistics, hypothesis tests are used to weigh the evidence (collected data) to determine whether there is a real effect or phenomenon present in the data, or if its simply a consequence of random sampling or variation. When conducting a hypothesis test, we define a null hypothesis $H_0$ that predicates that no effect is present, and we define an alternative hypothesis $H_A$ that specifies the direction of a present effect. A hypothesis test requires a calculated *test statistic* from the observed data, and an understanding of the test statistic's distribution. A *$p$-value* is the probability of obtaining a test statistic as extreme or more extreme than the observed test statistic, assuming the null hypothesis to be true. And $\alpha$, the *significance level*, is the probability of rejecting the null hypothesis when it is actually true (*type I error*). This value is set arbitrarily by the investigator ahead of time. If the $p$-value is less than $\alpha$, then we reject our null hypothesis, otherwise we fail to reject it.
 
-In TDA, we can use persistence landscapes to derive test statistics in order to conduct hypotheses tests. Our hypothesis testing functions in {plt} provide the result as a list of class `htest`, which contains useful information like the estimated distance between the mean landscapes, the test statistic, the $p$-value, and more. In TDA, hypothesis tests can be used to assess whether two samples came from the same distribution.
+In TDA, we can use persistence landscapes to derive test statistics in order to conduct hypotheses tests on samples of point cloud data. Our {plt} hypothesis testing functions --- `pl_z_test()`, `pd_z_test()`, and `pl_perm_test()` --- provide the test result as a list of class `htest`, which contains useful information like the estimated distance between the mean landscapes, the test statistic, the $p$-value, and more. In TDA, hypothesis tests can be used to assess whether two samples came from the same distribution.
 
-For our next example, we show how to make such a distinction. First, we create a counterfeit lemniscate sampler which may be similar enough to deceive quality control. The difference in this counterfeit lemniscate is that it has different-sized circles, while the original lemniscate has same-sized lobes. Below, the non-symmetric lemniscate sampler is comprised of two uniform circles of different radii, each sampled with noise and then interlinked.
+For our next example, we will show how to test for such a distinction. First, we create a counterfeit lemniscate sampler which may be similar enough to deceive quality control. The difference in this counterfeit lemniscate is that it has different-sized circles, while the original lemniscate has same-sized lobes. Below, the non-symmetric lemniscate sampler is comprised of two uniform circles of different radii, each sampled with noise and then interlinked.
 
 ```{r,fig.align = 'center'}
 sample_nonsym_lemniscate <- function() {
@@ -250,7 +250,7 @@ sample_nonsym_lemniscate <- function() {
 plot(sample_nonsym_lemniscate(), asp = 1, pch = 16, xlab = "x", ylab = "y", main = "Non-symmetric Figure Eight Point Cloud")
 ```
 
-Now, we noisily sample $6$ times from the lemniscate sampler above, compute the persistence landscape for each point cloud, and then plot the persistence landscapes.
+We noisily sample $6$ times from the lemniscate sampler above, compute the persistence landscape for each point cloud, and then plot the persistence landscapes.
 
 ```{r,fig.align = 'center'}
 set.seed(194114L)
@@ -266,8 +266,7 @@ for (i in seq(6)) {
 }
 ```
 
-We will refer to the sampling distributions, `pl_list_1` and `pl_list_2`, as $P_1$ and $P_2$. Below, we replot the mean persistence landscape of $P_1$ (figure eight) and plot the mean persistence landscape of $P_2$ (non-symmetric figure eight).
-
+We will refer to the sampling distributions, `pl_list_1` and `pl_list_2`, as $P_1$ and $P_2$. Below, we replot the mean persistence landscape of $P_1$ (figure eight) and plot the mean persistence landscape of $P_2$ (non-symmetric figure eight). We denote these mean landscapes as $\bar{P_1}$ and $\bar{P_2}$.
 ```{r,fig.align = 'center'}
 par(mfrow = c(2,1), mar = c(2,2,0.25,2))
 plot(pl_mean(pl_list_1))
@@ -276,32 +275,37 @@ plot(pl_mean(pl_list_2))
 title("Mean PL of P2", adj = 0.1, line = -1)
 ```
 
-We will use hypothesis tests to test if there is a statistically significant difference between these two mean persistence landscapes.
+We will use a two sample Z-test and a permutation test to determine if there is a statistically significant difference between $\bar{P_1}$ and $\bar{P_2}$.
 
 ### Z-Test
 
-The purpose of a **two sample Z-test** is to test for the difference of means between two samples from two population distributions. The Z-test is a parametric test that requires the two samples to be normally distributed and performs well when you have large sample sizes and known population variances. To conduct this test on persistent landscapes, the test statistic is the integral of the mean persistent landscape. If these assumptions are not met, then the test is inappropriate. For more information, please reference section 3 of Bubenik (2015).
+The purpose of a **two sample Z-test** is to test for the difference of means between two samples from two population distributions. The Z-test is a parametric test that requires the two samples to be normally distributed and performs well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate.
 
-In our example, the null hypothesis is that there is not a difference in the two mean persistence landscapes, which would imply that they both came from the same population distribution. And the alternative hypothesis is that there is a difference between the mean persistence landscapes. What interval this integration is taken over is dependent on the `support` provided. Users can enter intervals for the `support` parameter to focus on regions where important topological features lie, this also would increase efficiency as there would be less calculations to be made. Then, the Z-score is computed from which we get our $p$-value. We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level, so $\alpha=0.05$.
+To conduct this test on persistent landscapes, the test statistic requires a functional, the integral of the mean persistent landscape, to quantify the difference in mean persistence landscapes.  The interval of this integration is determined by the `support` provided from the user. Specifically, users can enter intervals for the `support` parameter to focus on regions where important topological features lie, which would increase computational efficiency. The test statistic is $$z = \frac{\bar{P_1}-\bar{P_2}}{\sqrt{\frac{S^2_{P_1}}{n_1}+\frac{S^2_{P_2}}{n_2}}},$$
+where the denominator is the standard error for the difference and $z \sim N(0,1)$. For more information, please reference section 3 of Bubenik (2015).   
+
+In our example, the null hypothesis is that there is not a difference in the two mean persistence landscapes, which would imply that they both came from the same population distribution. And the alternative hypothesis is that there is a difference between the mean persistence landscapes. 
+
+We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level, so $\alpha=0.05$.
 
 ```{r}
-(ztest <- pl_z_test(pl_list_1,pl_list_2,alternative = "two.sided"))
+(ztest <- pl_z_test(pl_list_1, pl_list_2, alternative = "two.sided"))
 ```
 
 ```{r,echo = FALSE, include=FALSE}
 pval1 <- round(ztest$p.value, 3)
 ```
 
-Since the $p$-value is $`r pval1`$ at $\alpha=0.05$, we fail to reject the null hypothesis. This result suggests that, according to the Z-test, the samples appear to come from the same distribution. This highlights the Z-test's conservative nature when testing for differences between two samples of persistence landscapes.
+Since the $p$-value is $`r pval1`$ at $\alpha=0.05$, we have sufficient evidence to reject the null hypothesis. This result suggests that, according to the Z-test, the samples appear to come from the different distributions. However, note that this $p$-value would have been insufficient for a predefined $\alpha = 0.1$. This highlights the Z-test's conservative nature when testing for differences between two samples of persistence landscapes, especially when we have small sample sizes.
 
 ### Permutation Test
 
-We now perform a **permutation test**, which is a non-parametric hypothesis test. This test is useful for smaller sample sizes and does not require an assumption of distribution of the data. Instead, we build the sampling distribution by rearranging the our $12$ samples ($6$ from $P_1$ and $6$ from $P_2$) and computing the test statistic for each permutation. We then compare the observed/initial test statistic to the distribution of test statistics we obtained by randomly permuting the data. This helps to determine whether the observed effect is statistically significant. 
+We now perform a **permutation test**, which is a non-parametric hypothesis test. This test is useful for smaller sample sizes and does not require an assumption of distribution of the data. Instead, we build the sampling distribution by rearranging the our $12$ samples ($6$ each from $P_1$ and $P_2$) and computing the test statistic for each permutation. We then compare the observed/initial test statistic to the distribution of test statistics we obtained by randomly permuting the data. This helps to determine whether the observed effect is statistically significant. 
 
 The null hypothesis is that $P_1$ and $P_2$ come from the same distribution and the alternative hypothesis being that they do not come from the same distribution. 
 
 ```{r}
-(perm <- pl_perm_test(pl_list_1,pl_list_2))
+(perm <- pl_perm_test(pl_list_1, pl_list_2, complete = TRUE))
 ```
 
 ```{r,echo = FALSE, include=FALSE}
