@@ -68,7 +68,7 @@ By applying the alpha complex with various radii (scale), we create a **filtered
 $$
 K_0 \subset K_1 \subset K_2 \subset \cdots\subset K_n,
 $$
-where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. Note that for any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. 
+where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. For any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. 
 
 ## Generate a Simplicial Complex
 
@@ -281,28 +281,33 @@ We will use a two sample Z-test and a permutation test to determine if there is 
 
 The purpose of a **two sample Z-test** is to test for the difference of means between two samples from two population distributions. The Z-test is a parametric test that requires the two samples to be normally distributed and performs well when you have large sample sizes and known population variances. If these assumptions are not met, then the test is inappropriate.
 
-To conduct this test on persistent landscapes, the test statistic requires a functional, the integral of the mean persistent landscape, to quantify the difference in mean persistence landscapes.  The interval of this integration is determined by the `support` provided from the user. Specifically, users can enter intervals for the `support` parameter to focus on regions where important topological features lie, which would increase computational efficiency. The test statistic is $$z = \frac{\bar{P_1}-\bar{P_2}}{\sqrt{\frac{S^2_{P_1}}{n_1}+\frac{S^2_{P_2}}{n_2}}},$$
+To conduct this test on persistent landscapes, the test statistic requires a functional, the integral of the mean persistent landscape, to quantify the difference in mean persistence landscapes.  The interval of this integration is determined by the `support` provided from the user. Specifically, users can enter intervals for the `support` parameter to focus on regions where important topological features lie, which would increase computational efficiency. The test statistic is 
+$$z = \frac{\bar{P_1}-\bar{P_2}}{\sqrt{\frac{S^2_{P_1}}{n_1}+\frac{S^2_{P_2}}{n_2}}},$$
+
 where the denominator is the standard error for the difference and $z \sim N(0,1)$. For more information, please reference section 3 of Bubenik (2015).   
 
-In our example, the null hypothesis is that there is not a difference in the two mean persistence landscapes, which would imply that they both came from the same population distribution. And the alternative hypothesis is that there is a difference between the mean persistence landscapes. 
+In our example, the null hypothesis is that there is not a difference in the two mean persistence landscapes, which would imply that they both came from the same population distribution. And the alternative hypothesis is that there is a difference between the mean persistence landscapes. Succinctly, we test $H_0: \bar{P_1}-\bar{P_2} = 0$ $\text{vs}$ $H_A: \bar{P_1}-\bar{P_2} \ne 0$.
 
-We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level, so $\alpha=0.05$.
+We can adjust $\alpha$ by changing the `conf.level`. Here, we will use the default $0.95$ confidence level, so $\alpha=0.05$. Also, the user can adjust the direction of the alternative hypothesis by setting the `alternative` argument to "two.sided" (default), "greater" or "less".
 
 ```{r}
-(ztest <- pl_z_test(pl_list_1, pl_list_2, alternative = "two.sided"))
+(ztest <- pl_z_test(pl_list_1, pl_list_2, alternative = "two.sided", conf.level = 0.95))
 ```
 
 ```{r,echo = FALSE, include=FALSE}
 pval1 <- round(ztest$p.value, 3)
 ```
 
-Since the $p$-value is $`r pval1`$ at $\alpha=0.05$, we have sufficient evidence to reject the null hypothesis. This result suggests that, according to the Z-test, the samples appear to come from the different distributions. However, note that this $p$-value would have been insufficient for a predefined $\alpha = 0.1$. This highlights the Z-test's conservative nature when testing for differences between two samples of persistence landscapes, especially when we have small sample sizes.
+Since the $p$-value is $`r pval1`$ at $\alpha=0.05$, we have sufficient evidence to reject the null hypothesis. This result suggests that, according to the Z-test, the samples appear to come from the different distributions. However, note that this $p$-value would have been insufficient for a predefined $\alpha = 0.01$. This highlights the Z-test's conservative nature when testing for differences between two samples of persistence landscapes, especially when we have small sample sizes.
 
 ### Permutation Test
 
-We now perform a **permutation test**, which is a non-parametric hypothesis test. This test is useful for smaller sample sizes and does not require an assumption of distribution of the data. Instead, we build the sampling distribution by rearranging the our $12$ samples ($6$ each from $P_1$ and $P_2$) and computing the test statistic for each permutation. We then compare the observed/initial test statistic to the distribution of test statistics we obtained by randomly permuting the data. This helps to determine whether the observed effect is statistically significant. 
+We now perform a **permutation test**, which is a non-parametric hypothesis test. This test is useful for smaller sample sizes and does not require an assumption of distribution of the data. Specifically, the principle assumption of the permutation test is that the observations (in our case, the persistence landscapes) do not come from two distinct population distributions $F_{P_1}$ & $F_{P_2}$, but they are *completely exchangeable* across the two groups.
 
-The null hypothesis is that $P_1$ and $P_2$ come from the same distribution and the alternative hypothesis being that they do not come from the same distribution. 
+The first step of the permutation test is to calculate an initial test statistic. For our data, it will be 
+$K = \bar{P_1}-\bar{P_2}$. Instead, we build the sampling distribution by rearranging our $12$ samples ($6$ each from $P_1$ and $P_2$) and computing the test statistic for each permutation. We then compare the initial test statistic to the distribution of test statistics we obtained by randomly permuting the data. This helps to determine whether the observed effect is statistically significant. 
+
+The null hypothesis is that $P_1$ and $P_2$ come from the same distribution and the alternative hypothesis being that they do not come from the same population distribution. Succinctly, we test $H_0: F_{P_1} = F_{P_2}$ $\text{vs}$ $H_A:  F_{P_1} \ne F_{P_2}$.
 
 ```{r}
 (perm <- pl_perm_test(pl_list_1, pl_list_2, complete = TRUE))
@@ -321,6 +326,7 @@ Note that we failed to reject the null hypothesis when conducting the parametric
 In this section, we conduct exploratory analysis using variance decomposition.  This is done to reduce the dimensions of our data while retaining as much variance as possible. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called *principal components*. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes.
 
 We continue using the lists from our toy example. We utilize the `pl_to_matrix()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them. `prcomp()` performs PCA on our vectorized persistence landscapes.
+
 ```{r,fig.align = 'center'}
 pl_list <- c(pl_list_1,pl_list_2)
 pl_vectors <- pl_to_matrix(pl_list)
