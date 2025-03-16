@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(alphahull)
 ```
 
-In this vignette, we will show how {plt} supports computation of persistence landscapes[^1], and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing as we will see. 
+In this vignette, we will show how {plt} supports the computation of persistence landscapes[^1], and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing. 
 
 # Basic use of TDA in Machine Learning
 
@@ -60,7 +60,7 @@ plot(pc, asp = 1, pch = 16L, main = "Figure Eight Point Cloud")
 
 # Adapting Point Data to Persistence Data
 
-From our point set, we would like to generate more topologically informative data. We construct a **simplicial complex** $K$, which is a set of **simplices**. Recall that a *$0$-simplex* is a single point, a *$1$-simplex* is an edge or line segment, a *$2$-simplex* is a triangle, and a *$3$-simplex* is a tetrahedron. 
+From our point set, we would like to generate more topologically informative data. We construct a **simplicial complex** $K$, which is a set of **simplices**. A *$0$-simplex* is a single point, a *$1$-simplex* is an edge or line segment, a *$2$-simplex* is a triangle, and a *$3$-simplex* is a tetrahedron. 
 
 There are different formulations for constructing simplicial complexes that have their own advantages and disadvantages. We will utilize the **alpha complex** as it captures the underlying structure of the data accurately and is more computationally efficient than other methods. 
 
@@ -70,7 +70,7 @@ K_0 \subset K_1 \subset K_2 \subset \cdots\subset K_n,
 $$
 where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. For any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. 
 
-## Generate a Simplicial Complex
+## Create a Simplicial Complex
 
 The plots below show the alpha complex at six levels of its distance threshold $\epsilon_\alpha$.  As $\epsilon_\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, persist throughout many values of $\epsilon_\alpha$.
 
@@ -344,11 +344,11 @@ data.labels <- c(rep(1,length(pl_list_1)), rep(2,length(pl_list_2)))
 plot(pca$x[,1:2], col = data.labels, pch = 17 + (2 * data.labels), asp = 1)
 ```
 
-As we can see, clustering of samples from the same sample did occur. We observe that the between-group variance is mainly contained in the first principal component. And the within-group variance of $P_1$ is smaller than the within-group variance of $P_2$. 
+As we can see, clustering of samples from the same sample did occur. We observe that the between-group variance is mainly contained in the first principal component. And the within-group variance of $P_1$ is smaller than the between-group variance of $P_2$. 
 
 # Classification
 
-We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes (in our case the classes are the sample) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
+We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes ($P_1$ or $P_2$) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
 
 Below we train our model using `svm()` and perform $4$-fold *cross validation*. That is, the algorithm splits the data into $4$ groups and as it iterates to using each group as the testing group, it uses the other $3$ groups as the training data. We set `scale = FALSE` so that more persistent features have more weight.
 
