@@ -55,7 +55,7 @@ library(e1071)
 
 # Gather a point set
 
-To begin, we create a toy point cloud on which we will illustrate how to use {plt}. We noisily sample $60$ points in $\mathbb{R}^2$ from a figure eight, the lemniscate of Gerono.
+To begin, we create a simple point cloud on which we will illustrate how to use {plt}. We noisily sample $60$ points in $\mathbb{R}^2$ from a figure eight, the lemniscate of Gerono.
 
 ```{r,fig.align = 'center'}
 set.seed(120246L)
@@ -327,7 +327,7 @@ Since the $p$-value is $`r pval2`$, we again reject the null hypothesis. This $p
 
 In this section, we conduct exploratory analysis using variance decomposition.  This is done to reduce the dimensions of our data while retaining as much variance as possible. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called *principal components*. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes.
 
-We continue using the lists from our toy example. We utilize the `pl_to_matrix()` function, which converts our persistence landscapes into their vectorized forms, allowing us to perform general-purpose data analytic operations on them. `prcomp()` performs PCA on our vectorized persistence landscapes.
+We continue using the lists from our example. We utilize the `pl_to_matrix()` function, which converts our persistence landscapes into matrix format, allowing us to perform general-purpose data analytic operations on them. `prcomp()` performs PCA on our vectorized persistence landscapes.
 
 ```{r,fig.align = 'center'}
 pl_list <- c(pl_list_1,pl_list_2)
@@ -337,7 +337,7 @@ plot(pca, type = "l", main = "Scree Plot")
 summary(pca)
 ```
 
-In the summary above, we see that about $77.5\%$ of the variance in the original data is captured in the first principal component, and about $13.9\%$ of the variance is captured in the second principal component. So the first and second principal component are sufficient in explaining the variance of the data.
+In the summary above, we see that about $77.5\%$ of the variance in the original data is captured in the first principal component, and about $13.9\%$ of the variance is captured in the second principal component. So the first and second principal component are sufficient to explain the variance of the data.
 
 To evaluate whether the dimension reduction was successful, we assign labels to our data based on the distribution they were generated from and plot each sample with their corresponding first principal component and second principal component values to see if any clustering or patterns occurred.
 
@@ -346,11 +346,11 @@ data.labels <- c(rep(1,length(pl_list_1)), rep(2,length(pl_list_2)))
 plot(pca$x[,1:2], col = data.labels, pch = 17 + (2 * data.labels), asp = 1)
 ```
 
-As we can see, clustering of samples from the same sample did occur. We observe that the between-group variance is mainly contained in the first principal component. And the within-group variance of $P_1$ is smaller than the between-group variance of $P_2$. 
+As we can see, clustering of samples from the same sample did occur. We observe that the between-group variance is mainly contained in the first principal component. Also, the within-group variance of $P_1$ is smaller than the between-group variance of $P_2$. 
 
 # Classification
 
-We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes ($P_1$ or $P_2$) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors (our landscapes).
+We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes ($P_1$ or $P_2$) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors.
 
 Below we train our model using `svm()` and perform $4$-fold *cross validation*. That is, the algorithm splits the data into $4$ groups and as it iterates to using each group as the testing group, it uses the other $3$ groups as the training data. We set `scale = FALSE` so that more persistent features have more weight.
 
