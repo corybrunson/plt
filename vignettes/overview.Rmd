@@ -1,6 +1,6 @@
 ---
 title: "Exploratory and Predictive Analysis"
-author: "James Golabek, Aidan Bryant, Jason Cory Brunson, Peter Bubenik, Johnathan Bush, Iryna Hartsock"
+author: "James Golabek, Aidan Bryant, Jason Cory Brunson, Johnathan Bush, Iryna Hartsock, Peter Bubenik"
 output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{Exploratory and Predictive Analysis}
