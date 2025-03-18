@@ -17,7 +17,6 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE,warning=FALSE,message=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(alphahull)
 ```
 
 In this vignette, we will show how {plt} supports the computation of persistence landscapes[^1], and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing. 
@@ -42,9 +41,15 @@ The [{tdaunif}](https://github.com/tdaverse/tdaunif) package provides tools to t
 The [{TDA}](https://cran.r-project.org/package=TDA) package contains various tools for TDA, including functions to compute persistence data from point clouds and distance matrices. We use the `alphaComplexDiag()` function to obtain the birth and death values of the alpha complex persistence module.
 
 ```{r,warning=FALSE,message=FALSE}
+# for manifold samples
 library(tdaunif)
+# for alpha complexes
+library(alphahull)
+# for persistent homology
 library(TDA)
+# for persistence landscapes!
 library(plt)
+# for support vector machines
 library(e1071)
 ```
 
