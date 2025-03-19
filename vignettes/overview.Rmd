@@ -162,7 +162,7 @@ To create the persistence landscape, we superimpose these tent functions. At eac
 
 - $\lambda_1(t)$ is the level that takes the value of the tallest tent at $t$
 - $\lambda_2(t)$ is the level that takes the value of the second tallest tent at $t$, and so on for the remaining less prominent features.
-- Generically, $\lambda_k(t)=\text{k}^{\text{th}}$ largest value of $\{f_{(b_i, d_i)}(t) | (b_i, d_i) \in PD\}$ at each $t$ where $PD$ is the persistence diagram.
+- Generically, $\lambda_k(t)=k^{\text{th}}$ largest value of $\{f_{(b_i, d_i)}(t) | (b_i, d_i) \in PD\}$ at each $t$ where $PD$ is the persistence diagram.
 This superimposition of tents, creating a level of functions, allows us to visualize and analyze the relative significance of topological features. The collection of our levels makes our landscape.
 
 
