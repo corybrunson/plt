@@ -126,7 +126,7 @@ col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2)
 
 # Persistence Diagram
 
-The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. For any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are *non-persistent* features because they die shortly or immediately after being born. 
+The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. For any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are ephemeral features because they die shortly or immediately after being born. 
 
 In the persistence diagram below, three features stand out. Two are $1$-dimensional features distinguished by their distance from the line $d = b$. These persistence features represent the two lobes of the figure eight. We also observe a $0$-dimensional feature with infinite persistence because there must always be the one connected component that includes the entire dataset. As smaller components merge, this final component persists across all scales, since nothing remains to connect with it.
 
