@@ -21,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this vignette, we will show how {plt} supports the computation of persistence landscapes[^1], and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing. 
 
-# Basic use of TDA in Machine Learning
+# Basic use of TDA in Statistics and Machine Learning
 
 **Topological data analysis** (TDA)[^2] involves the use of algebraic topology to analyze data. The goal is to measure global topological features. A typical procedure is to: 
 
