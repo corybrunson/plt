@@ -19,11 +19,13 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In this vignette, we will show how {plt} supports the computation of persistence landscapes[^1], and both exploratory and predictive analysis. The construction of persistence landscapes has useful properties for machine learning and hypothesis testing. This vignette is based on Bubenik's TDA labs[^2].
+In this vignette, we will show how {plt} supports the computation of persistence landscapes[^1], and both exploratory and predictive analysis. This vignette is based on Bubenik's TDA labs[^2].
 
 # Basic use of TDA in Statistics and Machine Learning
 
-**Topological data analysis** (TDA) involves the use of algebraic topology to analyze data. The goal is to measure global topological features. A typical procedure is to: 
+**Topological data analysis** (TDA) involves the use of algebraic topology to analyze data. The goal is to measure global topological features. One summary of these features is the persistence diagram, however this summary lacks key qualities that make it directly usable for statistical analysis and machine learning. The persistence landscape bridges this gap with properties we will discuss later. 
+
+A typical procedure is to: 
 
 1. Represent a sample of data as a point cloud.
 2. Construct a filtered simplicial complex on the point cloud.
@@ -277,6 +279,7 @@ title("Mean PL of P2", adj = 0.1, line = -1)
 ```
 
 There is a visual difference between the landscapes, but we haven't quantified the strength of evidence for this difference.
+
 We will use a two sample Z-test and a permutation test to determine if there is a statistically significant difference between $\bar{P_1}$ and $\bar{P_2}$.
 
 ## Z-Test
