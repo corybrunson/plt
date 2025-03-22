@@ -23,7 +23,7 @@ In this vignette, we will show how {plt} supports the computation of persistence
 
 # Basic use of TDA in Statistics and Machine Learning
 
-**Topological data analysis** (TDA) involves the use of algebraic topology to analyze data. The goal is to measure global topological features. One summary of these features is the persistence diagram, however this summary lacks key qualities that make it directly usable for statistical analysis and machine learning. The persistence landscape bridges this gap with properties that follow: 
+**Topological data analysis** (TDA) involves the use of algebraic topology to analyze data. The goal is to measure global topological features. One summary of these features is the persistence diagram, however this summary lacks key qualities that make it directly usable for statistical analysis and machine learning. The persistence landscape bridges this gap with the following properties: 
 
 - **Linearity**: Persistence landscapes live in a vector space, allowing them to be meaningfully added, scaled, and averaged.
 - **Inner Product Structure**: Landscapes lie in a Hilbert space, enabling the definition of distances, norms, and inner products for comparing topological summaries.
