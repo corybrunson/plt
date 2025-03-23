@@ -19,11 +19,13 @@ for (i in seq(6)) {
  pl_list_2 <- c(pl_list_2, pl)
 }
 
-test_that("symmetry of pl_z_test() & pl_perm_test()", {
+test_that("two-sided symmetry of pl_z_test() & pl_perm_test()", {
 #pl_z_test
 expect_equal(pl_z_test(pl_list_1,pl_list_2)$p.value, pl_z_test(pl_list_2,pl_list_1)$p.value)
 #pl_perm_test
 expect_equal(pl_perm_test(pl_list_1,pl_list_2)$p.value, pl_perm_test(pl_list_2,pl_list_1)$p.value, tolerance = 0.01)
 })
 
+ 
 
+# test one-sided symmetry of pl_z_test() & pl_perm_test()
