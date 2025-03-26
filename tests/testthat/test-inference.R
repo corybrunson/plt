@@ -27,5 +27,7 @@ expect_equal(pl_perm_test(pl_list_1,pl_list_2)$p.value, pl_perm_test(pl_list_2,p
 })
 
  
-
-# test one-sided symmetry of pl_z_test() & pl_perm_test()
+test_that("one-sided symmetry of pl_z_test()", {
+  #pl_z_test
+  expect_equal(pl_z_test(pl_list_1,pl_list_2, alternative = "less")$p.value, 1 - pl_z_test(pl_list_1,pl_list_2, alternative = "greater")$p.value)
+})
