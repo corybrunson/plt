@@ -19,21 +19,9 @@ knitr::opts_chunk$set(
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-In this vignette, we will show how {plt} supports the computation of persistence landscapes[^1], and both exploratory and predictive analysis. This vignette is based on Bubenik's TDA labs[^2].
+The goal of **Topological data analysis** (TDA) is to analyze and measure the global topological features of data. The persistence diagram, a common topological summary, lacks key properties to make it conformable for statistical hypothesis testing and machine learning. Persistence landscapes, introduced by Bubenik (2015)[^1], are a vectorization of persistence diagrams. In this vignette, we will show how {plt} supports the computation of persistence landscapes, and both exploratory and predictive analysis. This vignette is based on Bubenik's TDA labs[^2].
 
-# Basic use of TDA in Statistics and Machine Learning
-
-**Topological data analysis** (TDA) involves the use of algebraic topology to analyze data. The goal is to measure global topological features. One summary of these features is the persistence diagram, however this summary lacks key qualities that make it directly usable for statistical analysis and machine learning. The persistence landscape bridges this gap with the following properties: 
-
-- **Linearity**: Persistence landscapes live in a vector space, allowing them to be meaningfully added, scaled, and averaged.
-- **Inner Product Structure**: Landscapes lie in a Hilbert space, enabling the definition of distances, norms, and inner products for comparing topological summaries.
-- **Asymptotic Normality**: Persistence landscapes satisfy a central limit theorem, enabling the use of normal-distribution-based inference for hypothesis testing and confidence intervals.
-- **Stability**: Small perturbations in the input data lead to small changes in the landscape, allowing us to better handle noise.
-- **Vectorization**: Landscapes can be vectorized, making them easily manipulable and compatible with statistical and machine learning pipelines.
-
-We will see the fruition of these properties in the applied section.
-
-A typical procedure when using TDA is to: 
+The following procedure is an overview of this vignette's TDA methodology: 
 
 1. Represent a sample of data as a point cloud.
 2. Construct a filtered simplicial complex on the point cloud.
@@ -53,7 +41,7 @@ The [{TDA}](https://cran.r-project.org/package=TDA) package contains various too
 ```{r,warning=FALSE,message=FALSE}
 # for manifold samples
 library(tdaunif)
-# for alpha complexes
+# for alpha shapes
 library(alphahull)
 # for persistent homology
 library(TDA)
@@ -209,6 +197,13 @@ n_levs <- max(pl_num_levels(pl1d))
 plot(pl1d, main = "Persistence Landscape", n_levels = n_levs, asp = 1)
 ```
 
+A persistence landscape has the following properties which make it directly usable for statistical analysis and machine learning: 
+
+- **Linearity**: Persistence landscapes live in a vector space, allowing them to be meaningfully added, scaled, and averaged.
+- **Inner Product Structure**: Landscapes lie in a Hilbert space, enabling the definition of distances, norms, and inner products for comparing topological summaries.
+- **Asymptotic Normality**: Persistence landscapes satisfy a central limit theorem, enabling the use of normal-distribution-based inference for hypothesis testing and confidence intervals.
+- **Stability**: Small perturbations in the input data lead to small changes in the landscape, allowing us to better handle noise.
+- **Vectorization**: Landscapes can be vectorized, making them easily manipulable and compatible with statistical and machine learning pipelines.
 
 # Mean Persistence Landscape
 
