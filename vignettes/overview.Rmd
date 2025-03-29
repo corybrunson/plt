@@ -32,7 +32,7 @@ Applications of TDA often proceed along the following steps:
 
 This vignette will include dimension reduction, two-sample hypothesis testing, and supervised classification as applications of TDA.
 
-# Interoperability
+## Interoperability
 
 {plt} is designed to be used with other TDA packages such as those loaded below. 
 
@@ -52,7 +52,7 @@ library(plt)
 library(e1071)
 ```
 
-# Adapting Point Data to Persistence Data
+# Persistent Homology of Point Clouds
 
 To begin, we create a simple point cloud on which we will illustrate how to use {plt}. We noisily sample $60$ points in $\mathbb{R}^2$ from a figure eight, the lemniscate of Gerono.
 
