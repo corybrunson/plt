@@ -52,7 +52,7 @@ library(plt)
 library(e1071)
 ```
 
-# Gather a point set
+# Adapting Point Data to Persistence Data
 
 To begin, we create a simple point cloud on which we will illustrate how to use {plt}. We noisily sample $60$ points in $\mathbb{R}^2$ from a figure eight, the lemniscate of Gerono.
 
@@ -61,8 +61,6 @@ set.seed(120246L)
 pc <- sample_lemniscate_gerono(n = 60, sd = 0.05)
 plot(pc, asp = 1, pch = 16L, main = "Figure Eight Point Cloud")
 ```
-
-# Adapting Point Data to Persistence Data
 
 From our point set, we would like to generate more topologically informative data. We construct a **simplicial complex** $K$, which is a set of **simplices**. A *$0$-simplex* is a single point, a *$1$-simplex* is an edge or line segment, a *$2$-simplex* is a triangle, and a *$3$-simplex* is a tetrahedron. 
 
@@ -73,8 +71,6 @@ $$
 K_0 \subset K_1 \subset K_2 \subset \cdots\subset K_n,
 $$
 where $n \in \mathbb{N}$ is the number of simplicial complexes in the filtration. For any pair of adjacent terms (simplicial complexes) in the filtration, the preceding term is a **subcomplex** of the succeeding term. 
-
-# Create a Simplicial Complex
 
 The plots below illustrate a filtration using alpha shapes (which closely resemble alpha complexes) at six levels of its distance threshold $\epsilon_\alpha$.  As $\epsilon_\alpha$ increases, the number of connected components and loops changes. However, some topological features, such as the two lobes of the figure eight, persist throughout many values of $\epsilon_\alpha$.
 
@@ -88,7 +84,7 @@ for (alpha in alpha_values) {
 }
 ```
 
-# Compute Persistence Data
+## Compute Persistence Data
 
 The filtration provides a mathematical structure for analyzing the global topological features of a point cloud. For each simplicial complex within the filtration, we apply **simplicial homology** to classify them using Betti numbers. The **$k^{\text{th}}$ Betti number $\beta_k$** counts the number of $k$-dimensional features of a simplicial complex. **$\beta_0$** counts the number of $0$-dimensional connected components, **$\beta_1$** counts the number of $1$-dimensional loops, and **$\beta_2$** counts the number of $3$-dimensional cavities. 
 
@@ -111,7 +107,6 @@ The `pd` object stores the birth and death values for the $0$ and $1$ dimension 
 head(pd)
 ```
 
-
 <!--
 ### Persistence Barcode
 A persistence barcode is a topological summary that visualizes the lifetimes of topological features. The x-axis represents the time span of the filtration. The below barcode shows that two features in homology dimension-one persist longer than the other features in dimension one. These two persistent features correspond to the two holes in $X$.
@@ -123,7 +118,7 @@ col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2)
 ```
 -->
 
-# Persistence Diagram
+## Persistence Diagram
 
 The persistence diagram is a topological summary that visualizes the birth and death times of topological features. The diagram has axes birth & death, and a line $d = b$. For any point $(b,d)$, we have $d-b \geq 0$. Graphically, each point is on or above the $d = b$ line. Points close to or on this line are ephemeral features because they die shortly or immediately after being born. 
 
@@ -135,7 +130,7 @@ legend(0.6, 0.4, c('Homology in degree 0','Homology in degree 1'),
 col = c(1,2), pch = c(19,2), cex = .8, pt.lwd = 2, bty = "n")
 ```
 
-#  Landscape Transformation
+# Persistence Landscape Transformation
 
 Now that we have persistence data, we can construct persistence landscapes, which are useful for analyzing topological features in a form suited for statistical methods. Persistence landscapes are built by transforming persistence diagrams into a sequence of "tent" functions that capture the lifetime of topological features.
 
@@ -208,7 +203,7 @@ A persistence landscape has the following properties which make it directly usab
 - **Asymptotic Normality**: Persistence landscapes satisfy a central limit theorem, enabling the use of normal-distribution-based inference for hypothesis testing and confidence intervals.
 - **Vectorization**: Landscapes can be vectorized, making them easily manipulable and compatible with statistical and machine learning pipelines.
 
-# Mean Persistence Landscape
+## Mean Persistence Landscape
 
 A convenient way of thinking about the mean persistence landscape is by considering its levels. To define a mean on landscapes, we take the pointwise mean of each level. Hence, the mean $i^{\mathbb{th}}$ level is given by
 $$\bar \lambda_i(x) = \frac{1}{N}\sum_{j=1}^{N}\lambda_i ^j(x),$$
@@ -236,9 +231,11 @@ We then compute the mean persistence landscape of these $6$ persistence landscap
 plot(pl_mean(pl_list_1), main = "Mean Persistence Landscape")
 ```
 
-# Hypothesis Testing
+# Applications of TDA
 
-In statistics, hypothesis tests are used to weigh the evidence (collected data) to determine whether there is a real effect or phenomenon present in the data, or if its simply a consequence of random sampling or variation. When conducting a hypothesis test, we define a _null hypothesis_ $H_0$ that predicates that no effect is present, and we define an alternative hypothesis $H_A$ that specifies the direction of a present effect. A hypothesis test requires a calculated *test statistic* from the observed data, and an understanding of the test statistic's theoretical probability distribution. A *$p$-value* is the probability of obtaining a test statistic as extreme or more extreme than the observed test statistic, assuming the null hypothesis to be true. And $\alpha$, the *significance level*, is the probability of rejecting the null hypothesis when it is actually true (*type I error*). This value is typically set by the investigator ahead of time, conventionally to 0.05. If the $p < \alpha$, then we _reject_ our null hypothesis, otherwise we _accept_ or _fail to reject_ it.
+## Hypothesis Testing
+
+In statistics, hypothesis tests are used to weigh the evidence (collected data) to determine whether there is a real effect or phenomenon present in the data, or if its simply a consequence of random sampling or variation. When conducting a hypothesis test, we define a _null hypothesis_ $H_0$ that predicates that no effect is present, and we define an alternative hypothesis $H_A$ that specifies the direction of a present effect. A hypothesis test requires a calculated *test statistic* from the observed data, and an understanding of the test statistic's theoretical probability distribution. A *$p$-value* is the probability of obtaining a test statistic as extreme or more extreme than the observed test statistic, assuming the null hypothesis to be true. And $\alpha$, the *significance level*, is the probability of rejecting the null hypothesis when it is actually true (*type I error*). This value is typically set by the investigator ahead of time, conventionally to $0.05$. If the $p < \alpha$, then we _reject_ our null hypothesis, otherwise we _accept_ or _fail to reject_ it.
 
 In TDA, we can use persistence landscapes to derive test statistics in order to conduct hypotheses tests on samples of point cloud data. Our {plt} hypothesis testing functions --- `pl_z_test()` and `pl_perm_test()` --- provide the test result as a list containing useful information like the estimated distance between the mean landscapes, the test statistic, the $p$-value, and more. The list is assigned the `htest` class, which comes with an elegant `print()` method.
 
@@ -330,7 +327,7 @@ pval2 <- round(perm$p.value, 4)
 
 Since the $p$-value is $`r pval2`$, we again reject the null hypothesis. This $p$-value was an order of magnitude smaller than that obtained from the two sample Z-test. These two hypothesis tests are looking at the data in different ways, so one test may detect the topological (or geometric) difference between the samples more effectively than the other.
 
-# Exploratory Dimension Reduction
+## Exploratory Dimension Reduction
 
 In this section, we conduct exploratory analysis using variance decomposition.  This is done to reduce the dimensions of our data while retaining as much variance as possible. We will use **principal components analysis** (PCA), which transforms the given variables into a new set of uncorrelated variables called *principal components*. These components are ordered by the amount of variance they capture from the data, with the first component capturing the most variance, and each subsequent component capturing progressively less. We apply PCA to the vectorized forms of the persistence landscapes.
 
@@ -355,7 +352,7 @@ plot(pca$x[,1:2], col = data.labels, pch = 17 + (2 * data.labels), asp = 1)
 
 As we can see, clustering of samples from the same sample did occur. We observe that the between-group variance is mainly contained in the first principal component. Also, the within-group variance of $P_1$ is smaller than the between-group variance of $P_2$. 
 
-# Classification
+## Classification
 
 We now build a machine learning model to classify the point clouds using their vectorized persistence landscapes. A **support vector machine** (SVM) is a supervised algorithm commonly used for classification tasks. It works by finding the optimal hyperplane that best separates the classes ($P_1$ or $P_2$) in the feature space (where each dimension of the feature space corresponds to one of the elements in these vectors), maximizing the margin between the closest data points of each class, known as support vectors.
 
@@ -369,7 +366,9 @@ summary(svm_model)
 
 The model successfully distinguishes between the different topological structures present in the two persistence landscapes.
 
-# Appendix
+# Supporting Information
+
+## Appendix
 
 A **$k$-simplex** is a $k$-dimensional polytope which is the convex hull of $k+1$ points in Euclidean space in general position (the points $x_1,...,x_{k+1}$ are *affinely independent*, which means that the vectors $x_2-x_1,...,x_{k+1}-x_1$ are linearly independent). The convex hull of a non-empty subset of these points is called the *face* of the simplex. 
 
@@ -435,7 +434,7 @@ $$
 $$
 Essentially, $\lambda_k(t)$ finds the largest interval around t where there at least $k$ persistent features.
  
-# References
+## References
 
 [^1]: Bubenik, Peter. "Statistical Topological Data Analysis Using Persistence Landscapes." *Journal of Machine Learning Research*, vol. 16, 2015, pp. 77-102.
 
