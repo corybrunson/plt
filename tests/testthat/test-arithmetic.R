@@ -15,3 +15,16 @@ test_that("singletons are handled as lists", {
   # sd
   expect_no_error(pl_sd(pl))
 })
+
+
+
+test_that("rename this later",{
+  # vmax
+  expect_no_error(pl_vmax(pl))
+  # vmin
+  expect_no_error(pl_vmin(pl))
+  # vmoment
+  expect_no_error(pl_vmoment(pl))
+  # vrange
+  expect_no_error(pl_vrange(pl))
+})
