@@ -14,11 +14,14 @@ test_that("singletons are handled as lists", {
   expect_no_error(pl_var(pl))
   # sd
   expect_no_error(pl_sd(pl))
+  # range
+  expect_no_error(pl_range(pl))
+  # scale ?
+  
+  
 })
 
-
-
-test_that("rename this later",{
+test_that("vectorizations work",{
   # vmax
   expect_no_error(pl_vmax(pl))
   # vmin
@@ -28,3 +31,5 @@ test_that("rename this later",{
   # vrange
   expect_no_error(pl_vrange(pl))
 })
+
+test_that
