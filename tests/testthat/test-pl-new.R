@@ -34,3 +34,8 @@ test_that("`pl_type()` works", {
   expect_equal(pl_type(pl_new(pd_a,degree = 1)),
                pl_type(pl_new(pd_r,degree = 1)))
 })
+
+test_that("`pl_support()` works", {
+  expect_no_error(pl_support(pl_new(pd_a,degree = 1)))
+  expect_no_error(pl_support(pl_new(pd_r,degree = 1)))
+})
