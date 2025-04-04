@@ -14,11 +14,22 @@ test_that("singletons are handled as lists", {
   expect_no_error(pl_var(pl))
   # sd
   expect_no_error(pl_sd(pl))
-  # range
-  expect_no_error(pl_range(pl))
   # scale ?
   
 })
+
+test_that("classic functions work on PLs",{
+  # max
+  expect_no_error(pl_max(pl))
+  # min
+  expect_no_error(pl_min(pl))
+  # moment
+  expect_no_error(pl_moment(pl))
+  # range
+  expect_no_error(pl_range(pl))
+})
+
+
 
 test_that("vectorizations work",{
   # vmax
