@@ -18,7 +18,6 @@ test_that("singletons are handled as lists", {
   expect_no_error(pl_range(pl))
   # scale ?
   
-  
 })
 
 test_that("vectorizations work",{
@@ -32,4 +31,3 @@ test_that("vectorizations work",{
   expect_no_error(pl_vrange(pl))
 })
 
-test_that
