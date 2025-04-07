@@ -42,3 +42,10 @@ test_that("vectorizations work",{
   expect_no_error(pl_vrange(pl))
 })
 
+test_that("`pl_abs` correctly returns the absolute value of a PL", {
+  pl2 <- -1 * pl
+  pl3 <- pl_abs(pl2)
+  
+  expect_equal(pl_distance(pl, pl3), 0) # Note expect equal test wont work on the PLs themselves, why?
+  
+})

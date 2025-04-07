@@ -106,3 +106,11 @@ test_that("pl_indicator_form scales correctly with p", {
 })
 
 #pl_dist
+
+test_that("`pl_dist` returns 0 matrix when using the same persistence landscape", {
+  pl_list <- list(pl, pl, pl)
+  distm <- pl_dist(pl_list)
+  
+  expect_equal(sum(distm), 0)
+}
+)
