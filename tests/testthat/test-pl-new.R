@@ -51,3 +51,14 @@ test_that("`pl_limits()` works", {
   expect_equal(pl_limits(pl_new(pd_r,degree = 1))[2],
                pl_support(pl_new(pd_r,degree = 1))[2])
 })
+
+test_that("`pl_num_levels` can switch between exact and discrete PLs", {
+  pd <- data.frame(dim = 2, birth = c(1, 2, 3, 3), death = c(4, 4, 4, 6))
+  pl <- pl_new(pd, degree = 2, exact = TRUE)
+  pl2 <- pl_discretize(pl)
+  
+  expect_equal(pl_num_levels(pl), 4)
+  expect_equal(pl_num_levels(pl2), 4)
+  expect_error(pl_num_levels(pd))
+  
+})
