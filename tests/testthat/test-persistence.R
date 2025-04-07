@@ -131,3 +131,11 @@ test_that("as.data.frame.persistence creates correct format", {
   expect_equal(colnames(df), c("degree", "birth", "death"))
   expect_equal(as.numeric(df[1, ]), c(0, 1, 2))
 })
+
+test_that("`get_pairs` correctly grabs pairs from persistence object", {
+  ppd_a <- as_persistence(pd_a)
+  
+  expect_equal(get_pairs(ppd_a, 0), ppd_a$pairs[[1]])
+  expect_true(all(is.na(get_pairs(ppd_a, 2)))) #nonexistent dimension returns empty matrix
+  expect_error(get_pairs(pd_r)) #verifies failure given incorrect class
+})
