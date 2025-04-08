@@ -51,8 +51,7 @@ test_that("`pl_abs` correctly returns the absolute value of a PL", {
   pl3 <- -1 * pl
   pl4 <- pl_abs(pl3)
   
-  expect_equal(pl_distance(pl, pl4), 0) # Note expect equal test wont work on the PLs themselves, why?
-  
+  expect_equal(pl_distance(pl, pl4), 0)
 })
 
 test_that("`pl_add` behaves as expected", {
