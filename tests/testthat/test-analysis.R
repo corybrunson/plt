@@ -80,30 +80,30 @@ test_that("`pl_indicator_form` correctly applies `r`", {
 
 # TODO: Understand why the following test fails
 
-'''test_that("pl_indicator_form scales correctly with p", {
-  f <- list(c(1, 2))
+#test_that("pl_indicator_form scales correctly with p", {
+#  f <- list(c(1, 2))
   
-  # should all equal 1
-  result_p1 <- pl_indicator_form(pl2, supports, r = 0, p = 1)
-  result_p2 <- pl_indicator_form(pl2, supports, r = 0, p = 2) # not sure how this is working?
-  result_pinf <- pl_indicator_form(pl2, supports, r = 0, p = Inf)
-  
-
-  expect_equal(result_p1, result_p2, tolerance = 1e-6)
-  expect_equal(result_p2, result_pinf, tolerance = 1e-6)
+#  # should all equal 1
+#  result_p1 <- pl_indicator_form(pl2, supports, r = 0, p = 1)
+#  result_p2 <- pl_indicator_form(pl2, supports, r = 0, p = 2) # not sure how this is working?
+#  result_pinf <- pl_indicator_form(pl2, supports, r = 0, p = Inf)
   
 
-  f <- list(c(0, 2), c(1, 2))
-  # Weird results at this section
-  result_t_p1 <- pl_indicator_form(pl3, f, r = 0, p = 1)
-  result_t_p2 <- pl_indicator_form(pl3, f, r = 0, p = 2) # funny?
-  result_t_pinf <- pl_indicator_form(pl3, f, r = 0, p = Inf)
+#  expect_equal(result_p1, result_p2, tolerance = 1e-6)
+#  expect_equal(result_p2, result_pinf, tolerance = 1e-6)
   
-  # Check expected ordering of norms
-  expect_equal(result_t_p1, 1.25)
-  expect_equal(result_t_p2, 1.0625)
-  eexpect_equal(result_t_p1, result_t_pinf)
-})'''
+
+#  f <- list(c(0, 2), c(1, 2))
+#  # Weird results at this section
+#  result_t_p1 <- pl_indicator_form(pl3, f, r = 0, p = 1)
+#  result_t_p2 <- pl_indicator_form(pl3, f, r = 0, p = 2) # funny?
+#  result_t_pinf <- pl_indicator_form(pl3, f, r = 0, p = Inf)
+  
+#  # Check expected ordering of norms
+#  expect_equal(result_t_p1, 1.25)
+#  expect_equal(result_t_p2, 1.0625)
+#  eexpect_equal(result_t_p1, result_t_pinf)
+#})
 
 
 test_that("`pl_dist` returns 0 matrix when using the same persistence landscape", {

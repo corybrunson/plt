@@ -59,8 +59,9 @@ test_that("`pl_add` behaves as expected", {
   pla <- pl2 + pl2
   plb <- pl_add(pl2, pl2)
   plc <- 2 * pl2
-  pls <- list(pla, plb, pl)
-  expect_equal(pl_dist(pls)[1,1], 0)
+
+  pls <- list(pla, plb, plc)
+  expect_equal(sum(pl_dist(pls)), 0)
 })
 
 test_that("`pl_inner` obeys: symmetrical, nonnegative, and linearity ", {
