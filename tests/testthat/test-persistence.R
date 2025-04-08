@@ -19,7 +19,9 @@ test_that("as_persistence.default correctly processes a basic matrix", {
 test_that("as_persistence.default correctly processes output from `____$diag`", {
   coords <- df[, c("x", "y")]
   
-  pd <- alphaComplexDiag(df)$diagram
+  skip_if_not_installed("TDA")
+  
+  pd <- TDA::alphaComplexDiag(df)$diagram
   pd[, c(2, 3)] <- sqrt(pd[, c(2, 3)])
   pd_p <- as_persistence(pd)
   
@@ -29,26 +31,33 @@ test_that("as_persistence.default correctly processes output from `____$diag`", 
     z = c(0.1, 0.3, 0.2, 0.4, 0.35)
   )
   
-  pd2 <- alphaShapeDiag(df3d)$diagram
+  pd2 <- TDA::alphaShapeDiag(df3d)$diagram
   pd2[, c(2, 3)] <- sqrt(pd2[, c(2, 3)])
   pd_p2 <- as_persistence(pd2)
   
-  FltRips <- ripsFiltration(X = df, maxdimension = 1,
-                            maxscale = 1.5, dist = "euclidean", library = "Dionysus",
-                            printProgress = FALSE)
-  DiagFltRips <- filtrationDiag(filtration = FltRips, maxdimension = 1,
-                                library = "Dionysus", location = TRUE, printProgress = TRUE)
+  FltRips <- TDA::ripsFiltration(
+    X = df, maxdimension = 1,
+    maxscale = 1.5, dist = "euclidean", library = "Dionysus",
+    printProgress = FALSE
+  )
+  DiagFltRips <- TDA::filtrationDiag(
+    filtration = FltRips, maxdimension = 1,
+    library = "Dionysus", location = TRUE, printProgress = TRUE
+  )
   pd3 <- DiagFltRips$diagram
   pd3[, c(2, 3)] <- sqrt(pd3[, c(2, 3)])
   pd_p3 <- as_persistence(pd3)
   
-  Diag1 <- gridDiag(coords, distFct, lim = cbind(c(-1, 1), c(-1, 1)), by = 0.05, sublevel = TRUE,
-                    printProgress = TRUE) 
+  Diag1 <- TDA::gridDiag(
+    coords, TDA::distFct,
+    lim = cbind(c(-1, 1), c(-1, 1)), by = 0.05, sublevel = TRUE,
+    printProgress = TRUE
+  ) 
   pd4 <- Diag1$diagram 
   pd4[, c(2, 3)] <- sqrt(pd4[, c(2, 3)])
   pd_p4 <- as_persistence(pd4)
   
-  pd5 <- ripsDiag(df, maxdimension = 1, maxscale = 10)$diagram
+  pd5 <- TDA::ripsDiag(df, maxdimension = 1, maxscale = 10)$diagram
   pd5[, c(2, 3)] <- sqrt(pd5[, c(2, 3)])
   pd_p5 <- as_persistence(pd5)
   
@@ -77,7 +86,10 @@ test_that("as_persistence.default correctly processes output from `____$diag`", 
 
 test_that("as_persistence.PHom correctly processes output from `vietoris_rips` 
           from {ripserr}", {
-            pd <- cubical(volcano)
+            
+            skip_if_not_installed("ripserr")
+            
+            pd <- ripserr::cubical(volcano)
             pd_p <- as_persistence(pd)
             
             expect_s3_class(pd_p, "persistence")
