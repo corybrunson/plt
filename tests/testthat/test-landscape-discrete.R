@@ -23,8 +23,8 @@ test_that("PL is correct for one persistence pair.", {
 
 x <- tdaunif::sample_circle(100L)
 y <- tdaunif::sample_circle(100L)
-pd <- as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2))
-pd2 <- as_persistence(ripserr::vietoris_rips(y, dim = 1L, threshold = 2))
+pd <- as_persistence(ripserr::vietoris_rips(x, max_dim = 1L, threshold = 2))
+pd2 <- as_persistence(ripserr::vietoris_rips(y, max_dim = 1L, threshold = 2))
 
 matchDimension <- function(pl_1, pl_2){
   if(dim(pl_1)[1] < dim(pl_2)[1]){
@@ -165,3 +165,4 @@ test_that("getInternal from discrete is correct from diagram", {
   
   expect_equal(pl$getInternal(), plref$getInternal())
 })
+
