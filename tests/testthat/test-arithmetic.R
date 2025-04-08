@@ -4,7 +4,7 @@ pd <- cbind(start = 2, end = 5)
 pl <- pl_new(pd, exact = TRUE)
 #larger example
 pd2 <- matrix(c(0, 1, .25, 1.25), ncol = 2, byrow = TRUE)
-pl2 <- pl_new(pd2, exact = False)
+pl2 <- pl_new(pd2, exact = FALSE)
 
 test_that("singletons are handled as lists", {
   # sum
@@ -17,7 +17,9 @@ test_that("singletons are handled as lists", {
   expect_no_error(pl_var(pl))
   # sd
   expect_no_error(pl_sd(pl))
-  # scale ?
+  # scale
+  expect_error(pl_scale(pl))
+  expect_no_error(pl_scale(pl,mult = 0))
   
 })
 
@@ -57,8 +59,8 @@ test_that("`pl_add` behaves as expected", {
   pla <- pl2 + pl2
   plb <- pl_add(pl2, pl2)
   plc <- 2 * pl2
-  pls <- list(pla, plb, pl)c
-  expect_equal(sum(pl_dist(pls)), 0)
+  pls <- list(pla, plb, pl)
+  expect_equal(pl_dist(pls)[1,1], 0)
 })
 
 test_that("`pl_inner` obeys: symmetrical, nonnegative, and linearity ", {
