@@ -45,6 +45,30 @@ A persistence landscape (an object of S4 class
 Calculate distances and perform infinitesimal calculus on
 persistence landscapes. See Section 3 of Bubenik (2015).
 }
+\details{
+\code{pl_integrate()} computes the \eqn{L^p} integral of a persistence
+landscape. The \code{p} parameter denotes the integral's power;
+\code{p = 1} computes the area under the curves, while \code{p = 2} corresponds to the
+\eqn{L^2} norm. Letting \code{p = Inf} returns the maximum landscape height.
+
+\code{pl_distance()} calculates the \eqn{L^p} distance between two persistence
+landscapes.
+
+\code{pl_dist()} utilizes \code{pl_distance()} to compute all pairwise distances
+between a list of landscapes. It returns a symmetric matrix of distances.
+
+\code{pl_norm()} returns the \eqn{L^p} norm of a single landscape, used as a
+scalar summary of its magnitude. Similar to \code{pl_integrate()}, it supports
+all finite powers \code{p >= 1}, as well as \code{p = Inf} for the supremum norm.
+
+\code{pl_indicator()} computes the linear form defined by a sum of indicator
+functions over user-specified support intervals, weighted by \eqn{1/k^r}
+where \eqn{k} indexes the landscape levels.
+
+\code{pl_indicator_form()} evaluates the integral of the indicator function form
+described above with respect to the \eqn{L^p} norm. It returns a real number
+representing the landscape's integral onto the chosen intervals.
+}
 \examples{
 
 # multiply by an indicator function
@@ -67,9 +91,9 @@ plot(pl_df, xlim = c(0, 5))
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 
 # integrate PL multiplied by an indicator function
-pl_integrate(pl_d, p = 5)
+pl_indicator_form(pl_d, supports = f, p = 5)
 pl_integrate(pl_df, p = 5)
-pl_integrate(pl_e, p = 5)
+pl_indicator_form(pl_e, supports = f, p = 5)
 pl_integrate(pl_ef, p = 5)
 }
 \seealso{
