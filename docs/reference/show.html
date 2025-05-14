@@ -33,6 +33,9 @@ used for base::print()."><!-- mathjax --><script src="https://cdnjs.cloudflare.c
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/overview.html">Exploratory and Predictive Analysis</a>
+    </li>
+    <li>
       <a href="../articles/toy-example.html">Analysis of a Toy Example</a>
     </li>
   </ul></li>
@@ -326,6 +329,12 @@ used for <code><a href="https://rdrr.io/r/base/print.html" class="external-link"
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 44</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  4 11</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">pl</span>, by_level <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 11  4</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      level   x  fx</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.1      1 0.0 0.0</span>
@@ -429,7 +438,7 @@ used for <code><a href="https://rdrr.io/r/base/print.html" class="external-link"
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jason Cory Brunson, Jose Bouza, Paweł Dłotko.</p>
+  <p></p><p>Developed by Jason Cory Brunson, James Golabek, Aidan Bryant, Jose Bouza, Paweł Dłotko.</p>
 </div>
 
 <div class="pkgdown">

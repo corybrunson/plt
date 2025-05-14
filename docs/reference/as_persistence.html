@@ -32,6 +32,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/overview.html">Exploratory and Predictive Analysis</a>
+    </li>
+    <li>
       <a href="../articles/toy-example.html">Analysis of a Toy Example</a>
     </li>
   </ul></li>
@@ -158,6 +161,7 @@ can be imported by others as needed. Refer to
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/ellipses.html" class="external-link">sample_cylinder_elliptical</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">60</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># calculate PH using {ripserr}</span></span></span>
 <span class="r-in"><span><span class="va">ph</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ripserr/man/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">x</span>, dim <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
 <span class="r-in"><span><span class="fu">as_persistence</span><span class="op">(</span><span class="va">ph</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 'persistence' data computed up to degree 1:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -189,7 +193,7 @@ can be imported by others as needed. Refer to
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jason Cory Brunson, Jose Bouza, Paweł Dłotko.</p>
+  <p></p><p>Developed by Jason Cory Brunson, James Golabek, Aidan Bryant, Jose Bouza, Paweł Dłotko.</p>
 </div>
 
 <div class="pkgdown">

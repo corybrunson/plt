@@ -34,6 +34,9 @@ persistence data using persistence landscapes. See Section 3 of Bubenik
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/overview.html">Exploratory and Predictive Analysis</a>
+    </li>
+    <li>
       <a href="../articles/toy-example.html">Analysis of a Toy Example</a>
     </li>
   </ul></li>
@@ -187,8 +190,7 @@ Depends on the choice of <code>conf.level</code>.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># two sets of landscapes from similar but distinctive point clouds</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># two sets of landscapes from similar but distinctive point clouds</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">711018L</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">circlescapes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fl">6</span>,</span></span>
@@ -196,12 +198,24 @@ Depends on the choice of <code>conf.level</code>.</p></dd>
 <span class="r-in"><span>    <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ripserr/man/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2L</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="pl_new.html">pl_new</a></span><span class="op">(</span>degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
 <span class="r-in"><span><span class="va">toruscapes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">replicate</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="fl">6</span>,</span></span>
 <span class="r-in"><span>  <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, lambda <span class="op">=</span> <span class="fl">24</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ripserr/man/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2L</span>, threshold <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu"><a href="pl_new.html">pl_new</a></span><span class="op">(</span>degree <span class="op">=</span> <span class="fl">1</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># null hypothesis tests</span></span></span>
 <span class="r-in"><span><span class="fu">pl_z_test</span><span class="op">(</span><span class="va">circlescapes</span>, <span class="va">toruscapes</span><span class="op">)</span></span></span>
@@ -209,20 +223,20 @@ Depends on the choice of <code>conf.level</code>.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	z-test</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> z = 2.114, df = 10, p-value = 0.01726</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> z = 2.114, df = 10, p-value = 0.03451</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true difference in means is not equal to 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95 percent confidence interval:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.02727041 0.21848939</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.00895417 0.23680564</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  mean of x  mean of y </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.14781005 0.02493015 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mean integral of x mean integral of y </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         0.14781005         0.02493015 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">pl_perm_test</span><span class="op">(</span><span class="va">circlescapes</span>, <span class="va">toruscapes</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	permutation test</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data:  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value = 0.005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> p-value = 0.004</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true distance between mean landscapes is greater than 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> distance between mean landscapes </span>
@@ -231,11 +245,11 @@ Depends on the choice of <code>conf.level</code>.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># benchmark one- and two-step computation of indicator-based linear form</span></span></span>
-<span class="r-in"><span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">pl</span><span class="op">$</span><span class="fu">indicator_form</span><span class="op">(</span><span class="va">f</span>, <span class="fl">0</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">pl</span><span class="op">$</span><span class="fu">indicator</span><span class="op">(</span><span class="va">f</span>, <span class="fl">0</span><span class="op">)</span><span class="op">$</span><span class="fu">integral</span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="http://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="fu">bench</span><span class="fu">::</span><span class="fu"><a href="https://bench.r-lib.org/reference/mark.html" class="external-link">mark</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">pl</span><span class="op">$</span><span class="fu">indicator_form</span><span class="op">(</span><span class="va">f</span>, r <span class="op">=</span> <span class="fl">1</span>, p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  <span class="va">pl</span><span class="op">$</span><span class="fu">indicator</span><span class="op">(</span><span class="va">f</span>, r <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">$</span><span class="fu">integral</span><span class="op">(</span>p <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
@@ -250,7 +264,7 @@ Depends on the choice of <code>conf.level</code>.</p></dd>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jason Cory Brunson, Jose Bouza, Paweł Dłotko.</p>
+  <p></p><p>Developed by Jason Cory Brunson, James Golabek, Aidan Bryant, Jose Bouza, Paweł Dłotko.</p>
 </div>
 
 <div class="pkgdown">

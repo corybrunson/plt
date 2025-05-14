@@ -33,6 +33,9 @@ PersistenceLandscape' C++ class."><!-- mathjax --><script src="https://cdnjs.clo
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/overview.html">Exploratory and Predictive Analysis</a>
+    </li>
+    <li>
       <a href="../articles/toy-example.html">Analysis of a Toy Example</a>
     </li>
   </ul></li>
@@ -64,6 +67,9 @@ PersistenceLandscape' C++ class.</p>
 <span></span>
 <span><span class="co"># S3 method for class 'Rcpp_PersistenceLandscape'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">x</span>, mode <span class="op">=</span> <span class="st">"any"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'Rcpp_PersistenceLandscape'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">x</span>, by_level <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'Rcpp_PersistenceLandscape'</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">x</span>, row.names <span class="op">=</span> <span class="cn">NULL</span>, optional <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
@@ -104,6 +110,11 @@ PersistenceLandscape' C++ class.</p>
     <code>typeof(x) == mode</code>.</p></dd>
 
 
+<dt id="arg-by-level">by_level<a class="anchor" aria-label="anchor" href="#arg-by-level"></a></dt>
+<dd><p>Logical; whether the levels are encoded as rows (the default)
+or columns.</p></dd>
+
+
 <dt id="arg-row-names">row.names<a class="anchor" aria-label="anchor" href="#arg-row-names"></a></dt>
 <dd><p><code>NULL</code> or a character vector giving the row
     names for the data frame.  Missing values are not allowed.</p></dd>
@@ -124,7 +135,7 @@ PersistenceLandscape' C++ class.</p>
     <p>The C++ class 'PersistenceLandscape' is exposed as the S4 class
 'Rcpp_PersistenceLandscape' via the <code>RCPP_MODULE()</code> macro provided by
 <strong><a href="https://rdrr.io/pkg/Rcpp/man/Rcpp-package.html" class="external-link">Rcpp</a></strong>. See
-<a href="https://github.com/coatless-r-n-d/rcpp-modules-student" class="external-link">https://github.com/coatless-r-n-d/rcpp-modules-student</a> for an
+<a href="https://github.com/coatless-rd-rcpp/rcpp-modules-student" class="external-link">https://github.com/coatless-rd-rcpp/rcpp-modules-student</a> for an
 introduction. New objects should be created from persistence data
 (diagrams) using <code><a href="pl_new.html">pl_new()</a></code>.</p>
     </div>
@@ -410,6 +421,12 @@ introduction. New objects should be created from persistence data
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">as.vector</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 44</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  4 11</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">pl</span>, by_level <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>PL is already discrete.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 11  4</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pl</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      level   x  fx</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.1      1 0.0 0.0</span>
@@ -513,7 +530,7 @@ introduction. New objects should be created from persistence data
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jason Cory Brunson, Jose Bouza, Paweł Dłotko.</p>
+  <p></p><p>Developed by Jason Cory Brunson, James Golabek, Aidan Bryant, Jose Bouza, Paweł Dłotko.</p>
 </div>
 
 <div class="pkgdown">

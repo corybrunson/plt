@@ -49,6 +49,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/overview.html">Exploratory and Predictive Analysis</a>
+    </li>
+    <li>
       <a href="../articles/toy-example.html">Analysis of a Toy Example</a>
     </li>
   </ul>
@@ -77,10 +80,15 @@
 
     
     
-<p>This vignette reproduces the analysis of a toy example in Sections 5.2–5.7 of Bubenik and Dłotko (2017).<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<p>This vignette reproduces the analysis of a toy example in Sections
+5.2–5.7 of Bubenik and Dłotko (2017).<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">plt</span><span class="op">)</span></span></code></pre></div>
-<p>The purpose of this example is to illustrate the Persistence Landscapes Toolbox for summarizing and discriminating among point cloud data based on their persistent homology. The toy data comprise several point clouds sampled from unions of pairwise tangent unit circles; see the example after the sampler below (c.f. Section 5.2):</p>
+<p>The purpose of this example is to illustrate the Persistence
+Landscapes Toolbox for summarizing and discriminating among point cloud
+data based on their persistent homology. The toy data comprise several
+point clouds sampled from unions of pairwise tangent unit circles; see
+the example after the sampler below (c.f. Section 5.2):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># sample `50 * n` points from `n` concatenated circles with uniform noise</span></span>
 <span><span class="va">sample_tangent_circles</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
@@ -97,7 +105,11 @@
 <span><span class="co"># illustrate with a 5-circle sequence</span></span>
 <span><span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="fu">sample_tangent_circles</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5L</span><span class="op">)</span>, pch <span class="op">=</span> <span class="st">"+"</span>, col <span class="op">=</span> <span class="st">"red"</span>, asp <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
 <p><img src="toy-example_files/figure-html/unnamed-chunk-3-1.png" width="672"></p>
-<p>Here we generate all <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>*</mo><mn>11</mn><mo>=</mo><mn>55</mn></mrow><annotation encoding="application/x-tex">5 * 11 = 55</annotation></semantics></math> samples and store their degree-1 persistence landscapes. We include a scale factor that recovers landscapes at the same scale as those reported in the paper:</p>
+<p>Here we generate all
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>*</mo><mn>11</mn><mo>=</mo><mn>55</mn></mrow><annotation encoding="application/x-tex">5 * 11 = 55</annotation></semantics></math>
+samples and store their degree-1 persistence landscapes. We include a
+scale factor that recovers landscapes at the same scale as those
+reported in the paper:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># define scale factor</span></span>
 <span><span class="va">sf</span> <span class="op">&lt;-</span> <span class="fl">55</span></span>
@@ -125,14 +137,17 @@
 <span>  <span class="op">}</span></span>
 <span>  <span class="va">toy_pl</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">toy_n</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>Each landscape contains as many significant levels as circles made up the sample space. In the plots below, tick marks are omitted to make more space for the landscapes themselves:</p>
+<p>Each landscape contains as many significant levels as circles made up
+the sample space. In the plots below, tick marks are omitted to make
+more space for the landscapes themselves:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfcol <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">5L</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">n</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">toy_pl</span><span class="op">)</span><span class="op">)</span> <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">toy_pl</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">toy_pl</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span>, xaxt <span class="op">=</span> <span class="st">"n"</span>, yaxt <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="toy-example_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
-<p>The commonalities of the samples from each space can be revealed by taking their mean landscapes (c.f. Section 5.4):</p>
+<p>The commonalities of the samples from each space can be revealed by
+taking their mean landscapes (c.f. Section 5.4):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># calculate means</span></span>
 <span><span class="va">toy_pl_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">toy_pl</span>, <span class="va">pl_mean</span><span class="op">)</span></span>
@@ -142,7 +157,12 @@
 <span>  <span class="fu"><a href="../reference/plot.html">plot</a></span><span class="op">(</span><span class="va">toy_pl_mean</span><span class="op">[[</span><span class="va">n</span><span class="op">]</span><span class="op">]</span>, xaxt <span class="op">=</span> <span class="st">"n"</span>, yaxt <span class="op">=</span> <span class="st">"n"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p><img src="toy-example_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
-<p>Below we compute the <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>-, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>-, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>-norms of these mean landscapes (c.f. Section 5.5):</p>
+<p>Below we compute the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>-,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>-,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>∞</mi><annotation encoding="application/x-tex">\infty</annotation></semantics></math>-norms
+of these mean landscapes (c.f. Section 5.5):</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># norms to calculate</span></span>
 <span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="cn">Inf</span><span class="op">)</span></span>
@@ -163,7 +183,9 @@
 <span><span class="co">#&gt; 3-circle 2430.9508 210.5853 29.24994</span></span>
 <span><span class="co">#&gt; 4-circle 3343.0838 251.6085 31.01226</span></span>
 <span><span class="co">#&gt; 5-circle 4081.0200 277.3163 30.87295</span></span></code></pre></div>
-<p>Below we compute the pairwise <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>-distances between the mean landscapes (c.f. Section 5.6):</p>
+<p>Below we compute the pairwise
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>-distances
+between the mean landscapes (c.f. Section 5.6):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compute distance matrix</span></span>
 <span><span class="fu"><a href="../reference/analysis.html">pl_dist</a></span><span class="op">(</span><span class="va">toy_pl_mean</span><span class="op">)</span></span>
@@ -173,7 +195,19 @@
 <span><span class="co">#&gt; [3,] 156.7207  95.45027   0.00000  95.81676 143.13606</span></span>
 <span><span class="co">#&gt; [4,] 205.8155 150.94825  95.81676   0.00000  88.71722</span></span>
 <span><span class="co">#&gt; [5,] 235.3159 187.10785 143.13606  88.71722   0.00000</span></span></code></pre></div>
-<p>Section 5.7 reports that permutation tests between the sample landscapes from different numbers <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> of circles all obtained p-values near zero, successfully detecting the differences between the samples. Below we report two permutation tests, between the samples <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n=1</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">n=2</annotation></semantics></math> and between the samples <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">n=4</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">n=5</annotation></semantics></math>:</p>
+<p>Section 5.7 reports that permutation tests between the sample
+landscapes from different numbers
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+of circles all obtained p-values near zero, successfully detecting the
+differences between the samples. Below we report two permutation tests,
+between the samples
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n=1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">n=2</annotation></semantics></math>
+and between the samples
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">n=4</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">n=5</annotation></semantics></math>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># compare 1-circle and 2-circle samples</span></span>
 <span><span class="fu"><a href="../reference/inference.html">pl_perm_test</a></span><span class="op">(</span><span class="va">toy_pl</span><span class="op">[[</span><span class="fl">1L</span><span class="op">]</span><span class="op">]</span>, <span class="va">toy_pl</span><span class="op">[[</span><span class="fl">2L</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
@@ -197,7 +231,10 @@
 <span><span class="co">#&gt; sample estimates:</span></span>
 <span><span class="co">#&gt; distance between mean landscapes </span></span>
 <span><span class="co">#&gt;                         88.71722</span></span></code></pre></div>
-<p>To test the specificity, rather than the sensitivity, of the permutation test, below we generate additional, smaller samples from the 1- and 5-circle spaces and perform permutation tests between them and their original counterparts from the same spaces:</p>
+<p>To test the specificity, rather than the sensitivity, of the
+permutation test, below we generate additional, smaller samples from the
+1- and 5-circle spaces and perform permutation tests between them and
+their original counterparts from the same spaces:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># draw a new 1-circle sample</span></span>
 <span><span class="va">new_pl_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fl">6L</span><span class="op">)</span></span>
@@ -249,7 +286,9 @@
 <div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
-<li id="fn1"><p>Bubenik P &amp; Dłotko P (2017) “A persistence landscapes toolbox for topological statistics”. <em>Journal of Symbolic Computation</em> <strong>78</strong>(1):91–114. <a href="https://www.sciencedirect.com/science/article/pii/S0747717116300104" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0747717116300104</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Bubenik P &amp; Dłotko P (2017) “A persistence
+landscapes toolbox for topological statistics”. <em>Journal of Symbolic
+Computation</em> <strong>78</strong>(1):91–114. <a href="https://www.sciencedirect.com/science/article/pii/S0747717116300104" class="external-link uri">https://www.sciencedirect.com/science/article/pii/S0747717116300104</a><a href="#fnref1" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
@@ -264,7 +303,7 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Jason Cory Brunson, Jose Bouza, Paweł Dłotko.</p>
+<p>Developed by Jason Cory Brunson, James Golabek, Aidan Bryant, Jose Bouza, Paweł Dłotko.</p>
 </div>
 
 <div class="pkgdown">

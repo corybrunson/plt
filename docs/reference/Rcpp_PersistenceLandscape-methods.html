@@ -32,6 +32,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu"><li>
+      <a href="../articles/overview.html">Exploratory and Predictive Analysis</a>
+    </li>
+    <li>
       <a href="../articles/toy-example.html">Analysis of a Toy Example</a>
     </li>
   </ul></li>
@@ -114,7 +117,9 @@ on persistence landscapes.</p>
 <span class="r-in"><span><span class="va">pt1</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pt2</span> <span class="op">&lt;-</span> <span class="fu">tdaunif</span><span class="fu">::</span><span class="fu"><a href="https://tdaverse.github.io/tdaunif/reference/tori.html" class="external-link">sample_torus_tube</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">2.5</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pd1</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ripserr/man/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pt1</span>, dim <span class="op">=</span> <span class="fl">2L</span>, threshold <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
 <span class="r-in"><span><span class="va">pd2</span> <span class="op">&lt;-</span> <span class="fu">ripserr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ripserr/man/vietoris_rips.html" class="external-link">vietoris_rips</a></span><span class="op">(</span><span class="va">pt2</span>, dim <span class="op">=</span> <span class="fl">2L</span>, threshold <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`dim` parameter has been deprecated; use `max_dim` instead.</span>
 <span class="r-in"><span><span class="va">pl1</span> <span class="op">&lt;-</span> <span class="fu"><a href="pl_new.html">pl_new</a></span><span class="op">(</span><span class="va">pd1</span>, degree <span class="op">=</span> <span class="fl">1L</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="pl_new.html">pl_new</a></span><span class="op">(</span><span class="va">pd2</span>, degree <span class="op">=</span> <span class="fl">1L</span>, exact <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># plot</span></span></span>
@@ -190,7 +195,7 @@ on persistence landscapes.</p>
 
 
       <footer><div class="copyright">
-  <p></p><p>Developed by Jason Cory Brunson, Jose Bouza, Paweł Dłotko.</p>
+  <p></p><p>Developed by Jason Cory Brunson, James Golabek, Aidan Bryant, Jose Bouza, Paweł Dłotko.</p>
 </div>
 
 <div class="pkgdown">
