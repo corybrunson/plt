@@ -1,6 +1,7 @@
 #' @title Integrals, Distances, and Norms of Persistence Landscapes
 #' @description Calculate distances and perform infinitesimal calculus on
 #'   persistence landscapes. See Section 3 of Bubenik (2015).
+#'
 #' @details `pl_integrate()` computes the \eqn{L^p} integral of a persistence
 #'   landscape. The `p` parameter denotes the integral's power;
 #'   `p = 1` computes the area under the curves, while `p = 2` corresponds to the
@@ -23,6 +24,7 @@
 #'   `pl_indicator_form()` evaluates the integral of the indicator function form
 #'   described above with respect to the \eqn{L^p} norm. It returns a real number
 #'   representing the landscape's integral onto the chosen intervals.
+#'
 #' @name analysis
 #' @include arithmetic.R
 #' @inheritParams pl_new
