@@ -18,6 +18,8 @@ Toolbox by Paweł Dłotko and Peter Bubenik. It is adapted from the
 
 Authors:
 \itemize{
+  \item James Golabek \email{jamesgolabek@gmail.com}
+  \item Aidan Bryant \email{bryant.aidan15@gmail.com}
   \item Jose Bouza \email{josejbouza@gmail.com} [programmer, copyright holder]
   \item Paweł Dłotko [programmer, copyright holder]
 }
