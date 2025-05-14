@@ -71,4 +71,3 @@ test_that("getInternal from discrete is correct from diagram", {
   
   expect_equal(pl$getInternal(), plref$getInternal())
 })
-
