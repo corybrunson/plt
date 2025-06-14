@@ -2,6 +2,25 @@ Rcpp_PersistenceLandscape <- setClass("Rcpp_PersistenceLandscape")
 
 #' @rdname PersistenceLandscape
 #' @inheritParams base::summary
+#' @value A named list of class "summary.Rcpp_PersistenceLandscape" with
+#' summary details:
+#'  \describe{
+#'    \item{str}{A character string describing whether the landscape is of 
+#'    `exact` or `discrete` type}
+#'    \item{n.levels}{A integer denoting the number of levels of the landscape.}
+#'    \item{limits}{A numeric 2-length vector expresing the domain limits.}
+#'    \item{resolution}{A numeric that tells the grid step size if the
+#'    landscape is `discrete`, otherwise returns `NA`.}
+#'    \item{support}{A numeric 2-length vector containing an interval from which 
+#'    all levels are nonzero.}
+#'    \item{range}{A numeric 2-length vector containing the minimum and maximum 
+#'    values of the landscape function across all levels.}
+#'    \item{magnitude}{A numeric representing the self-inner product of the 
+#'    landscape using the L^\eqn{2} norm.}
+#'    \item{integral}{A numeric representing the integration of the landscape
+#'    using the L^\eqn{1} norm.}
+#'    }
+#' 
 #' @export
 summary.Rcpp_PersistenceLandscape <- function(object, ...) {
   res <- list(

@@ -1,7 +1,23 @@
 #' @title Linear Algebra with Persistence Landscapes
 #' @description Convert between persistence landscapes and their vectorizations,
 #'   and perform linear algebra on vectorized persistence landscapes.
+#'   
+#' @details `pl_t()` extracts the common grid of t-values, discretizing
+#' exact landscapes on the fly.
 #'
+#' `pl_to_vector()` pad/truncates levels and flattens a persistence landscape to a 
+#' numeric vector; the grid is stored in the `"t_vals"` attribute.
+#'
+#' `pl_to_matrix()` – standardizes persistence landscapes by coordinating 
+#' resolution, limits, and level count across multiple landscapes and then bind 
+#' their vectorizations row-wise into a matrix (grid in `"t_vals"` attribute).
+#'
+#' `pl_from_vector()` rebuilds one landscape from a flattened vector + grid, 
+#' optionally dropping empty levels.
+#'
+#' `pl_from_matrix()` applies `pl_from_vector()` row-wise to turn a matrix 
+#' back into a list of landscapes.
+#' 
 #' @name algebra
 #' @include arithmetic.R
 #' @inheritParams pl_new
@@ -14,6 +30,11 @@
 #' @param num_levels Number of levels to vectorize; may me more or less than
 #'   `pl_num_levels(pl)`.
 #' @param drop_levels Logical; whether to omit levels that are empty in all PLs.
+#' @return Returns 3-D numeric array, a numeric vector with a `"t_vals"` attribute to 
+#' reconstruct the to reconstruct the discrete landscape, a matrix containing 
+#' vectorizations of landscapes each with `"t_vals"` atttribute, a persistence 
+#' landscape with class "Rcpp_PersistenceLandscape", a list of persistence 
+#' landscapes with class "Rcpp_PersistenceLandscape".
 #' @seealso [arithmetic], [analysis], [inference] for other landscape functions.
 #' @example inst/examples/ex-algebra.R
 NULL
