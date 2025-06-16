@@ -97,7 +97,7 @@ pl_new.persistence <- function(x, degree = NULL, ...) {
 #' @export
 pl_new.default <- function(x, ...) {
   
-  x <- try(as_persistence(x))
+  x <- try(phutil::as_persistence(x))
   if (inherits(x, "try-error")) {
     stop("No `as_persistence()` method for class '", class(x)[[1L]], "'.")
   }
