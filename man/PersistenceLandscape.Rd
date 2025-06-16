@@ -57,23 +57,39 @@ or columns.}
     See also the \code{make.names} argument of the \code{matrix} method.}
 }
 \value{
-A named list of class "summary.Rcpp_PersistenceLandscape" with
-summary details:
+The \code{\link[=summary]{summary()}} method returns a named list of class
+\code{"summary.Rcpp_PersistenceLandscape"} with the following details:
 \describe{
-\item{str}{A character string describing whether the landscape is of
-\code{exact} or \code{discrete} type}
-\item{n.levels}{A integer denoting the number of levels of the landscape.}
-\item{limits}{A numeric 2-length vector expresing the domain limits.}
-\item{resolution}{A numeric that tells the grid step size if the
-landscape is \code{discrete}, otherwise returns \code{NA}.}
-\item{support}{A numeric 2-length vector containing an interval from which
-all levels are nonzero.}
-\item{range}{A numeric 2-length vector containing the minimum and maximum
-values of the landscape function across all levels.}
-\item{magnitude}{A numeric representing the self-inner product of the
-landscape using the L^\eqn{2} norm.}
-\item{integral}{A numeric representing the integration of the landscape
-using the L^\eqn{1} norm.}
+\item{\code{str}}{
+A character string describing whether the landscape is of \code{exact} or
+\code{discrete} type.
+}
+\item{\code{n.levels}}{
+A integer denoting the number of levels of the landscape.
+}
+\item{\code{limits}}{
+A numeric length-2 vector expresing the domain limits.
+}
+\item{\code{resolution}}{
+A numeric that tells the grid step size if the landscape is \code{discrete},
+otherwise returns \code{NA}.
+}
+\item{\code{support}}{
+A numeric length-2 vector representing the minimal interval on which at
+least one level is nonzero (for exact landscapes, agrees with \code{limits}).
+}
+\item{\code{range}}{
+A numeric length-2 vector containing the minimum and maximum values of
+the landscape function across all levels.
+}
+\item{\code{magnitude}}{
+A numeric representing the self-inner product of the landscape using the
+\eqn{L^2} norm.
+}
+\item{\code{integral}}{
+A numeric representing the integral of the landscape using the L^\eqn{1}
+norm.
+}
 }
 }
 \description{

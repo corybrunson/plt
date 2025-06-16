@@ -2,7 +2,7 @@
 #' @description Convert between persistence landscapes and their vectorizations,
 #'   and perform linear algebra on vectorized persistence landscapes.
 #'   
-#' @details `pl_t()` extracts the common grid of t-values, discretizing
+#' @details `pl_t()` extracts the common grid of \eqn{t}-values, discretizing
 #' exact landscapes on the fly.
 #'
 #' `pl_to_vector()` pad/truncates levels and flattens a persistence landscape to a 
