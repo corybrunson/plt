@@ -35,9 +35,33 @@ grid support of a discrete persistence landscape.}
 
 \item{drop_levels}{Logical; whether to omit levels that are empty in all PLs.}
 }
+\value{
+Returns 3-D numeric array, a numeric vector with a \code{"t_vals"} attribute to
+reconstruct the to reconstruct the discrete landscape, a matrix containing
+vectorizations of landscapes each with \code{"t_vals"} atttribute, a persistence
+landscape with class "Rcpp_PersistenceLandscape", a list of persistence
+landscapes with class "Rcpp_PersistenceLandscape".
+}
 \description{
 Convert between persistence landscapes and their vectorizations,
 and perform linear algebra on vectorized persistence landscapes.
+}
+\details{
+\code{pl_t()} extracts the common grid of t-values, discretizing
+exact landscapes on the fly.
+
+\code{pl_to_vector()} pad/truncates levels and flattens a persistence landscape to a
+numeric vector; the grid is stored in the \code{"t_vals"} attribute.
+
+\code{pl_to_matrix()} – standardizes persistence landscapes by coordinating
+resolution, limits, and level count across multiple landscapes and then bind
+their vectorizations row-wise into a matrix (grid in \code{"t_vals"} attribute).
+
+\code{pl_from_vector()} rebuilds one landscape from a flattened vector + grid,
+optionally dropping empty levels.
+
+\code{pl_from_matrix()} applies \code{pl_from_vector()} row-wise to turn a matrix
+back into a list of landscapes.
 }
 \examples{
 

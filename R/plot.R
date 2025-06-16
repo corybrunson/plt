@@ -21,7 +21,7 @@
 #' @param ... Additional parameters passed to [base::plot()]. Values passed to
 #'   `type` or `col` will be ignored with a message.
 #' @param silent Logical; whether to silence messages.
-#' @value None (invisible NULL).
+#' @returns None (invisible NULL).
 #' @seealso [Rcpp_PersistenceLandscape-class] for the exported C++ class and
 #'   [pl_new()] for the R wrapper.
 #' @example inst/examples/ex-plot.R

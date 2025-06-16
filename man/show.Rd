@@ -10,6 +10,9 @@
 \arguments{
 \item{object}{A \link{PersistenceLandscape} object.}
 }
+\value{
+None (invisible NULL).
+}
 \description{
 A \code{\link[methods:show]{methods::show()}} S4 method for persistence landscape objects,
 used for \code{\link[base:print]{base::print()}}.

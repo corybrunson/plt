@@ -30,7 +30,7 @@
 #' @param num_levels Number of levels to vectorize; may me more or less than
 #'   `pl_num_levels(pl)`.
 #' @param drop_levels Logical; whether to omit levels that are empty in all PLs.
-#' @return Returns 3-D numeric array, a numeric vector with a `"t_vals"` attribute to 
+#' @returns Returns 3-D numeric array, a numeric vector with a `"t_vals"` attribute to 
 #' reconstruct the to reconstruct the discrete landscape, a matrix containing 
 #' vectorizations of landscapes each with `"t_vals"` atttribute, a persistence 
 #' landscape with class "Rcpp_PersistenceLandscape", a list of persistence 

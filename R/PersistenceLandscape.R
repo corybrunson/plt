@@ -2,7 +2,7 @@ Rcpp_PersistenceLandscape <- setClass("Rcpp_PersistenceLandscape")
 
 #' @rdname PersistenceLandscape
 #' @inheritParams base::summary
-#' @value A named list of class "summary.Rcpp_PersistenceLandscape" with
+#' @returns A named list of class "summary.Rcpp_PersistenceLandscape" with
 #' summary details:
 #'  \describe{
 #'    \item{str}{A character string describing whether the landscape is of 
