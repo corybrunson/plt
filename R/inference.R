@@ -3,6 +3,22 @@
 #'   persistence data using persistence landscapes. See Section 3 of Bubenik
 #'   (2015).
 #'
+#'@details `pl_z_test()` conducts a z-test (type indicated by the user) 
+#' analogous to the classical test using population means, but instead 
+#' using the L^\eqn{p} integration of the landscapes (`p` indicated by user) 
+#' as the summary test statistic to perform the test on. 
+#' 
+#' `pd_z_test()` conducts a z-test (type indicated by the user) starting from 
+#' persistence diagrams by converting `x` and `y` to persistence landscapes 
+#' using `pl_new()` and then applies `pl_z_test()`.
+#' 
+#' `pl_perm_test` conducts a permutation test on `x` and `y` by using the 
+#' L^\eqn{2} distance between each permuted groups average persistence landscape 
+#' as the test statistic. If the user as indicated `complete = TRUE` then 
+#' every possible permutation will be used for the test. In the case the total number of 
+#' permutations exceeds `max_iter`, the test will then sample from `x` and `y` 
+#' `max_iter` times and similarly when `complete = FALSE`.
+#'
 #' @name inference
 #' @include PersistenceLandscape.R
 #' @inheritParams pl_new

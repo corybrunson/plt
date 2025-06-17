@@ -57,6 +57,8 @@ test_that("`pl_from_matrix` reconstructs multiple PLs correctly", {
   expect_equal(length(pls), 2)
   expect_true(all(vapply(pls, inherits, TRUE, "Rcpp_PersistenceLandscape")))
   expect_equal(pl_distance(pls[[1]], pl), 0)
+  # FIXME: This test threw errors on some but not all runs, with varying
+  # `actual` values that differed from 0.
   expect_equal(pl_distance(pls[[2]], pl_s), 0)
 })
 

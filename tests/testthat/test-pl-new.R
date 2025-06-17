@@ -53,7 +53,7 @@ test_that("`pl_limits()` works", {
 })
 
 test_that("`pl_num_levels` can switch between exact and discrete PLs", {
-  pd <- data.frame(dim = 2, birth = c(1, 2, 3, 3), death = c(4, 4, 4, 6))
+  pd <- data.frame(dimension = 2, birth = c(1, 2, 3, 3), death = c(4, 4, 4, 6))
   pl <- pl_new(pd, degree = 2, exact = TRUE)
   pl2 <- pl_discretize(pl)
   

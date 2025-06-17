@@ -50,7 +50,7 @@ test_that("add PL is correct for simple case.", {
 })
 
 x <- tdaunif::sample_circle(100)
-pd <- as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2))
+pd <- as_persistence(ripserr::vietoris_rips(x, max_dim = 1L, threshold = 2))
 
 test_that("`discretize` from exact is correct", {
   pl <- pl_new(pd$pairs[[1]], exact=TRUE)
@@ -60,12 +60,12 @@ test_that("`discretize` from exact is correct", {
 
 test_that("getInternal from discrete is correct from diagram", {
   pd <- suppressWarnings(
-    as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2)))
+    as_persistence(ripserr::vietoris_rips(x, max_dim = 1L, threshold = 2)))
   pl <- pl_new(pd, degree = 1L, exact = TRUE,
                   xmax = 2.5, xby = 0.1)
   
   pdref <- suppressWarnings(
-    as_persistence(ripserr::vietoris_rips(x, dim = 1L, threshold = 2)))
+    as_persistence(ripserr::vietoris_rips(x, max_dim = 1L, threshold = 2)))
   plref <- pl_new(pdref, degree = 1L, exact = TRUE,
                   xmax = 2.5, xby = 0.1)
   
