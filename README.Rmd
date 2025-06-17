@@ -56,7 +56,6 @@ Examples and tests in **plt** rely on other packages to simulate data and to com
 
 * **tdaunif** provides functions to sample uniformly from various immersed manifolds.
 * **ripserr** and **TDA** provide functions to compute persistence data from point clouds and distance matrices.
-* **phutil** provides functions to both query and coerce persistence data into the format used by other functions.
 
 **plt** introduces the 'Rcpp_PersistenceLandscape' S4 class, which is exposed using **Rcpp** from the underlying 'PersistenceLandscape' C++ class.
 Instances of this class can be created using `new()` but the recommended way is to use `pl_new()`.

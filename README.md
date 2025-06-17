@@ -62,10 +62,10 @@ single matrix of persistence data or a specially formatted list with the
 class `'persistence_diagram"`. The `$pairs` entry of the list is itself
 a list, of a 2-column matrix of persistence pairs for each homological
 degree from 0 (`$pairs[[1]]`) to the maximum degree calculated. The
-generic converter `as_persistence()` includes methods for outputs from
-`ripserr::vietoris_rips()` and from `TDA::*Diag()`; it operates under
-the hood of `pl_new()`, but we invoke it explicitly here for
-illustration.
+generic converter `as_persistence()` (imported from **phutil**) includes
+methods for outputs from `ripserr::vietoris_rips()` and from
+`TDA::*Diag()`; it operates under the hood of `pl_new()`, but we invoke
+it explicitly here for illustration.
 
 ### Calculation
 
@@ -82,6 +82,8 @@ plot(pc, asp = 1, pch = 16L)
 
 ``` r
 pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
 print(pd)
 #> PHom object containing persistence data for 63 features.
 #> 
@@ -184,7 +186,7 @@ level of the landscape at each point on a 1-dimensional grid, ranging
 from `xmin` to `xmax` at increments of `xby`. A landscape constructed
 using a discrete approximation is stored as a 3-dimensional array of
 dimensions (levels, values, 2), with one level per feature (some of
-which may be trivial) and one value per grid point, stored as $x,y$
+which may be trivial) and one value per grid point, stored as $`x,y`$
 pairs along the third dimension.
 
 ``` r
@@ -327,6 +329,8 @@ To illustrate these features, we first generate a companion data set:
 set.seed(772888L)
 pc2 <- tdaunif::sample_circle(60, sd = .1) / 2
 pd2 <- ripserr::vietoris_rips(pc2, dim = 1, threshold = 2, p = 2)
+#> Warning in vietoris_rips.matrix(pc2, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
 pl2 <- pl_new(pd2, degree = 1, exact = TRUE)
 pl2 <- pl_delimit(pl2, xmin = 0, xmax = 2, xby = 0.1)
 pl2_ <- pl_discretize(pl2)
@@ -436,12 +440,52 @@ pl1s <- replicate(6, {
   pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
   pl_new(pd, degree = 1, xby = .01)
 })
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
 # samples of landscapes from circles
 pl2s <- replicate(8, {
   pc <- tdaunif::sample_circle(60, sd = .1) / 2
   pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
   pl_new(pd, degree = 1, xby = .01)
 })
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
+
+#> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
+#> parameter has been deprecated; use `max_dim` instead.
 ```
 
 An inspection of the mean landscapes makes clear that they are distinct:
