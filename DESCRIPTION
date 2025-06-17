@@ -65,7 +65,6 @@ Collate:
     'inference.R'
     'plt-package.R'
     'landscape.R'
-    'persistence.R'
     'plot.R'
     'show.R'
     'utils.R'

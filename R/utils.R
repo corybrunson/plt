@@ -1,10 +1,11 @@
 
-#` @importFrom phutil as_persistence
-#` @export
+
+#' @importFrom phutil as_persistence
+#' @export
 phutil::as_persistence
 
-#` @importFrom phutil get_pairs
-#` @export
+#' @importFrom phutil get_pairs
+#' @export
 phutil::get_pairs
 
 # copied from {ggplot2}

@@ -35,11 +35,11 @@ test_that("distance agrees with integral of difference", {
 })
 
 # "Complex" example
-pd3 <- data.frame(dim = 1, birth = c(0, 1), death = c(2, 2))
+pd3 <- data.frame(dimension = 1, birth = c(0, 1), death = c(2, 2))
 pl3 <- pl_new(pd3, degree = 1)
 
 # Non-nested example
-pd4 <- data.frame(dim = 1, birth = c(0, 2), death = c(4, 6))
+pd4 <- data.frame(dimension = 1, birth = c(0, 2), death = c(4, 6))
 pl4 <- pl_new(pd4, degree = 1)
 
 test_that("`pl_indicator` applies indicator function correctly", {
