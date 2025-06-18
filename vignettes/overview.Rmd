@@ -164,9 +164,7 @@ This superimposition of tents, creating a level of functions, allows us to visua
 These levels help develop a geometric understanding of persistence landscapes and should be helpful for when we think about the analysis being done. 
 
 
-To begin working with the persistence landscape framework, {plt} methods demands that our data is in a particular format, `as_persistence()` ensures this, if your data is in one of the recognized formats/classes (see [help file](https://corybrunson.github.io/plt/reference/as_persistence.html)).
-
-This function in {plt} has multiple methods to convert persistence data to a format required for other {plt} functions. It can be applied to a $3$-column matrix (or an object coercible to one) with columns dimension/degree, start/birth, and end/death, though the columns need not be named, or it can convert outputs from persistence data producing functions like `alphaComplexDiag()`.
+To begin working with the persistence landscape framework, {plt} methods demands that our data is in a particular format. We import `as_persistence()` from [{phutil}](https://github.com/tdaverse/phutil) to coerce inputs into the `"persistence"` class. This function has multiple methods to convert persistence data to a format required for other {plt} functions. It can be applied to a $3$-column matrix (or an object coercible to one) with columns dimension/degree, start/birth, and end/death, though the columns need not be named, or it can convert outputs from persistence data producing functions like `alphaComplexDiag()`.
 
 Note that `as_persistence()` is called in `pl_new()`.
 
