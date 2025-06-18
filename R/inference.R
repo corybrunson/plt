@@ -3,7 +3,7 @@
 #'   persistence data using persistence landscapes. See Section 3 of Bubenik
 #'   (2015).
 #'
-#'@details `pl_z_test()` conducts a z-test (type indicated by the user) 
+#' @details `pl_z_test()` conducts a z-test (type indicated by the user) 
 #' analogous to the classical test using population means, but instead 
 #' using the L^\eqn{p} integration of the landscapes (`p` indicated by user) 
 #' as the summary test statistic to perform the test on. 
