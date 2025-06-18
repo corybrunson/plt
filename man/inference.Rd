@@ -117,9 +117,10 @@ using \code{pl_new()} and then applies \code{pl_z_test()}.
 
 \code{pl_perm_test} conducts a permutation test on \code{x} and \code{y} by using the
 L^\eqn{2} distance between each permuted groups average persistence landscape
-as the test statistic. If there are more combinations of the persistence
-landscapes of \code{x} and \code{y} than \code{max_iter}, then the test will sample from
-\code{x} and \code{y} \code{max_iter} times, if \code{complete} is \code{TRUE}.
+as the test statistic. If the user as indicated \code{complete = TRUE} then
+every possible permutation will be used for the test. In the case the total number of
+permutations exceeds \code{max_iter}, the test will then sample from \code{x} and \code{y}
+\code{max_iter} times and similarly when \code{complete = FALSE}.
 }
 \examples{
 # two sets of landscapes from similar but distinctive point clouds

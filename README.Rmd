@@ -61,7 +61,7 @@ Examples and tests in **plt** rely on other packages to simulate data and to com
 Instances of this class can be created using `new()` but the recommended way is to use `pl_new()`.
 This function accepts either a single matrix of persistence data or a specially formatted list with the class `'persistence_diagram"`.
 The `$pairs` entry of the list is itself a list, of a 2-column matrix of persistence pairs for each homological degree from 0 (`$pairs[[1]]`) to the maximum degree calculated.
-The generic converter `as_persistence()` includes methods for outputs from `ripserr::vietoris_rips()` and from `TDA::*Diag()`; it operates under the hood of `pl_new()`, but we invoke it explicitly here for illustration.
+The generic converter `as_persistence()` (imported from **phutil**) includes methods for outputs from `ripserr::vietoris_rips()` and from `TDA::*Diag()`; it operates under the hood of `pl_new()`, but we invoke it explicitly here for illustration.
 
 ### Calculation
 

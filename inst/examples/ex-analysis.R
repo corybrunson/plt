@@ -1,6 +1,6 @@
 
 # multiply by an indicator function
-pd <- data.frame(dim = 1, birth = c(0, 1), death = c(2, 4))
+pd <- data.frame(dimension = 1, birth = c(0, 1), death = c(2, 4))
 f <- list(c(.5, 3), c(1.5, 2), c(1.75, 2))
 
 # exact landscape

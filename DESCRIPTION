@@ -39,7 +39,7 @@ Description: Persistence data (often equated with persistence diagrams) are
 Language: en-US
 Encoding: UTF-8
 License: GPL (>= 2)
-Imports: methods, Rcpp (>= 1.0.12)
+Imports: methods, Rcpp (>= 1.0.12), phutil
 LinkingTo: Rcpp
 Suggests: 
     grDevices,
@@ -65,7 +65,6 @@ Collate:
     'inference.R'
     'plt-package.R'
     'landscape.R'
-    'persistence.R'
     'plot.R'
     'show.R'
     'utils.R'
