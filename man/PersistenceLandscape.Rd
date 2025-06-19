@@ -56,6 +56,42 @@ or columns.}
     meaning of \code{\link[base]{data.frame}(*, check.names = !optional)}.
     See also the \code{make.names} argument of the \code{matrix} method.}
 }
+\value{
+The \code{\link[=summary]{summary()}} method returns a named list of class
+\code{"summary.Rcpp_PersistenceLandscape"} with the following details:
+\describe{
+\item{\code{str}}{
+A character string describing whether the landscape is of \code{exact} or
+\code{discrete} type.
+}
+\item{\code{n.levels}}{
+A integer denoting the number of levels of the landscape.
+}
+\item{\code{limits}}{
+A numeric length-2 vector expresing the domain limits.
+}
+\item{\code{resolution}}{
+A numeric that tells the grid step size if the landscape is \code{discrete},
+otherwise returns \code{NA}.
+}
+\item{\code{support}}{
+A numeric length-2 vector representing the minimal interval on which at
+least one level is nonzero (for exact landscapes, agrees with \code{limits}).
+}
+\item{\code{range}}{
+A numeric length-2 vector containing the minimum and maximum values of
+the landscape function across all levels.
+}
+\item{\code{magnitude}}{
+A numeric representing the self-inner product of the landscape using the
+\eqn{L^2} norm.
+}
+\item{\code{integral}}{
+A numeric representing the integral of the landscape using the L^\eqn{1}
+norm.
+}
+}
+}
 \description{
 Export, and create and manipulate objects of, the
 PersistenceLandscape' C++ class.

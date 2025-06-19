@@ -40,6 +40,9 @@ colors for \code{\link[grDevices:colorRamp]{grDevices::colorRamp()}} to interpol
 
 \item{silent}{Logical; whether to silence messages.}
 }
+\value{
+None (invisible NULL).
+}
 \description{
 A \code{\link[base:plot]{base::plot()}} method for persistence landscape objects.
 }
