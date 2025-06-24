@@ -31,8 +31,8 @@
 #'   `pl_num_levels(pl)`.
 #' @param drop_levels Logical; whether to omit levels that are empty in all PLs.
 #' @returns `pl_t()` returns a numeric vector containing the grid of a 
-#' discrete persistence landscape. `pl_to_vector()` returns 3-D numeric array with 
-#' a numeric vector with a `"t_vals"` attribute to reconstruct the discrete 
+#' discrete persistence landscape. `pl_to_vector()` returns a numeric 
+#' vector with a `"t_vals"` attribute to reconstruct the discrete 
 #' landscape. `pl_to_matrix()` returns a matrix of such vectorizations.  
 #' `pl_from_vector()` returns a persistence landscape with class 
 #' "Rcpp_PersistenceLandscape", and `pl_from_matrix()` returns a list of 
