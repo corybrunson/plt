@@ -37,8 +37,8 @@ grid support of a discrete persistence landscape.}
 }
 \value{
 \code{pl_t()} returns a numeric vector containing the grid of a
-discrete persistence landscape. \code{pl_to_vector()} returns 3-D numeric array with
-a numeric vector with a \code{"t_vals"} attribute to reconstruct the discrete
+discrete persistence landscape. \code{pl_to_vector()} returns a numeric
+vector with a \code{"t_vals"} attribute to reconstruct the discrete
 landscape. \code{pl_to_matrix()} returns a matrix of such vectorizations.
 \code{pl_from_vector()} returns a persistence landscape with class
 "Rcpp_PersistenceLandscape", and \code{pl_from_matrix()} returns a list of
