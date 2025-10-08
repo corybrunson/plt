@@ -1,9 +1,15 @@
+skip_if_not_installed("ripserr")
+
 set.seed(120246L)
 t <- runif(12, 0, 2*pi)
 x <- cbind(cos(t), sin(t))
 pd_a <- TDA::alphaComplexDiag(x, maxdimension = 1)
 pd_a$diagram[, c(2, 3)] <- sqrt(pd_a$diagram[, c(2, 3)])
-pd_r <- ripserr::vietoris_rips(x, dim = 1)
+pd_r <- if (packageVersion("ripserr") < as.package_version("1.0.0")) {
+  ripserr::vietoris_rips(x, dim = 1)
+} else {
+  ripserr::vietoris_rips(x, max_dim = 1)
+}
 pd_3 <- unclass(pd_a$diagram)
 pd_2 <- as.matrix(pd_r)[, c(2, 3)]
 
