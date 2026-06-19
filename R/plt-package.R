@@ -13,3 +13,11 @@
 
 # load modules (can be done anywhere, will activate at load time)
 Rcpp::loadModule("persistence_landscape_module", TRUE)
+
+# promise `PersistenceLandscape` to namespace (lazily) before load time
+plt_ns <- topenv(environment())
+delayedAssign(
+  "PersistenceLandscape",
+  Rcpp::Module("persistence_landscape_module")$PersistenceLandscape,
+  assign.env = plt_ns
+)
