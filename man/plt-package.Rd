@@ -18,6 +18,7 @@ Toolbox by Paweł Dłotko and Peter Bubenik. It is adapted from the
 
 Authors:
 \itemize{
+  \item Jason Cory Brunson \email{cornelioid@gmail.com} (\href{https://orcid.org/0000-0003-3126-9494}{ORCID})
   \item James Golabek \email{jamesgolabek@gmail.com}
   \item Aidan Bryant \email{bryant.aidan15@gmail.com}
   \item Jose Bouza \email{josejbouza@gmail.com} [programmer, copyright holder]

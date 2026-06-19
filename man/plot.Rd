@@ -27,12 +27,12 @@ replace \code{Inf} (and its negative will replace \code{-Inf}) in the plot.}
 determined to be the number of levels in \code{pl} or \code{x}.}
 
 \item{palette}{Character; either a color palette from
-\code{\link[grDevices:palette]{grDevices::palette.pals()}} or \code{\link[grDevices:palettes]{grDevices::hcl.pals()}}, or the name of a
+\code{\link[grDevices:palette.pals]{grDevices::palette.pals()}} or \code{\link[grDevices:hcl.pals]{grDevices::hcl.pals()}}, or the name of a
 palette function documented there (e.g. \code{'rainbow()'}), or a vector of
 colors for \code{\link[grDevices:colorRamp]{grDevices::colorRamp()}} to interpolate. The default \code{palette = "default"} uses the current default via \verb{[palette()]}.}
 
-\item{alpha, rev}{Parameters passed to \code{\link[grDevices:palette]{grDevices::palette.colors()}},
-\code{\link[grDevices:palettes]{grDevices::hcl.colors()}}, or \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}}. Note that
+\item{alpha, rev}{Parameters passed to \code{\link[grDevices:palette.colors]{grDevices::palette.colors()}},
+\code{\link[grDevices:hcl.colors]{grDevices::hcl.colors()}}, or \code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}}. Note that
 \code{recycle = TRUE} is set internally.}
 
 \item{...}{Additional parameters passed to \code{\link[base:plot]{base::plot()}}. Values passed to
@@ -69,6 +69,6 @@ plot(pl_new(pd, degree = 2L, xmin = 0, xmax = 1.5, xby = 0.01),
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 }
 \seealso{
-\linkS4class{Rcpp_PersistenceLandscape} for the exported C++ class and
+\link[=Rcpp_PersistenceLandscape-class]{Rcpp_PersistenceLandscape} for the exported C++ class and
 \code{\link[=pl_new]{pl_new()}} for the R wrapper.
 }

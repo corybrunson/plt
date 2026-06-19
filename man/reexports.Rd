@@ -12,6 +12,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{phutil}{\code{\link[phutil:persistence]{as_persistence}}, \code{\link[phutil:persistence]{get_pairs}}}
+  \item{phutil}{\code{\link[phutil:as_persistence]{as_persistence()}}, \code{\link[phutil:get_pairs]{get_pairs()}}}
 }}
 

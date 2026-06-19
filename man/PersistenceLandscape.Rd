@@ -27,7 +27,8 @@
 
 \item{x}{a result of the \emph{default} method of \code{summary()}.}
 
-\item{digits}{integer, used for number formatting with
+\item{digits}{integer (or \code{\link[base]{NULL}}, see \sQuote{Details}),
+    used for number formatting with
     \code{\link[base]{signif}()} (for \code{summary.default}) or
     \code{\link[base]{format}()} (for \code{summary.data.frame}).  In
     \code{summary.default}, if not specified (i.e.,

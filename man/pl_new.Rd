@@ -29,7 +29,7 @@ pl_discretize(pl)
 }
 \arguments{
 \item{x}{Persistence data (or diagram), stored as a 2-column matrix, as a
-'\link{persistence}' object, or in a format coercible to 'persistence'.}
+'\link[phutil:persistence]{persistence}' object, or in a format coercible to 'persistence'.}
 
 \item{degree}{Non-negative integer; if input is a persistence diagram object,
 then the dimension for which to compute a landscape. (For degree \eqn{d},
@@ -126,5 +126,5 @@ print(pl)
 plot(pl)
 }
 \seealso{
-\linkS4class{Rcpp_PersistenceLandscape} for the exported C++ class.
+\link[=Rcpp_PersistenceLandscape-class]{Rcpp_PersistenceLandscape} for the exported C++ class.
 }

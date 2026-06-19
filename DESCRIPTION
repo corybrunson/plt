@@ -51,7 +51,6 @@ Suggests:
     rmarkdown,
     alphahull,
     e1071
-RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 Config/testthat/edition: 3
 VignetteBuilder: knitr
@@ -68,3 +67,4 @@ Collate:
     'plot.R'
     'show.R'
     'utils.R'
+Config/roxygen2/version: 8.0.0
