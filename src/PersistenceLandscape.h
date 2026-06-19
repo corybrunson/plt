@@ -242,7 +242,9 @@ public:
     this->exact = false;
     this->min_x = t[0];
     this->max_x = t[t.size() - 1];
-    this->dx = (this->max_x - this->min_x) / (t.size() - 1);
+    // this->dx = (this->max_x - this->min_x) / (t.size() - 1);
+    // NOTE: Prevent cumulative error error in 'test-algebra.R'. -JCB
+    this->dx = t[1] - t[0];
     
     // populate `land`
     for (size_t i = 0; i != x.nrow(); ++i) {
