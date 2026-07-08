@@ -14,11 +14,11 @@ print(pl$getInternal()[[1L]])
 plot(pl)
 
 # coerce to discrete at different resolutions
-plot(pl, xlim = c(0, .5))
-pl <- pl_delimit(pl, xmin = 0, xmax = .5, xby = .01)
+plot(pl, xlim = c(0, .6))
+pl <- pl_delimit(pl, xmin = 0, xmax = .6, xby = .01)
 pl_ <- pl_discretize(pl)
 plot(pl_)
-pl <- pl_delimit(pl, xmin = 0, xmax = .5, xby = .001)
+pl <- pl_delimit(pl, xmin = 0, xmax = .6, xby = .001)
 pl_ <- pl_discretize(pl)
 plot(pl_)
 
