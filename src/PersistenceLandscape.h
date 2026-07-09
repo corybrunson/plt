@@ -779,9 +779,9 @@ std::pair<double, double> PersistenceLandscape::support() const {
         this->land[0][1].second == 0)
       lo_x = this->land[0][1].first;
     // high end of support
-    if (this->land[0][this->land.size() - 1].first != R_NegInf &&
-        this->land[0][this->land.size() - 1].second == 0)
-      hi_x = this->land[0][this->land.size() - 1].first;
+    if (this->land[0][this->land[0].size() - 2].first != R_NegInf &&
+        this->land[0][this->land[0].size() - 2].second == 0)
+      hi_x = this->land[0][this->land[0].size() - 2].first;
     
   } else {
     
