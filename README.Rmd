@@ -19,7 +19,7 @@ Persistence landscapes are a vectorization of persistence data/diagrams that hav
 This is an R package interface to a C++ library to efficienctly compute and calculate with persistence landscapes.[^plt]
 
 [^pl]: Bubenik P (2015) "Statistical Topological Data Analysis using Persistence Landscapes". _Journal of Machine Learning Research_ **16**(3):77--102. <https://jmlr.csail.mit.edu/papers/v16/bubenik15a.html>
-[^plt]: Bubenik P & Dłotko P (2017) "A persistence landscapes toolbox for topological statistics". _Journal of Symbolic Computation_ **78**(1):91--114. <https://www.sciencedirect.com/science/article/pii/S0747717116300104>
+[^plt]: Bubenik P & Dłotko P (2017) "A persistence landscapes toolbox for topological statistics". _Journal of Symbolic Computation_ **78**(1):91--114. <https://doi.org/10.1016/j.jsc.2016.03.009>
 
 ## Installation
 
@@ -276,7 +276,7 @@ It was originally adapted and ported to R in [Jose Bouza's **tda-tools** package
 
 ### Resources
 
-Development of this package benefitted from the use of equipment and the support of colleagues at the [University of Florida](https://www.ufl.edu/), especially [Peter Bubenik's research group](https://people.clas.ufl.edu/peterbubenik/researchgroup/) and the [Laboratory for Systems Medicine](https://systemsmedicine.pulmonary.medicine.ufl.edu/).
+Development of this package benefitted from the use of equipment and the support of colleagues at the [University of Florida](https://www.ufl.edu/), especially [Peter Bubenik's research group](https://people.clas.ufl.edu/peterbubenik/researchgroup-2/) and the [Laboratory for Systems Medicine](https://systemsmedicine.pulmonary.medicine.ufl.edu/).
 
 ### Contribute
 

@@ -26,7 +26,7 @@ Authors@R: c(
     )
 Description: Persistence data (often equated with persistence diagrams) are
     difficult to couple with statistical tools and machine learning approaches.
-    Bubenik (2015) <arXiv:1207.6437> introduced persistence landscapes to
+    Bubenik (2015) <doi:10.48550/arXiv.1207.6437> introduced persistence landscapes to
     address this problem by encoding persistence data as functions with a
     Hilbert space structure. As such, they admit linear operations, an inner
     product, and desirable statistical properties like a central limit theorem.

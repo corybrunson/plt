@@ -85,13 +85,13 @@ pd <- ripserr::vietoris_rips(pc, dim = 1, threshold = 2, p = 2)
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
 print(pd)
-#> PHom object containing persistence data for 63 features.
+#> PHom object containing persistence data for 64 features.
 #> 
 #> Contains:
-#> * 59 0-dim features
+#> * 60 0-dim features
 #> * 4 1-dim features
 #> 
-#> Radius/diameter: min = 0; max = 0.63582.
+#> Radius/diameter: min = 0; max = Inf.
 ```
 
 We the convert the persistence data to the preferred persistence diagram
@@ -100,10 +100,11 @@ format and inspect some of its features:
 ``` r
 pd <- as_persistence(pd)
 print(pd)
-#> 'persistence' data computed up to degree 1:
 #> 
-#> * 0-degree features: 59
-#> * 1-degree features:  4
+#> ── Persistence Data ────────────────────────────────────────────────────────────
+#> ℹ There are 60 and 4 pairs in dimensions 0 and 1 respectively.
+#> ℹ Computed from a Vietoris-Rips/Cubical filtration using `ripserr::<vietoris_rips/cubical>()`.
+#> ! With unknown parameters.
 print(head(pd$pairs[[1]]))
 #>      [,1]       [,2]
 #> [1,]    0 0.01918952
@@ -114,7 +115,7 @@ print(head(pd$pairs[[1]]))
 #> [6,]    0 0.05941691
 print(head(pd$pairs[[2]]))
 #>           [,1]      [,2]
-#> [1,] 0.4809292 0.6358225
+#> [1,] 0.4809293 0.6358225
 #> [2,] 0.3016234 0.6075172
 #> [3,] 0.2504500 0.2727915
 #> [4,] 0.2251884 0.2300871
@@ -160,22 +161,22 @@ print(pl1$getInternal())
 #>            [,1]        [,2]
 #>  [1,]      -Inf 0.000000000
 #>  [2,] 0.2251884 0.000000000
-#>  [3,] 0.2276378 0.002449358
+#>  [3,] 0.2276378 0.002449356
 #>  [4,] 0.2300871 0.000000000
 #>  [5,] 0.2504500 0.000000000
-#>  [6,] 0.2616207 0.011170764
+#>  [6,] 0.2616207 0.011170760
 #>  [7,] 0.2727915 0.000000000
 #>  [8,] 0.3016234 0.000000000
-#>  [9,] 0.4545703 0.152946885
+#>  [9,] 0.4545703 0.152946889
 #> [10,] 0.5442232 0.063293964
-#> [11,] 0.5583759 0.077446647
+#> [11,] 0.5583759 0.077446640
 #> [12,] 0.6358225 0.000000000
 #> [13,]       Inf 0.000000000
 #> 
 #> [[2]]
 #>           [,1]       [,2]
 #> [1,]      -Inf 0.00000000
-#> [2,] 0.4809292 0.00000000
+#> [2,] 0.4809293 0.00000000
 #> [3,] 0.5442232 0.06329396
 #> [4,] 0.6075172 0.00000000
 #> [5,]       Inf 0.00000000
@@ -186,7 +187,7 @@ level of the landscape at each point on a 1-dimensional grid, ranging
 from `xmin` to `xmax` at increments of `xby`. A landscape constructed
 using a discrete approximation is stored as a 3-dimensional array of
 dimensions (levels, values, 2), with one level per feature (some of
-which may be trivial) and one value per grid point, stored as $`x,y`$
+which may be trivial) and one value per grid point, stored as $x,y$
 pairs along the third dimension.
 
 ``` r
@@ -212,8 +213,8 @@ print(pl1d$getInternal())
 #> , , 2
 #> 
 #>      [,1] [,2]       [,3]       [,4]     [,5]      [,6]       [,7]       [,8]
-#> [1,]    0    0 0.02356502 0.07356502 0.123565 0.1323288 0.08232875 0.06063412
-#> [2,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.04425917 0.03232875
+#> [1,]    0    0 0.02356502 0.07356502 0.123565 0.1323288 0.08232876 0.06063412
+#> [2,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.04425916 0.03232876
 #> [3,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.00000000 0.00000000
 #> [4,]    0    0 0.00000000 0.00000000 0.000000 0.0000000 0.00000000 0.00000000
 #>            [,9] [,10]
@@ -252,30 +253,30 @@ pl1_$getInternal()[, seq(230L, 270L), , drop = FALSE]
 #> 
 #> , , 2
 #> 
-#>              [,1]         [,2]         [,3]         [,4]         [,5]
-#> [1,] 0.0006539916 5.241935e-05 4.985605e-05 4.729276e-05 4.472946e-05
-#> [2,] 0.0000000000 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
+#>              [,1]        [,2]         [,3]         [,4]         [,5]
+#> [1,] 0.0006539899 5.24159e-05 4.985277e-05 4.728965e-05 4.472652e-05
+#> [2,] 0.0000000000 0.00000e+00 0.000000e+00 0.000000e+00 0.000000e+00
 #>              [,6]         [,7]         [,8]         [,9]        [,10]
-#> [1,] 4.216616e-05 3.960287e-05 3.703957e-05 3.447627e-05 3.191297e-05
+#> [1,] 4.216339e-05 3.960027e-05 3.703714e-05 3.447401e-05 3.191089e-05
 #> [2,] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
 #>             [,11]        [,12]        [,13]        [,14]        [,15]
-#> [1,] 2.934968e-05 2.678638e-05 2.422308e-05 2.165979e-05 1.909649e-05
+#> [1,] 2.934776e-05 2.678463e-05 2.422151e-05 2.165838e-05 1.909525e-05
 #> [2,] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00
-#>             [,16]        [,17]       [,18]      [,19]        [,20]        [,21]
-#> [1,] 1.653319e-05 1.396989e-05 1.14066e-05 8.8433e-06 6.280002e-06 3.716705e-06
-#> [2,] 0.000000e+00 0.000000e+00 0.00000e+00 0.0000e+00 0.000000e+00 0.000000e+00
-#>             [,22]        [,23]       [,24]       [,25]       [,26]      [,27]
-#> [1,] 1.153408e-06 0.0009623328 0.001923512 0.002884692 0.003845871 0.00480705
-#> [2,] 0.000000e+00 0.0000000000 0.000000000 0.000000000 0.000000000 0.00000000
-#>           [,28]       [,29]       [,30]       [,31]       [,32]      [,33]
-#> [1,] 0.00576823 0.006729409 0.007690589 0.008651768 0.009612947 0.01057413
-#> [2,] 0.00000000 0.000000000 0.000000000 0.000000000 0.000000000 0.00000000
-#>            [,34]      [,35]       [,36]       [,37]       [,38]       [,39]
-#> [1,] 0.009677368 0.00878061 0.007883851 0.006987093 0.006090334 0.005193576
-#> [2,] 0.000000000 0.00000000 0.000000000 0.000000000 0.000000000 0.000000000
-#>            [,40]       [,41]
-#> [1,] 0.004296817 0.003400059
-#> [2,] 0.000000000 0.000000000
+#>             [,16]      [,17]        [,18]        [,19]        [,20]
+#> [1,] 1.653213e-05 1.3969e-05 1.140587e-05 8.842748e-06 6.279622e-06
+#> [2,] 0.000000e+00 0.0000e+00 0.000000e+00 0.000000e+00 0.000000e+00
+#>             [,21]        [,22]        [,23]      [,24]       [,25]       [,26]
+#> [1,] 3.716496e-06 1.153369e-06 0.0009623315 0.00192351 0.002884688 0.003845866
+#> [2,] 0.000000e+00 0.000000e+00 0.0000000000 0.00000000 0.000000000 0.000000000
+#>            [,27]       [,28]       [,29]       [,30]       [,31]       [,32]
+#> [1,] 0.004807044 0.005768222 0.006729401 0.007690579 0.008651757 0.009612935
+#> [2,] 0.000000000 0.000000000 0.000000000 0.000000000 0.000000000 0.000000000
+#>           [,33]       [,34]       [,35]       [,36]       [,37]       [,38]
+#> [1,] 0.01057411 0.009677356 0.008780599 0.007883843 0.006987086 0.006090329
+#> [2,] 0.00000000 0.000000000 0.000000000 0.000000000 0.000000000 0.000000000
+#>            [,39]       [,40]       [,41]
+#> [1,] 0.005193572 0.004296815 0.003400058
+#> [2,] 0.000000000 0.000000000 0.000000000
 ```
 
 We can also specify the bounds and the resolution of the discretization:
@@ -292,9 +293,9 @@ pl1_$getInternal()
 #> 
 #> , , 2
 #> 
-#>      [,1] [,2] [,3]       [,4]      [,5]       [,6]        [,7] [,8] [,9] [,10]
-#> [1,]    0    0    0 0.09837659 0.1075172 0.03582254 0.000000000    0    0     0
-#> [2,]    0    0    0 0.00000000 0.0000000 0.04388611 0.003068344    0    0     0
+#>      [,1] [,2] [,3]      [,4]      [,5]       [,6]        [,7] [,8] [,9] [,10]
+#> [1,]    0    0    0 0.0983766 0.1075172 0.03582253 0.000000000    0    0     0
+#> [2,]    0    0    0 0.0000000 0.0000000 0.04388611 0.003068346    0    0     0
 #>      [,11]
 #> [1,]     0
 #> [2,]     0
@@ -358,11 +359,11 @@ plot(2 * pl1_ - pl2_)
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 # inner products of exact and discrete landscapes
 pl1 %*% pl2
-#> [1] 0.005336876
+#> [1] 0.005336877
 pl1_ %*% pl2_
-#> [1] 0.004917171
+#> [1] 0.004917172
 pl1 %*% pl2_
-#> [1] 0.004917171
+#> [1] 0.004917172
 ```
 
 (Note that the landscapes are automatically delimited to a compatible
@@ -382,9 +383,9 @@ pl_integrate(pl2)
 #> [1] 0.07295263
 # 1-integral obeys linearity
 pl_integrate(pl1) * 2 - pl_integrate(pl2)
-#> [1] -0.01390959
+#> [1] -0.0139096
 pl_integrate(pl1 * 2 - pl2)
-#> [1] -0.01390959
+#> [1] -0.0139096
 ```
 
 The distance between two landscapes is defined in terms of the integral
@@ -402,9 +403,9 @@ pl_distance(pl1 * 2, pl2, p = 1)
 
 # using the 2-norm
 pl_integrate(pl_abs(pl1 * 2 - pl2), p = 2) ^ (1/2)
-#> [1] 0.05041889
+#> [1] 0.0504189
 pl_distance(pl1 * 2, pl2, p = 2)
-#> [1] 0.05041889
+#> [1] 0.0504189
 
 # using the infinity norm
 pl_vmax(pl_abs(pl1 * 2 - pl2))
@@ -442,19 +443,14 @@ pl1s <- replicate(6, {
 })
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
 # samples of landscapes from circles
@@ -465,25 +461,18 @@ pl2s <- replicate(8, {
 })
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
-
 #> Warning in vietoris_rips.matrix(pc, dim = 1, threshold = 2, p = 2): `dim`
 #> parameter has been deprecated; use `max_dim` instead.
 ```
@@ -518,7 +507,7 @@ pl_z_test(pl1s, pl2s)
 #> z = -2.3584, df = 12, p-value = 0.01835
 #> alternative hypothesis: true difference in means is not equal to 0
 #> 95 percent confidence interval:
-#>  -0.067781063 -0.006254089
+#>  -0.067781065 -0.006254089
 #> sample estimates:
 #> mean integral of x mean integral of y 
 #>         0.02664640         0.06366397
@@ -528,11 +517,11 @@ pl_perm_test(pl1s, pl2s)
 #>  permutation test
 #> 
 #> data:  
-#> p-value < 2.2e-16
+#> p-value = 0.001
 #> alternative hypothesis: true distance between mean landscapes is greater than 0
 #> sample estimates:
 #> distance between mean landscapes 
-#>                       0.06631177
+#>                       0.06631178
 ```
 
 ## Acknowledgments
@@ -549,8 +538,8 @@ package](https://github.com/jjbouza/tda-tools).
 Development of this package benefitted from the use of equipment and the
 support of colleagues at the [University of
 Florida](https://www.ufl.edu/), especially [Peter Bubenik’s research
-group](https://people.clas.ufl.edu/peterbubenik/researchgroup/) and the
-[Laboratory for Systems
+group](https://people.clas.ufl.edu/peterbubenik/researchgroup-2/) and
+the [Laboratory for Systems
 Medicine](https://systemsmedicine.pulmonary.medicine.ufl.edu/).
 
 ### Contribute
@@ -573,5 +562,4 @@ following `citation("plt")`.
 
 [^2]: Bubenik P & Dłotko P (2017) “A persistence landscapes toolbox for
     topological statistics”. *Journal of Symbolic Computation*
-    **78**(1):91–114.
-    <https://www.sciencedirect.com/science/article/pii/S0747717116300104>
+    **78**(1):91–114. <https://doi.org/10.1016/j.jsc.2016.03.009>
