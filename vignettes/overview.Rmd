@@ -6,6 +6,7 @@ vignette: >
   %\VignetteIndexEntry{Exploratory and Predictive Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{TDA,alphahull,e1071}
 ---
 
 ```{r, include = FALSE}
