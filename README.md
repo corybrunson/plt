@@ -305,8 +305,9 @@ pl1_$getInternal()
 
 **plt** provides a `plot()` method for the ‘Rcpp_PersistenceLandscape’
 class. It uses **grDevices** to build color palettes, and as such its
-default palette is viridis; but the user may supply the name of a
-recognized palette or a sequence of colors between which to interpolate:
+default palette depends on the version of R; but the user may supply the
+name of a recognized palette or a sequence of colors between which to
+interpolate:
 
 ``` r
 n_levs <- max(pl_num_levels(pl1), pl_num_levels(pl1d))

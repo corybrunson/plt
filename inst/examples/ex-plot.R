@@ -6,8 +6,8 @@ rpp <- tdaunif::sample_projective_plane(48L)
 # compute persistence data, retaining parameters
 pd <- ripserr::vietoris_rips(rpp, dim = 2L, threshold = 4)
 
-# plot landscapes
 par(mfrow = c(3L, 1L), mar = c(0, 2, 0, 2))
+
 # palette name
 plot(pl_new(pd, degree = 0L, xmin = 0, xmax = 1.5, xby = 0.01),
      palette = "Cork", lwd = 1)
@@ -17,4 +17,15 @@ plot(pl_new(pd, degree = 1L, xmin = 0, xmax = 1.5, xby = 0.01),
 # custom color ramp
 plot(pl_new(pd, degree = 2L, xmin = 0, xmax = 1.5, xby = 0.01),
      palette = c("red", "green", "blue"), lwd = 1)
+
+# example with many colors
+rpp2 <- tdaunif::sample_projective_plane(120L)
+pd2 <- ripserr::vietoris_rips(rpp2, dim = 2L, threshold = 4)
+plot(pl_new(pd2, degree = 0L, xmin = 0, xmax = 1.5, xby = 0.01),
+     palette = "Polychrome 36", lwd = 1)
+plot(pl_new(pd2, degree = 1L, xmin = 0, xmax = 1.5, xby = 0.01),
+     palette = "Alphabet", lwd = 1)
+plot(pl_new(pd2, degree = 2L, xmin = 0, xmax = 1.5, xby = 0.01),
+     palette = "Tableau 10", lwd = 1)
+
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))

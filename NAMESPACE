@@ -59,6 +59,8 @@ exportMethods(plot)
 exportMethods(show)
 import(Rcpp)
 import(methods)
-importFrom(phutil,as_persistence)
-importFrom(phutil,get_pairs)
+importFrom(phutil,
+  as_persistence,
+  get_pairs
+)
 useDynLib(plt, .registration = TRUE)

@@ -26,14 +26,21 @@ replace \code{Inf} (and its negative will replace \code{-Inf}) in the plot.}
 \item{n_levels}{Integer; number of levels to plot. If \code{NULL} (the default),
 determined to be the number of levels in \code{pl} or \code{x}.}
 
-\item{palette}{Character; either a color palette from
-\code{\link[grDevices:palette.pals]{grDevices::palette.pals()}} or \code{\link[grDevices:hcl.pals]{grDevices::hcl.pals()}}, or the name of a
-palette function documented there (e.g. \code{'rainbow()'}), or a vector of
-colors for \code{\link[grDevices:colorRamp]{grDevices::colorRamp()}} to interpolate. The default \code{palette = "default"} uses the current default via \verb{[palette()]}.}
+\item{palette}{Character; either the name of a qualitative palette from
+\code{\link[grDevices:palette.pals]{grDevices::palette.pals()}} (passed to \code{\link[grDevices:palette.colors]{grDevices::palette.colors()}}) or
+a sequential/diverging palette from \code{\link[grDevices:hcl.pals]{grDevices::hcl.pals()}} (passed to
+\code{\link[grDevices:hcl.colors]{grDevices::hcl.colors()}}), the name of a palette function in
+\link{grDevices} (e.g. \code{'rainbow'} or \code{'terrain.colors'}), a single color, or a
+vector of colors for \code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}} to interpolate. The
+default \code{palette = "default"} uses \code{\link[grDevices:palette.colors]{grDevices::palette.colors()}} with
+\code{palette = "Okabe-Ito"} (the colorblind-friendly default introduced in R
+4.0.0), falling back to the current \code{\link[grDevices:palette]{grDevices::palette()}}.}
 
 \item{alpha, rev}{Parameters passed to \code{\link[grDevices:palette.colors]{grDevices::palette.colors()}},
-\code{\link[grDevices:hcl.colors]{grDevices::hcl.colors()}}, or \code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}}. Note that
-\code{recycle = TRUE} is set internally.}
+\code{\link[grDevices:hcl.colors]{grDevices::hcl.colors()}}, or \code{\link[grDevices:colorRampPalette]{grDevices::colorRampPalette()}}. For
+qualitative palettes returned by \code{\link[grDevices:palette.colors]{grDevices::palette.colors()}}, \code{rev}
+reverses the order. Note that \code{recycle = TRUE} is set internally when
+calling \code{\link[grDevices:palette.colors]{grDevices::palette.colors()}}.}
 
 \item{...}{Additional parameters passed to \code{\link[base:plot]{base::plot()}}. Values passed to
 \code{type} or \code{col} will be ignored with a message.}
@@ -55,8 +62,8 @@ rpp <- tdaunif::sample_projective_plane(48L)
 # compute persistence data, retaining parameters
 pd <- ripserr::vietoris_rips(rpp, dim = 2L, threshold = 4)
 
-# plot landscapes
 par(mfrow = c(3L, 1L), mar = c(0, 2, 0, 2))
+
 # palette name
 plot(pl_new(pd, degree = 0L, xmin = 0, xmax = 1.5, xby = 0.01),
      palette = "Cork", lwd = 1)
@@ -66,6 +73,17 @@ plot(pl_new(pd, degree = 1L, xmin = 0, xmax = 1.5, xby = 0.01),
 # custom color ramp
 plot(pl_new(pd, degree = 2L, xmin = 0, xmax = 1.5, xby = 0.01),
      palette = c("red", "green", "blue"), lwd = 1)
+
+# example with many colors
+rpp2 <- tdaunif::sample_projective_plane(120L)
+pd2 <- ripserr::vietoris_rips(rpp2, dim = 2L, threshold = 4)
+plot(pl_new(pd2, degree = 0L, xmin = 0, xmax = 1.5, xby = 0.01),
+     palette = "Polychrome 36", lwd = 1)
+plot(pl_new(pd2, degree = 1L, xmin = 0, xmax = 1.5, xby = 0.01),
+     palette = "Alphabet", lwd = 1)
+plot(pl_new(pd2, degree = 2L, xmin = 0, xmax = 1.5, xby = 0.01),
+     palette = "Tableau 10", lwd = 1)
+
 par(mfrow = c(1L, 1L), mar = c(5.1, 4.1, 4.1, 2.1))
 }
 \seealso{
