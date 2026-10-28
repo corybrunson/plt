@@ -15,10 +15,6 @@ src/*.dll
 # ignore
 ignore
 
-# website
-docs/*
-!docs/articles/
-
 # hosting
 inst/doc
 /doc/
